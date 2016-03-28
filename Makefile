@@ -1,7 +1,7 @@
-all: ngs.1.html
-
-../ngs/c/ngs.1.html: ../ngs/c/ngs.1.md
-	make -C ../ngs/c ngs.1.html
+all: ngs.1.html pandoc.css
 
 ngs.1.html: ../ngs/c/ngs.1.html
+	cp -a $< $@
+
+pandoc.css: ../ngs/c/pandoc.css
 	cp -a $< $@
