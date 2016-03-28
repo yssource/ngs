@@ -20,6 +20,9 @@
 <h1 id="synopsis">SYNOPSIS</h1>
 <p><strong>ngs</strong> <em>script_name</em><br />
 <strong>ngs</strong> [<strong>-e</strong>|<strong>-E</strong>] <em>expression</em></p>
+<h1 id="options">OPTIONS</h1>
+<p>Given <em>script_name</em> runs the script.</p>
+<p>Using <em>expression</em> is equivalent to running a script that consists of <strong>{</strong> <em>expression</em> <strong>}</strong>. <strong>-e</strong> loads stdlib.ngs before evaluating the expression, <strong>-E</strong> skips the loading of stdlib.ngs.</p>
 <h1 id="description">DESCRIPTION</h1>
 <p><strong>ngs</strong> is a Next Generation Shell. It has two main parts: the language and the interactive shell.</p>
 <p>This project contains the language part which is under development. The interactive part will be dealt with later. This manual covers both implemented and unimplemented parts.</p>
@@ -45,9 +48,6 @@
 </ul>
 <h2 id="inspired-by">Inspired by</h2>
 <p>The language was inspired by Python, JavaScript, Ruby. Also lifted good parts from bash.</p>
-<h1 id="options">OPTIONS</h1>
-<p>Given <em>script_name</em> runs the script.</p>
-<p>Using <em>expression</em> is equivalent to running a script that consists of <strong>{</strong> <em>expression</em> <strong>}</strong>. <strong>-e</strong> loads stdlib.ngs before evaluating the expression, <strong>-E</strong> skips the loading of stdlib.ngs.</p>
 <h1 id="exit-code">EXIT CODE</h1>
 <p>The exit code is whatever the running code (<em>script_name</em> or <em>expression</em>) returns using the following conversions:</p>
 <h2 id="int-integer">Int (integer)</h2>
