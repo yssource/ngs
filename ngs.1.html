@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Ilya Sher" />
+  <meta name="date" content="2015-01-01" />
+  <title>NGS(1) NGS User Manual</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">NGS(1) NGS User Manual</h1>
+<h2 class="author">Ilya Sher</h2>
+<h3 class="date">2015</h3>
+</div>
+<h1 id="name">NAME</h1>
+<p>ngs - Next Generation Shell.</p>
+<h1 id="synopsis">SYNOPSIS</h1>
+<p><strong>ngs</strong> <em>script_name</em><br />
+<strong>ngs</strong> [<strong>-e</strong>|<strong>-E</strong>] <em>expression</em></p>
+<h1 id="description">DESCRIPTION</h1>
+<p><strong>ngs</strong> is a Next Generation Shell. It has two main parts: the language and the interactive shell.</p>
+<p>This project contains the language part which is under development. The interactive part will be dealt with later. This manual covers both implemented and unimplemented parts.</p>
+<h1 id="motivation-and-background">MOTIVATION AND BACKGROUND</h1>
+<p>NGS tries to fill the void between outdated shells such as <strong>bash</strong> and generic programming languages such as <strong>Ruby</strong>, <strong>Python</strong>, <strong>Perl</strong>, <strong>Go</strong>. The shells are domain-specific languages but the domain has changed so they are not a good fit for the job. Generic languages on the other hand are not domain-specific so they are not good as shells and too verbose for system tasks scripting, also not a good fit.</p>
+<h2 id="motivation---fix-current-shell-syntax">Motivation - fix current shell syntax</h2>
+<p>Since conventional shells were first designed just to run commands and only later extended to be a programming languages while keeping syntax compatibility, the syntax is inconvenient. Examples:</p>
+<ul>
+<li>bash - <strong>while some command;do ... done</strong>. NGS - <strong>while $(some command) ...</strong></li>
+<li>bash - while running <strong>my_command $var</strong>, the number of arguments passed to <strong>my_command</strong> is not known from syntax due to expansion rules.</li>
+<li>bash - <strong>my_command &quot;$var&quot;</strong>, ngs - <strong>my_command $var</strong>.</li>
+<li>bash - <strong>my_command $var</strong>, ngs - <strong>my_command $*var</strong> (zero or more arguments, equals to the number of elements in the <strong>$var</strong> array).</li>
+</ul>
+<h2 id="motivation---fix-current-language-design">Motivation - fix current language design</h2>
+<ul>
+<li>For example, one can not simply set a variable defined outside while with code inside the while (because of sub-shell): <strong>a=1; cat /dev/null | while true;do a=2;break; done; echo $a</strong> - prints <strong>1</strong>.</li>
+</ul>
+<h2 id="motivation---cloud-support">Motivation - Cloud support</h2>
+<p>Bash was meant to manage one machine.</p>
+<ul>
+<li>There is no built-in support for managing multiple servers.</li>
+<li>There is no convenient way to work with cloud services APIs. This is mostly due to unsupported nested data structures.</li>
+</ul>
+<h2 id="inspired-by">Inspired by</h2>
+<p>The language was inspired by Python, JavaScript, Ruby. Also lifted good parts from bash.</p>
+<h1 id="options">OPTIONS</h1>
+<p>Given <em>script_name</em> runs the script.</p>
+<p>Using <em>expression</em> is equivalent to running a script that consists of <strong>{</strong> <em>expression</em> <strong>}</strong>. <strong>-e</strong> loads stdlib.ngs before evaluating the expression, <strong>-E</strong> skips the loading of stdlib.ngs.</p>
+<h1 id="exit-code">EXIT CODE</h1>
+<p>The exit code is whatever the running code (<em>script_name</em> or <em>expression</em>) returns using the following conversions:</p>
+<h2 id="int-integer">Int (integer)</h2>
+<p>A Number is used as exit code (modulo 256). For example, <strong>ngs -E 10</strong> returns exit code 10.</p>
+<h2 id="bool-boolean">Bool (boolean)</h2>
+<p><strong>true</strong> results 0, <strong>false</strong> results 1.</p>
+<h2 id="t-user-defined-type">T (user-defined type)</h2>
+<p>The exit code can be customized by <strong>to_exit_code(x:T)</strong> method.</p>
+<h2 id="anything-else-including-user-defined-types-without-to_exit_codext-method.">Anything else, including user-defined types without <strong>to_exit_code(x:T)</strong> method.</h2>
+<p>Exit code 0.</p>
+<h1 id="environment">ENVIRONMENT</h1>
+<h1 id="files">FILES</h1>
+<h1 id="language-gotchas---read-first">LANGUAGE GOTCHAS - READ FIRST</h1>
+<h2 id="gotchas---keyword-arguments">Gotchas - keyword arguments</h2>
+<pre><code># Keyword arguments are silently ignored if corresponding positional argument is passed.
+kwargs = {&quot;a&quot;: 10}
+F f(a, **kw) a; f(1, **kwargs) == 1
+
+# Keyword arguments for existing named attributes cause parameters not to match
+kwargs = {&quot;a&quot;: 10}
+F f(a) a; f(1, **kwargs) == 1
+
+# **kwargs silently override (consistent with literal hash) previous named arguments
+kwargs = {&quot;a&quot;: 10}
+F f(a=1) a; f(a=10, **kwargs) == 1
+
+# For speed and implementation simplicity reasons, the **kw parameter has all keys,
+# even if some of them matched and used for parameters. 
+# This is somewhat likely to change in the future.
+kwargs = {&quot;a&quot;: 10}
+F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {&quot;a&quot;: 10}]</code></pre>
+<h1 id="language-principles-overview">LANGUAGE PRINCIPLES OVERVIEW</h1>
+<ul>
+<li>Do the most practical thing
+<ul>
+<li><strong>read('myfile.json')</strong> will parse the JSON and return the data structure. If you read a JSON file, most probably you want to look at the data, not handle it as a binary or a string.</li>
+<li>If you run a command with ``my_command``, (which is a syntax for run and parse output) and it returns JSON, the expression evaluates to the parsed data structure.</li>
+<li>If you <strong>map</strong> or <strong>each</strong> a hash, the callback function will be called with two arguments: key and value.</li>
+<li><strong>my_array.my_prop</strong> does <strong>array.map(F(elem) elem.my_prop)</strong> because that's probably what you would like to get when using <strong>.my_prop</strong> on array of hashes, get that property of each element of the array. Kind of <strong>jq .[].my_prop</strong>.</li>
+</ul></li>
+<li>Have types x methods matrix.
+<ul>
+<li>Less guess work about the names of methods (functions). Same method should work on maximum number of types. Example: if you have <strong>1+2</strong> which adds the numbers, you will have <strong>arr1+arr2</strong> which will add (concatenate) the arrays, rather than <strong>arr1.concat(arr2)</strong> and <strong>hash1+hash2</strong> will produce merged hash rather than <strong>hash1.merge(hash2)</strong>.</li>
+<li>If you have a type and a method that can do remotely expected thing on that type, it should work. Example of &quot;remotely&quot; expected is: <strong>number.map(mapper)</strong> runs the <strong>mapper</strong> function for each number in range of 0 to the <em>number</em> - 1.</li>
+</ul></li>
+<li>Extensibility.
+<ul>
+<li>Have custom data format? There is no reason that <strong>read('your_file.super-format')</strong> will not return the parsed data structure.</li>
+<li>Have your custom software that returns non-zero exit code but it's OK? Extend NGS so that running that command will not produce a fatal error. NGS always runs in a mode that is equivalent to <strong>bash -e</strong>, saving many tears.</li>
+<li>Want <strong>read('http://example.com/my-resource')</strong> to work? Extend NGS to be able to fetch HTTP or S3.</li>
+<li>Define any operator on your custom types.</li>
+</ul></li>
+<li>Consistent syntax.
+<ul>
+<li>No more <strong>do ... done</strong> and <strong>if ... fi</strong> in the same language. Blocks are <strong>{ ... }</strong>.</li>
+<li>If you can call a function, <strong>my_func(*args)</strong> and have &quot;splat&quot; effect (<strong>args</strong> array becomes several arguments when calling the function), there is no reason why it would not work when you create an array: <strong>[1, 2, *args, 3, 4]</strong>, same for <strong>**kwargs</strong> and <strong>{my_hash_default: 7, **user_supplied_options, my_override: 8}</strong>.</li>
+</ul></li>
+<li><p>Short syntax for common cases. <strong>F (a,b) a+b</strong> is equivalent to JavaScript's <strong>function(a,b) { return a+b; }</strong> (last expression's value is returned, like in Ruby).</p></li>
+<li>Syntactic sugar for common cases.
+<ul>
+<li><strong>for(i;n) ...</strong> is equivalent to <strong>for(i=0;i&lt;n;i=i+1) ...</strong></li>
+<li><strong>collector ... collect(x) ...</strong> - for collecting items</li>
+</ul></li>
+<li>Simplicity
+<ul>
+<li>No classes. Only types, methods and multi-dispatch.</li>
+<li>Simple type system.</li>
+</ul></li>
+</ul>
+<h1 id="main-language-concepts">MAIN LANGUAGE CONCEPTS</h1>
+<h2 id="types">Types</h2>
+<p>In NGS, each value is of some type. Example of such types are: <strong>Int</strong>, <strong>Str</strong>, <strong>Arr</strong>. <strong>1</strong> for examples is of type <strong>Int</strong>eger, <strong>&quot;xyz&quot;</strong> is an <strong>Str</strong>ing and <strong>[1,2,3]</strong> is an <strong>Arr</strong>ay.</p>
+<p>Types in NGS plus methods that work with these types are rough equivalent of classes and their methods in languages such as Python and Ruby. Let's start with an example of roughly equivalent code:</p>
+<p>Python:</p>
+<pre><code>class Counter:
+
+    def __init__(self):
+        self.counter = 0
+
+    def incr(self):
+        self.counter += 1
+        return self.counter
+
+    def get(self):
+        return self.counter
+
+c = Counter()
+c.incr()
+print(c.get())</code></pre>
+<p>NGS (code syntax):</p>
+<pre><code>type Counter
+
+F init(c:Counter) c.counter = 0
+
+F incr(c:Counter) {
+    c.counter = c.counter + 1
+    c
+}
+
+F get(c:Counter) c.counter
+
+c = Counter()
+c.incr()
+echo(c.get())</code></pre>
+<p><strong>c.incr()</strong> and <strong>incr(c)</strong> are syntactically equivalent.</p>
+<p>Note that in NGS, the class is &quot;open&quot; so you can add methods that work with the <strong>Counter</strong> type any time after the definition of the type (<strong>type Counter</strong>).</p>
+<h2 id="methods-method-implementations-and-calling">Methods, method implementations and calling</h2>
+<p>A method in NGS is a collection (techincally <strong>Arr</strong>ay) of functions. Each such function implements the intended operation for some type. Example (NGS code syntax):</p>
+<pre><code>F bigger(x:Int) x+1
+F bigger(s:Str) &quot;+${s}+&quot;</code></pre>
+<p>Here <strong>bigger</strong> is a method. Each <strong>F</strong> definition defines a <strong>method implementation</strong>. When calling an <strong>Arr</strong>ay, NGS scans from the last element to first element and invokes the <strong>method implementation</strong> that matches the given arguments. Example:</p>
+<pre><code>echo(bigger(&quot;x&quot;))
+# Output: +x+
+
+echo(bigger(1))
+# Output: 2</code></pre>
+<p>When the array search is finished and no matching <strong>method implementation</strong> is found, <strong>ImplNotFound</strong> exception occurs.</p>
+<pre><code>echo(bigger(true))
+# Causes ImplNotFound exception</code></pre>
+<h2 id="customizaion-using-methods">Customizaion using methods</h2>
+<p>Most language syntax constructs are actually a method calls. For example <strong>1 + 2</strong> is <strong>+(1,2)</strong> . The method named <strong>+</strong> is called with 1 and 2 as arguments. This means you can customize what a <strong>+</strong> does when applied to your types. Since types are &quot;open&quot;, you can also define what a <strong>+</strong> means for existing types too.</p>
+<p>Note that the array is specifically scanned from last element to first to allow later code (your code as opposed to previously loaded library for example) to override the behaviour. This override can be narrowed to specific cases using the <strong>guard</strong> clause. Continuing the example above:</p>
+<pre><code>F bigger(x:Int) {
+    guard x &gt;= 100
+    x + 10
+}
+echo(bigger(1))
+echo(bigger(100))
+
+# Outputs one per line: 2, 110</code></pre>
+<p>When the condition following the <strong>guard</strong> clause is true, the execution continues. When the condition is false, method implementation execution is terminated and the search in the array of method implementations continues as if this implementation did not match the types of the arguments. I recommend not to cause any side effects inside the method implementation in statements above <strong>guard</strong>, if you have any.</p>
+<p>Such scanning behaviour allows for example to extend native <strong>fetch</strong> method, which can read a file to be able to fetch a URL.</p>
+<p>Customizaion using methods is also used for the command syntax. When a command is mentioned in your program, NGS just parses it into a <strong>Command</strong> type instance. After such parsing, NGS passes it to one of appropriate methods, depending on the context where the command was mentioned: <strong>``</strong>, <strong>````</strong> (other methods will probably be added later). Since these methods can be customized, one can control how external programs are run (or replaced by built-ins for example). Note that the implementations of the <strong>``</strong> and similar methods in <strong>stdlib.ngs</strong> are calling other methods. Each such call is a potential extension point, opportunity for more customization.</p>
+<h1 id="language-syntax">LANGUAGE SYNTAX</h1>
+<p>A notable difference between say JavaScript, Ruby, Perl, Python and NGS is that there are two syntaxes in the language. The <strong>command syntax</strong> and the <strong>code syntax</strong>. The <strong>command syntax</strong> covers the tasks of running programs and i/o redirection. The <strong>code syntax</strong> is a full blown language. The decision to have two syntaxes was made because I did not see another way to provide both good interactive experience and a complete, normal programming language. What I mean is that typing <strong>system('ls')</strong> or even <strong>`ls`</strong> is not a good interactive experience. On the other hand having syntax for full blown language based on interactive syntax (extending the <strong>command syntax</strong> till it becomes a real language) is not a good thing either, it will look bad. See control structures in bash. It's horrible. <strong>if ... ;then ...; fi</strong>.</p>
+<h2 id="command-syntax">Command syntax</h2>
+<p>This is the syntax at top level of the file or when you start an interactive shell. When in <strong>code syntax</strong> you can embed <strong>command syntax</strong> within <strong>$(...)</strong>, which returns the <strong>Command</strong> object (or a list of these, if <strong>$(...)</strong> contains pipes).</p>
+<p><strong>Command syntax examples</strong></p>
+<ul>
+<li><strong>ls</strong></li>
+<li><strong>ls $my_file</strong></li>
+<li><strong>ls $*my_files</strong></li>
+</ul>
+<h2 id="code-syntax">Code syntax</h2>
+<p>This is the syntax inside <strong>{...}</strong>.</p>
+<p><strong>Code syntax examples</strong></p>
+<ul>
+<li><strong>{ for(i;10) dump(i) }</strong></li>
+<li><strong>{ for(i;10) { j=i*2; dump(j); } }</strong></li>
+</ul>
+<h2 id="code-syntax---try-...-catch-...">Code syntax - try ... catch ...</h2>
+<p>Try to execute <em>expr</em>. If no excepion occurs, return the value of <em>expr</em>. If an error of type <strong>E1</strong> occurs, execute <strong>result1</strong>. If an error of type <strong>E2</strong> occurs, execute <strong>result2</strong> and so on. <strong>catch</strong> clauses are converted to a method which is then called. When the method is constructed, the implementations are reversed in order so the scan is from first to last <strong>catch</strong> clause.</p>
+<p><strong>try</strong> <em>expr</em> <strong>catch(</strong><em>e:E1</em><strong>)</strong> <em>result1</em> <strong>catch(</strong><em>e:E2</em><strong>)</strong> <em>result2</em> ...</p>
+<h2 id="code-syntax---forin-syntactic-sugar">Code syntax - for(i;n) syntactic sugar</h2>
+<p>TODO</p>
+<h2 id="code-syntax---collector-syntactic-sugar">Code syntax - collector syntactic sugar</h2>
+<ul>
+<li><strong>collector ... collect(x) ...</strong> is equivalent to <strong>collector([], code)</strong>. The expression after <strong>collector</strong> is wrapped as <strong>F(collect) { code }</strong></li>
+<li><strong>collector/expr ... collect(x) ...</strong> is equivalent to <strong>collector(expr, code)</strong>. The expression after <strong>collector</strong> is wrapped as <strong>F(collect) { code }</strong></li>
+</ul>
+<p>Sample usage:</p>
+<pre><code>collector
+    [1,2,3,4,5].each(F(elt) {
+        collect(elt)
+        if elt &gt; 2 collect(elt * 2)
+    })</code></pre>
+<p>The expression evaluates to the array <strong>[1,2,3,6,4,8,5,10]</strong>. See <strong>stdlib.ngs</strong> for more <strong>collector</strong> usage examples.</p>
+<h2 id="code-syntax---throws-returns-continues-breaks-syntactic-sugar">Code syntax - throws, returns, continues, breaks syntactic sugar</h2>
+<ul>
+<li><p><em>expr1</em> <strong>throws</strong> <em>expr2</em> -&gt; if <em>expr1</em> throw <em>expr2</em></p>
+<p>fd &lt;= 0 throws Exception(&quot;fetch(): failed to open file ${fname}&quot;)</p></li>
+<li><p><em>expr1</em> <strong>returns</strong> <em>expr2</em> -&gt; if <em>expr1</em> return <em>expr2</em></p>
+<p>a.len() != b.len() returns false</p></li>
+<li><p><em>expr</em> <strong>continues</strong> -&gt; if <em>expr</em> continue</p>
+<p>for(i;5) { i == 3 continues; echo(i) } # Outputs one per line: 0, 1, 2, 4</p></li>
+<li><p><em>expr</em> <strong>breaks</strong> -&gt; if <em>expr</em> break</p>
+<p>for(i;5) { i == 3 breaks; echo(i) } # Outputs one per line: 0, 1, 2</p></li>
+</ul>
+<h1 id="language-data-types">LANGUAGE DATA TYPES</h1>
+<h2 id="basic-types">Basic types</h2>
+<p>Basic types are implemented in C. User-defined types <em>can not</em> inherit from a basic type.</p>
+<ul>
+<li>Null</li>
+<li>Bool</li>
+<li>Int</li>
+<li>Str</li>
+<li>Arr</li>
+<li>Fun</li>
+<li>Any
+<ul>
+<li>BasicTypeInstance</li>
+<li>NormalTypeInstance</li>
+</ul></li>
+<li>Seq</li>
+<li>Type
+<ul>
+<li>BasicType</li>
+<li>NormalType</li>
+</ul></li>
+<li>Hash</li>
+<li>CLib</li>
+<li>CSym</li>
+</ul>
+<h2 id="normal-types">Normal types</h2>
+<p>User-defined types <em>can</em> inherit from a basic type.</p>
+<ul>
+<li>Exception
+<ul>
+<li>Error
+<ul>
+<li>LookupFail
+<ul>
+<li>KeyNotFound</li>
+<li>IndexNotFound</li>
+<li>AttrNotFound</li>
+<li>GlobalNotFound</li>
+</ul></li>
+<li>InvalidArgument</li>
+<li>CompileFail</li>
+<li>CallFail
+<ul>
+<li>DontKnowHowToCall</li>
+<li>ImplNotFound</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Backtrace</li>
+<li>Command</li>
+<li>Range
+<ul>
+<li>InclusiveRange</li>
+<li>ExclusiveRange</li>
+</ul></li>
+</ul>
+<h2 id="defining-your-types">Defining your types</h2>
+<p>TODO</p>
+<h1 id="thanks">THANKS</h1>
+<p>Thanks to Guy Egozy, Avishai Ish-Shalom and other friends for ideas and feedback.</p>
+</body>
+</html>
