@@ -125,7 +125,7 @@ F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {&quot;a&quot;: 10}]</code></pre>
 </ul>
 <h1 id="main-language-concepts">MAIN LANGUAGE CONCEPTS</h1>
 <h2 id="types">Types</h2>
-<p>In NGS, each value is of some type. Example of such types are: <code>Int</code>, <code>Str</code>, <code>Arr</code>. <code>1</code> for examples is of type <code>Int</code>eger, <code>&quot;xyz&quot;</code> is an <code>Str</code>ing and <code>[1,2,3]</code> is an <code>Arr</code>ay.</p>
+<p>In NGS, each value is of some type. Example of such types are: <code>Int</code>, <code>Str</code>, <code>Arr</code>. <code>1</code> for example is an <code>Int</code>, <code>&quot;xyz&quot;</code> is a <code>Str</code> and <code>[1,2,3]</code> is an <code>Arr</code>.</p>
 <p>Types in NGS plus methods that work with these types are rough equivalent of classes and their methods in languages such as Python and Ruby. Let's start with an example of roughly equivalent code:</p>
 <p>Python:</p>
 <pre><code>class Counter:
@@ -161,10 +161,10 @@ echo(c.get())</code></pre>
 <p><code>c.incr()</code> and <code>incr(c)</code> are syntactically equivalent.</p>
 <p>Note that in NGS, the class is &quot;open&quot; so you can add methods that work with the <code>Counter</code> type any time after the definition of the type (<code>type Counter</code>).</p>
 <h2 id="methods-method-implementations-and-calling">Methods, method implementations and calling</h2>
-<p>A method in NGS is a collection (techincally <code>Arr</code>ay) of functions. Each such function implements the intended operation for some type. Example (NGS code syntax):</p>
+<p>A method in NGS is a collection (techincally <code>Arr</code>) of functions. Each such function implements the intended operation for some type. Example (NGS code syntax):</p>
 <pre><code>F bigger(x:Int) x+1
 F bigger(s:Str) &quot;+${s}+&quot;</code></pre>
-<p>Here <code>bigger</code> is a method. Each <code>F</code> definition defines a <strong>method implementation</strong>. When calling an <code>Arr</code>ay, NGS scans from the last element to first element and invokes the <strong>method implementation</strong> that matches the given arguments. Example:</p>
+<p>Here <code>bigger</code> is a method. Each <code>F</code> definition defines a <strong>method implementation</strong>. When calling an <code>Arr</code>, NGS scans from the last element to first element and invokes the <strong>method implementation</strong> that matches the given arguments. Example:</p>
 <pre><code>echo(bigger(&quot;x&quot;))
 # Output: +x+
 
@@ -312,7 +312,14 @@ catch(e:E2) { result2 }
 </ul></li>
 </ul>
 <h2 id="defining-your-types">Defining your types</h2>
-<p>TODO</p>
+<p>TODO, WIP</p>
+<pre><code>type T1
+type T2
+T2.inherit(T1)
+t2 = T2()
+echo(t2 is T2)
+echo(t2 is T1)
+# Outputs one per line: true, true</code></pre>
 <h1 id="thanks">THANKS</h1>
 <p>Thanks to Guy Egozy, Avishai Ish-Shalom and other friends for ideas and feedback.</p>
 </body>
