@@ -21,15 +21,15 @@
 <h1 id="synopsis">SYNOPSIS</h1>
 <p><strong>ngs</strong> <em>script_name</em><br />
 <strong>ngs</strong> [<strong>-e</strong>|<strong>-E</strong>] <em>expression</em></p>
-<h1 id="options">OPTIONS</h1>
-<p>Given <em>script_name</em> runs the script.</p>
-<p>Using <em>expression</em> is equivalent to running a script that consists of <code>{</code> <em>expression</em> <code>}</code>. <strong>-e</strong> loads stdlib.ngs before evaluating the expression, <strong>-E</strong> skips the loading of stdlib.ngs.</p>
 <h1 id="description">DESCRIPTION</h1>
 <p><strong>ngs</strong> is a Next Generation Shell. It has two main parts: the language and the interactive shell.</p>
 <p>This project contains the language part which is under development. The interactive part will be dealt with later. This manual covers both implemented and unimplemented parts.</p>
+<h1 id="options">OPTIONS</h1>
+<p>Given <em>script_name</em> runs the script.</p>
+<p>Using <em>expression</em> is equivalent to running a script that consists of <code>{</code> <em>expression</em> <code>}</code>. <strong>-e</strong> loads stdlib.ngs before evaluating the expression, <strong>-E</strong> skips the loading of stdlib.ngs.</p>
 <h2 id="motivation">MOTIVATION</h2>
 <p>NGS tries to fill the void between classical shells such as <strong>bash</strong> and general-purpose programming languages such as <strong>Ruby</strong>, <strong>Python</strong>, <strong>Perl</strong>, <strong>Go</strong>. The shells are domain-specific languages but the domain has changed so classical shells are not optimal for today's tasks. General-purpose languages on the other hand are not domain-specific so they are not good as shells and too verbose for system tasks scripting, not a good fit.</p>
-<h1 id="exit-code">EXIT CODE</h1>
+<h1 id="exit-status">EXIT STATUS</h1>
 <p>The exit code is whatever the running code (<em>script_name</em> or <em>expression</em>) returns using the following conversions:</p>
 <ul>
 <li><code>Int</code> (integer) - used directly as exit code (modulo 256). For example, <code>ngs -E 10</code> returns exit code 10.</li>
@@ -61,257 +61,23 @@
 </ul>
 <h2 id="stdlib.ngs">stdlib.ngs</h2>
 <p>Located in <code>NGS_DIR</code>. Standard library. Defines many methods and autoloading behaviour.</p>
-<h1 id="language-gotchas---read-first">LANGUAGE GOTCHAS - READ FIRST</h1>
-<h2 id="keyword-arguments-gotchas">Keyword arguments gotchas</h2>
-<pre><code># Keyword arguments are silently ignored if corresponding positional argument is passed.
-kwargs = {&quot;a&quot;: 10}
-F f(a, **kw) a; f(1, **kwargs) == 1
-
-# Keyword arguments for existing named attributes cause parameters not to match
-kwargs = {&quot;a&quot;: 10}
-F f(a) a; f(1, **kwargs) == 1
-
-# **kwargs silently override (consistent with literal hash) previous named arguments
-kwargs = {&quot;a&quot;: 10}
-F f(a=1) a; f(a=10, **kwargs) == 1
-
-# For speed and implementation simplicity reasons, the **kw parameter has all keys,
-# even if some of them matched and used for parameters. 
-# This is somewhat likely to change in the future.
-kwargs = {&quot;a&quot;: 10}
-F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {&quot;a&quot;: 10}]</code></pre>
-<h1 id="language-principles-overview">LANGUAGE PRINCIPLES OVERVIEW</h1>
-<ul>
-<li>Do the most practical thing
-<ul>
-<li><code>read('myfile.json')</code> will parse the JSON and return the data structure.</li>
-<li>The <code>``my_command``</code> will parse the command output (JSON for example) and return the data structure.</li>
-<li><code>my_array.my_prop</code> returns an array of <code>.my_prop</code> properties of each element.</li>
-</ul></li>
-<li><p>Simple methods naming for less guess work. <code>1+2</code> adds the numbers (method name <code>+</code>), <code>arr1+arr2</code> adds (concatenates) arrays and <code>hash1+hash2</code> produces merged hash.</p></li>
-<li>Extensibility
-<ul>
-<li><code>read('your_file.super-format')</code> can be extended to parse your format.</li>
-<li><code>fetch</code>, which reads from a file, can be extended to support HTTP or S3.</li>
-<li>Define any operator on your custom types or for existing types.</li>
-</ul></li>
-<li>Simplicity
-<ul>
-<li>No classes. Only types, methods and multiple dispatch (picking the right method implementation by matching types of parameters and arguments)</li>
-<li>Simple type system.</li>
-</ul></li>
-</ul>
-<h1 id="main-language-concepts">MAIN LANGUAGE CONCEPTS</h1>
-<h2 id="types">Types</h2>
-<p>In NGS, each value is of some type. <code>1</code> for example is an <code>Int</code>, <code>&quot;xyz&quot;</code> is a <code>Str</code> and <code>[1,2,3]</code> is an <code>Arr</code>.</p>
-<p>Define <code>Counter</code> type and a few methods for it (code syntax):</p>
-<pre><code>type Counter
-
-F init(c:Counter) c.counter = 0
-
-F incr(c:Counter) {
-    c.counter = c.counter + 1
-    c
-}
-
-F get(c:Counter) c.counter</code></pre>
-<p>Using the <code>Counter</code> type:</p>
-<pre><code>c = Counter()
-c.incr()
-echo(c.get())</code></pre>
-<p><code>c.incr()</code> and <code>incr(c)</code> are syntactically equivalent.</p>
-<h2 id="methods-method-implementations-and-calling">Methods, method implementations and calling</h2>
-<p>A method in NGS is an <code>Arr</code> of functions. Each function is called <strong>method implementation</strong>.</p>
-<pre><code>F bigger(x:Int) x+1
-F bigger(s:Str) &quot;+${s}+&quot;</code></pre>
-<p><code>bigger</code> is now an <code>Arr</code> with two elements, the functions defined by <code>F</code>. When calling an <code>Arr</code>, NGS scans the array backwards and invokes the <strong>method implementation</strong> that matches the given arguments (this matching is called multiple dispatch). Example:</p>
-<pre><code>echo(bigger(&quot;x&quot;))
-# Output: +x+
-
-echo(bigger(1))
-# Output: 2</code></pre>
-<p>No matching <strong>method implementation</strong> causes <code>ImplNotFound</code> exception.</p>
-<pre><code>echo(bigger(true))
-# Causes ImplNotFound exception</code></pre>
-<h2 id="customizaion-using-methods">Customizaion using methods</h2>
-<p>Most language syntax constructs are actually a method calls. For example <code>1 + 2</code> is <code>+(1,2)</code> . The method named <code>+</code> is called with 1 and 2 as arguments. This means you can customize what a <code>+</code> does when applied to your types. Since types are &quot;open&quot;, you can also define what a <code>+</code> means for existing types too.</p>
-<p>Backwards array scanning allows later code (your code as opposed to previously loaded library for example) to override the behaviour. This override can be narrowed to specific cases using the <code>guard</code> clause. Continuing the example above:</p>
-<pre><code>F bigger(x:Int) {
-    guard x &gt;= 100
-    x + 10
-}
-echo(bigger(1))
-echo(bigger(100))
-
-# Outputs one per line: 2, 110</code></pre>
-<p>When the condition following the <code>guard</code> clause is true, the execution continues. When the condition is false, method implementation execution is terminated and the search in the array of method implementations continues as if this implementation did not match the types of the arguments. I recommend not to cause any side effects inside the method implementation in statements above <code>guard</code>, if you have any.</p>
-<h1 id="language-syntax">LANGUAGE SYNTAX</h1>
-<p>NGS has two syntaxes. The <strong>command syntax</strong> covers the tasks of running programs and i/o redirection, mainly for good interactive (and simple scripting) experience. The <strong>code syntax</strong> is for everything else, giving access to a complete programming language.</p>
-<h2 id="command-syntax">Command syntax</h2>
-<pre><code>ls
-ls $my_file
-ls $*my_files</code></pre>
-<p>This is the syntax at top level of the file or when you start an interactive shell. When in <strong>code syntax</strong> you can embed <strong>command syntax</strong> within <code>$(...)</code> and serveral other constructs.</p>
-<h2 id="code-syntax">Code syntax</h2>
-<pre><code>{
-    type T
-    # unrelated
-    for(i;10) dump(i)
-}</code></pre>
-<p>This is the syntax inside <code>{...}</code>.</p>
-<h2 id="commands-separators">Commands separators</h2>
-<p>In both syntaxes, commands are separated by a new line or by <code>;</code> (semicolon).</p>
-<h2 id="command-syntax---...">Command syntax - <code>{...}</code></h2>
-<p>Embed <strong>code syntax</strong>.</p>
-<pre><code>{ my_code }
-ls ${ name = &quot;${prefix}${main}${suffix}&quot;; name }</code></pre>
-<h2 id="code-syntax---...">Code syntax - <code>{...}</code></h2>
-<p>Where code block is expected - code block (<code>{ code }</code> in this manual).</p>
-<pre><code>if a == b {
-    x = x + 1
-    y = y + x
-}
-# Single expression does not need {...} where code block is expected.
-z = if a 7 8</code></pre>
-<p>Literal hash anywhere else (<code>Hash</code> type):</p>
-<pre><code>inner_hash = {&quot;b&quot;: 2}
-h = {&quot;a&quot;: 1, **inner_hash, &quot;c&quot;: 3}
-# h is now {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3}</code></pre>
-<h2 id="code-syntax---...-1">Code syntax - <code>[...]</code></h2>
-<p>Literal array (<code>Arr</code> type):</p>
-<pre><code>inner_arr = [2,3]
-arr = [1, *inner_arr, 4]
-# arr is now [1, 2, 3, 4]</code></pre>
-<h2 id="command-and-code-syntax---assignment">Command and code syntax - assignment</h2>
-<pre><code>var_name=expression</code></pre>
-<h2 id="command-and-code-syntax---f">Command and code syntax - <code>F</code></h2>
-<pre><code>F myfunc(required_arg, optional_arg=default_value, *rest_args, **rest_kw_args) {
-    ...
-}</code></pre>
-<h2 id="code-syntax---try-...-catch-...">Code syntax - try ... catch ...</h2>
-<pre><code>try {
-    code
-}
-catch(e:E1) { result1 }
-catch(e:E2) { result2 }
-...</code></pre>
-<p>Try to execute the <em>code</em>. If no excepion occurs, return the value of <em>code</em>. If an error of type <code>E1</code> occurs, execute <code>result1</code>. If an error of type <code>E2</code> occurs, execute <code>result2</code> and so on.</p>
-<pre><code>try {
-    code
-}</code></pre>
-<p>If there are no <code>catch</code> clauses following the <code>try</code>, if any exception occurs in the <em>code</em>, the result of the <code>try</code> expression is <code>null</code>. Example:</p>
-<pre><code>v = try myhash[&#39;maybe-such-key-exists&#39;][&#39;and-then-some&#39;]</code></pre>
-<h2 id="code-syntax---forin-syntactic-sugar">Code syntax - for(i;n) syntactic sugar</h2>
-<pre><code>for(i;n) { code }</code></pre>
-<p>is same as</p>
-<pre><code>for(i=0; i&lt;n; i=i+1) { code }</code></pre>
-<h2 id="code-syntax---collector-syntactic-sugar">Code syntax - collector syntactic sugar</h2>
-<pre><code>collector
-    [1,2,3,4,5].each(F(elt) {
-        collect(elt)
-        if elt &gt; 2 collect(elt * 2)
-    })</code></pre>
-<p>The expression evaluates to the array <strong>[1,2,3,6,4,8,5,10]</strong>. See stdlib.ngs for more <code>collector</code> usage examples.</p>
-<ul>
-<li><code>collector ... collect(x) ...</code> is equivalent to <code>collector([], code)</code>. The expression after <code>collector</code> is wrapped as <code>F(collect) { code }</code></li>
-<li><code>collector/expr ... collect(x) ...</code> is equivalent to <code>collector(expr, code)</code>. The expression after <code>collector</code> is wrapped as <code>F(collect) { code }</code></li>
-</ul>
-<h2 id="code-syntax---throws-syntactic-sugar">Code syntax - throws syntactic sugar</h2>
-<pre><code>expr1 throws expr2
-# fd &lt;= 0 throws Exception(&quot;fetch(): failed to open file ${fname}&quot;)</code></pre>
-<p>is</p>
-<pre><code>if expr1 throw expr2</code></pre>
-<h2 id="code-syntax---returns-syntactic-sugar">Code syntax - returns syntactic sugar</h2>
-<pre><code>expr1 returns expr2
-# a.len() != b.len() returns false</code></pre>
-<p>is</p>
-<pre><code>if expr1 return expr2</code></pre>
-<h2 id="code-syntax---continues-syntactic-sugar">Code syntax - continues syntactic sugar</h2>
-<pre><code>expr continues
-# for(i;5) { i == 3 continues; echo(i) }
-# Outputs one per line: 0, 1, 2, 4</code></pre>
-<p>is</p>
-<pre><code>if expr continue</code></pre>
-<h2 id="code-syntax---breaks-syntactic-sugar">Code syntax - breaks syntactic sugar</h2>
-<pre><code>expr breaks
-# for(i;5) { i == 3 breaks; echo(i) }
-# Outputs one per line: 0, 1, 2</code></pre>
-<p>is</p>
-<pre><code>if expr break</code></pre>
-<h1 id="language-data-types">LANGUAGE DATA TYPES</h1>
-<h2 id="basic-types">Basic types</h2>
-<p>Basic types are implemented in C. User-defined types <em>can not</em> inherit from a basic type.</p>
-<ul>
-<li>Null</li>
-<li>Bool</li>
-<li>Int</li>
-<li>Str</li>
-<li>Arr</li>
-<li>Fun</li>
-<li>Any
-<ul>
-<li>BasicTypeInstance</li>
-<li>NormalTypeInstance</li>
-</ul></li>
-<li>Seq</li>
-<li>Type
-<ul>
-<li>BasicType</li>
-<li>NormalType</li>
-</ul></li>
-<li>Hash</li>
-<li>CLib</li>
-<li>CSym</li>
-</ul>
-<h2 id="normal-types">Normal types</h2>
-<p>User-defined types <em>can</em> inherit from a normal type.</p>
-<ul>
-<li>Exception
-<ul>
-<li>Error
-<ul>
-<li>LookupFail
-<ul>
-<li>KeyNotFound</li>
-<li>IndexNotFound</li>
-<li>AttrNotFound</li>
-<li>GlobalNotFound</li>
-</ul></li>
-<li>InvalidArgument</li>
-<li>CompileFail</li>
-<li>CallFail
-<ul>
-<li>DontKnowHowToCall</li>
-<li>ImplNotFound</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li>Backtrace</li>
-<li>Command</li>
-<li>Range
-<ul>
-<li>InclusiveRange</li>
-<li>ExclusiveRange</li>
-</ul></li>
-</ul>
-<p>... and all types defined with <code>type</code>.</p>
-<h2 id="defining-your-types">Defining your types</h2>
-<p>TODO, WIP</p>
-<pre><code>type T1
-type T2
-T2.inherit(T1)
-t2 = T2()
-echo(t2 is T2)
-echo(t2 is T1)
-# Outputs one per line: true, true</code></pre>
-<h1 id="language-hooks">LANGUAGE HOOKS</h1>
-<h2 id="impl_not_found_hook"><code>impl_not_found_hook</code></h2>
-<p>... is called when a method was called but no <strong>method implementation</strong> matched the arguments. Use <code>F impl_not_found_hook(callable:Fun, *args) ...</code> to add your behaviours.</p>
-<h2 id="global_not_found_hook"><code>global_not_found_hook</code></h2>
-<p>... is called on attempt to read from an undefined global variable. Sample usage from <strong>stdlib.ngs</strong></p>
-<pre><code>F global_not_found_hook(name:Str) {
-    require(&quot;${NGS_DIR}/autoload/${name}.ngs&quot;)
-}</code></pre>
+<h1 id="see-also">SEE ALSO</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="ngslang.1.html">ngslang(1)</a></td>
+<td align="left">NGS language overview and starting point</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="ngssyn.1.html">ngssyn(1)</a></td>
+<td align="left">NGS language syntax</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="ngstyp.1.html">ngstyp(1)</a></td>
+<td align="left">NGS language pre-defined types</td>
+</tr>
+</tbody>
+</table>
 <h1 id="thanks">THANKS</h1>
 <p>Thanks to Guy Egozy, Avishai Ish-Shalom and other friends for ideas and feedback.</p>
 </body>

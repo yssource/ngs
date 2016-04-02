@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Ilya Sher" />
+  <meta name="date" content="2015-01-01" />
+  <title>NGSTYP(1) NGS User Manual</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="pandoc.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">NGSTYP(1) NGS User Manual</h1>
+<h2 class="author">Ilya Sher</h2>
+<h3 class="date">2015</h3>
+</div>
+<h1 id="name">NAME</h1>
+<p>ngstyp - Next Generation Shell language types.</p>
+<h1 id="language-data-types">LANGUAGE DATA TYPES</h1>
+<h2 id="basic-types">Basic types</h2>
+<p>Basic types are implemented in C. User-defined types <em>can not</em> inherit from a basic type.</p>
+<ul>
+<li>Null</li>
+<li>Bool</li>
+<li>Int</li>
+<li>Str</li>
+<li>Arr</li>
+<li>Fun</li>
+<li>Any
+<ul>
+<li>BasicTypeInstance</li>
+<li>NormalTypeInstance</li>
+</ul></li>
+<li>Seq</li>
+<li>Type
+<ul>
+<li>BasicType</li>
+<li>NormalType</li>
+</ul></li>
+<li>Hash</li>
+<li>CLib</li>
+<li>CSym</li>
+</ul>
+<h2 id="normal-types">Normal types</h2>
+<p>User-defined types <em>can</em> inherit from a normal type.</p>
+<ul>
+<li>Exception
+<ul>
+<li>Error
+<ul>
+<li>LookupFail
+<ul>
+<li>KeyNotFound</li>
+<li>IndexNotFound</li>
+<li>AttrNotFound</li>
+<li>GlobalNotFound</li>
+</ul></li>
+<li>InvalidArgument</li>
+<li>CompileFail</li>
+<li>CallFail
+<ul>
+<li>DontKnowHowToCall</li>
+<li>ImplNotFound</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Backtrace</li>
+<li>Command</li>
+<li>Range
+<ul>
+<li>InclusiveRange</li>
+<li>ExclusiveRange</li>
+</ul></li>
+</ul>
+<p>... and all types defined with <code>type</code>.</p>
+<h2 id="defining-your-types">Defining your types</h2>
+<p>TODO, WIP</p>
+<pre><code>type T1
+type T2
+T2.inherit(T1)
+t2 = T2()
+echo(t2 is T2)
+echo(t2 is T1)
+# Outputs one per line: true, true</code></pre>
+</body>
+</html>

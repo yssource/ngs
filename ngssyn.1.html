@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Ilya Sher" />
+  <meta name="date" content="2015-01-01" />
+  <title>NGSSYN(1) NGS User Manual</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="pandoc.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">NGSSYN(1) NGS User Manual</h1>
+<h2 class="author">Ilya Sher</h2>
+<h3 class="date">2015</h3>
+</div>
+<h1 id="name">NAME</h1>
+<p>ngssyn - Next Generation Shell language syntax</p>
+<h1 id="description">DESCRIPTION</h1>
+<p>NGS has two syntaxes. The <strong>command syntax</strong> covers the tasks of running programs and i/o redirection, mainly for good interactive (and simple scripting) experience. The <strong>code syntax</strong> is for everything else, giving access to a complete programming language.</p>
+<h2 id="command-syntax">Command syntax</h2>
+<pre><code>ls
+ls $my_file
+ls $*my_files</code></pre>
+<p>This is the syntax at top level of the file or when you start an interactive shell. When in <strong>code syntax</strong> you can embed <strong>command syntax</strong> within <code>$(...)</code> and serveral other constructs.</p>
+<h2 id="code-syntax">Code syntax</h2>
+<pre><code>{
+    type T
+    # unrelated
+    for(i;10) dump(i)
+}</code></pre>
+<p>This is the syntax inside <code>{...}</code>.</p>
+<h2 id="commands-separators">Commands separators</h2>
+<p>In both syntaxes, commands are separated by a new line or by <code>;</code> (semicolon).</p>
+<h2 id="command-syntax---...">Command syntax - <code>{...}</code></h2>
+<p>Embed <strong>code syntax</strong>.</p>
+<pre><code>{ my_code }
+ls ${ name = &quot;${prefix}${main}${suffix}&quot;; name }</code></pre>
+<h2 id="code-syntax---...">Code syntax - <code>{...}</code></h2>
+<p>Where code block is expected - code block (<code>{ code }</code> in this manual).</p>
+<pre><code>if a == b {
+    x = x + 1
+    y = y + x
+}
+# Single expression does not need {...} where code block is expected.
+z = if a 7 8</code></pre>
+<p>Literal hash anywhere else (<code>Hash</code> type):</p>
+<pre><code>inner_hash = {&quot;b&quot;: 2}
+h = {&quot;a&quot;: 1, **inner_hash, &quot;c&quot;: 3}
+# h is now {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3}</code></pre>
+<h2 id="code-syntax---...-1">Code syntax - <code>[...]</code></h2>
+<p>Literal array (<code>Arr</code> type):</p>
+<pre><code>inner_arr = [2,3]
+arr = [1, *inner_arr, 4]
+# arr is now [1, 2, 3, 4]</code></pre>
+<h2 id="command-and-code-syntax---assignment">Command and code syntax - assignment</h2>
+<pre><code>var_name=expression</code></pre>
+<h2 id="command-and-code-syntax---f">Command and code syntax - <code>F</code></h2>
+<pre><code>F myfunc(required_arg, optional_arg=default_value, *rest_args, **rest_kw_args) {
+    ...
+}</code></pre>
+<h2 id="code-syntax---try-...-catch-...">Code syntax - try ... catch ...</h2>
+<pre><code>try {
+    code
+}
+catch(e:E1) { result1 }
+catch(e:E2) { result2 }
+...</code></pre>
+<p>Try to execute the <em>code</em>. If no excepion occurs, return the value of <em>code</em>. If an error of type <code>E1</code> occurs, execute <code>result1</code>. If an error of type <code>E2</code> occurs, execute <code>result2</code> and so on.</p>
+<pre><code>try {
+    code
+}</code></pre>
+<p>If there are no <code>catch</code> clauses following the <code>try</code>, if any exception occurs in the <em>code</em>, the result of the <code>try</code> expression is <code>null</code>. Example:</p>
+<pre><code>v = try myhash[&#39;maybe-such-key-exists&#39;][&#39;and-then-some&#39;]</code></pre>
+<h2 id="code-syntax---forin-syntactic-sugar">Code syntax - for(i;n) syntactic sugar</h2>
+<pre><code>for(i;n) { code }</code></pre>
+<p>is same as</p>
+<pre><code>for(i=0; i&lt;n; i=i+1) { code }</code></pre>
+<h2 id="code-syntax---collector-syntactic-sugar">Code syntax - collector syntactic sugar</h2>
+<pre><code>collector
+    [1,2,3,4,5].each(F(elt) {
+        collect(elt)
+        if elt &gt; 2 collect(elt * 2)
+    })</code></pre>
+<p>The expression evaluates to the array <strong>[1,2,3,6,4,8,5,10]</strong>. See stdlib.ngs for more <code>collector</code> usage examples.</p>
+<ul>
+<li><code>collector ... collect(x) ...</code> is equivalent to <code>collector([], code)</code>. The expression after <code>collector</code> is wrapped as <code>F(collect) { code }</code></li>
+<li><code>collector/expr ... collect(x) ...</code> is equivalent to <code>collector(expr, code)</code>. The expression after <code>collector</code> is wrapped as <code>F(collect) { code }</code></li>
+</ul>
+<h2 id="code-syntax---throws-syntactic-sugar">Code syntax - throws syntactic sugar</h2>
+<pre><code>expr1 throws expr2
+# fd &lt;= 0 throws Exception(&quot;fetch(): failed to open file ${fname}&quot;)</code></pre>
+<p>is</p>
+<pre><code>if expr1 throw expr2</code></pre>
+<h2 id="code-syntax---returns-syntactic-sugar">Code syntax - returns syntactic sugar</h2>
+<pre><code>expr1 returns expr2
+# a.len() != b.len() returns false</code></pre>
+<p>is</p>
+<pre><code>if expr1 return expr2</code></pre>
+<h2 id="code-syntax---continues-syntactic-sugar">Code syntax - continues syntactic sugar</h2>
+<pre><code>expr continues
+# for(i;5) { i == 3 continues; echo(i) }
+# Outputs one per line: 0, 1, 2, 4</code></pre>
+<p>is</p>
+<pre><code>if expr continue</code></pre>
+<h2 id="code-syntax---breaks-syntactic-sugar">Code syntax - breaks syntactic sugar</h2>
+<pre><code>expr breaks
+# for(i;5) { i == 3 breaks; echo(i) }
+# Outputs one per line: 0, 1, 2</code></pre>
+<p>is</p>
+<pre><code>if expr break</code></pre>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Ilya Sher" />
+  <meta name="date" content="2015-01-01" />
+  <title>NGSLANG(1) NGS User Manual</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="pandoc.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">NGSLANG(1) NGS User Manual</h1>
+<h2 class="author">Ilya Sher</h2>
+<h3 class="date">2015</h3>
+</div>
+<h1 id="name">NAME</h1>
+<p>ngslang - Next Generation Shell language overview.</p>
+<h1 id="language-principles-overview">LANGUAGE PRINCIPLES OVERVIEW</h1>
+<ul>
+<li>Do the most practical thing
+<ul>
+<li><code>read('myfile.json')</code> will parse the JSON and return the data structure.</li>
+<li>The <code>``my_command``</code> will parse the command output (JSON for example) and return the data structure.</li>
+<li><code>my_array.my_prop</code> returns an array of <code>.my_prop</code> properties of each element.</li>
+</ul></li>
+<li><p>Simple methods naming for less guess work. <code>1+2</code> adds the numbers (method name <code>+</code>), <code>arr1+arr2</code> adds (concatenates) arrays and <code>hash1+hash2</code> produces merged hash.</p></li>
+<li>Extensibility
+<ul>
+<li><code>read('your_file.super-format')</code> can be extended to parse your format.</li>
+<li><code>fetch</code>, which reads from a file, can be extended to support HTTP or S3.</li>
+<li>Define any operator on your custom types or for existing types.</li>
+</ul></li>
+<li>Simplicity
+<ul>
+<li>No classes. Only types, methods and multiple dispatch (picking the right method implementation by matching types of parameters and arguments)</li>
+<li>Simple type system.</li>
+</ul></li>
+</ul>
+<h1 id="language-gotchas---read-first">LANGUAGE GOTCHAS - READ FIRST</h1>
+<h2 id="keyword-arguments-gotchas">Keyword arguments gotchas</h2>
+<p>Keyword arguments implementation is preliminary so:</p>
+<pre><code># Keyword arguments are silently ignored if corresponding positional argument is passed.
+kwargs = {&quot;a&quot;: 10}
+F f(a, **kw) a; f(1, **kwargs) == 1
+
+# Keyword arguments for existing named attributes cause parameters not to match
+kwargs = {&quot;a&quot;: 10}
+F f(a) a; f(1, **kwargs) == 1
+
+# **kwargs silently override (consistent with literal hash) previous named arguments
+kwargs = {&quot;a&quot;: 10}
+F f(a=1) a; f(a=10, **kwargs) == 1
+
+# For speed and implementation simplicity reasons, the **kw parameter has all keys,
+# even if some of them matched and used for parameters. 
+# This is somewhat likely to change in the future.
+kwargs = {&quot;a&quot;: 10}
+F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {&quot;a&quot;: 10}]</code></pre>
+<h1 id="main-language-concepts">MAIN LANGUAGE CONCEPTS</h1>
+<h2 id="types">Types</h2>
+<p>In NGS, each value is of some type. <code>1</code> for example is an <code>Int</code>, <code>&quot;xyz&quot;</code> is a <code>Str</code> and <code>[1,2,3]</code> is an <code>Arr</code>.</p>
+<p>Define <code>Counter</code> type and a few methods for it (code syntax):</p>
+<pre><code>type Counter
+
+F init(c:Counter) c.counter = 0
+
+F incr(c:Counter) {
+    c.counter = c.counter + 1
+    c
+}
+
+F get(c:Counter) c.counter</code></pre>
+<p>Using the <code>Counter</code> type:</p>
+<pre><code>c = Counter()
+c.incr()
+echo(c.get())</code></pre>
+<p><code>c.incr()</code> and <code>incr(c)</code> are syntactically equivalent.</p>
+<h2 id="methods-method-implementations-and-calling">Methods, method implementations and calling</h2>
+<p>A method in NGS is an <code>Arr</code> of functions. Each function is called <strong>method implementation</strong>.</p>
+<pre><code>F bigger(x:Int) x+1
+F bigger(s:Str) &quot;+${s}+&quot;</code></pre>
+<p><code>bigger</code> is now an <code>Arr</code> with two elements, the functions defined by <code>F</code>. When calling an <code>Arr</code>, NGS scans the array backwards and invokes the <strong>method implementation</strong> that matches the given arguments (this matching is called multiple dispatch). Example:</p>
+<pre><code>echo(bigger(&quot;x&quot;))
+# Output: +x+
+
+echo(bigger(1))
+# Output: 2</code></pre>
+<p>No matching <strong>method implementation</strong> causes <code>ImplNotFound</code> exception.</p>
+<pre><code>echo(bigger(true))
+# Causes ImplNotFound exception</code></pre>
+<h2 id="customizaion-using-methods">Customizaion using methods</h2>
+<p>Most language syntax constructs are actually a method calls. For example <code>1 + 2</code> is <code>+(1,2)</code> . The method named <code>+</code> is called with 1 and 2 as arguments. This means you can customize what a <code>+</code> does when applied to your types. Since types are &quot;open&quot;, you can also define what a <code>+</code> means for existing types too.</p>
+<p>Backwards array scanning allows later code (your code as opposed to previously loaded library for example) to override the behaviour. This override can be narrowed to specific cases using the <code>guard</code> clause. Continuing the example above:</p>
+<pre><code>F bigger(x:Int) {
+    guard x &gt;= 100
+    x + 10
+}
+echo(bigger(1))
+echo(bigger(100))
+
+# Outputs one per line: 2, 110</code></pre>
+<p>When the condition following the <code>guard</code> clause is true, the execution continues. When the condition is false, method implementation execution is terminated and the search in the array of method implementations continues as if this implementation did not match the types of the arguments. I recommend not to cause any side effects inside the method implementation in statements above <code>guard</code>, if you have any.</p>
+<h1 id="language-hooks">LANGUAGE HOOKS</h1>
+<h2 id="impl_not_found_hook"><code>impl_not_found_hook</code></h2>
+<p>... is called when a method was called but no <strong>method implementation</strong> matched the arguments. Use <code>F impl_not_found_hook(callable:Fun, *args) ...</code> to add your behaviours.</p>
+<h2 id="global_not_found_hook"><code>global_not_found_hook</code></h2>
+<p>... is called on attempt to read from an undefined global variable. Sample usage from <strong>stdlib.ngs</strong></p>
+<pre><code>F global_not_found_hook(name:Str) {
+    require(&quot;${NGS_DIR}/autoload/${name}.ngs&quot;)
+}</code></pre>
+</body>
+</html>
