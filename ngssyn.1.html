@@ -24,7 +24,7 @@
 <pre><code>ls
 ls $my_file
 ls $*my_files</code></pre>
-<p>This is the syntax at top level of the file or when you start an interactive shell. When in <strong>code syntax</strong> you can embed <strong>command syntax</strong> within <code>$(...)</code> and serveral other constructs.</p>
+<p>This is the syntax at top level of the file or when you start an interactive shell. When in <strong>code syntax</strong> you can embed <strong>command syntax</strong> within <code>$(...)</code> and several other constructs.</p>
 <h2 id="code-syntax">Code syntax</h2>
 <pre><code>{
     type T
@@ -34,6 +34,18 @@ ls $*my_files</code></pre>
 <p>This is the syntax inside <code>{...}</code>.</p>
 <h2 id="commands-separators">Commands separators</h2>
 <p>In both syntaxes, commands are separated by a new line or by <code>;</code> (semicolon).</p>
+<h2 id="comments">Comments</h2>
+<pre><code># comment at the beginning of line
+some code # comments after code are not implemented yet</code></pre>
+<h2 id="truth-falsehood">Truth / Falsehood</h2>
+<p>In <code>if</code>, <code>while</code>, etc. conditions if given expression is not <code>Bool</code> (i.e. not <code>true</code> or <code>false</code>). It is converted to <code>Bool</code> by applying the <code>Bool()</code> method to it. Built in conversion is as follows:</p>
+<p>False: null, 0, empty string, empty array, empty hash. True: everything else. Not implemented yet: truth of real numbers</p>
+<p>Defining truth for your types:</p>
+<pre><code>{
+    type T
+    F init(t:T) t.wheels_count = 0
+    F Bool(t:T) t.wheels_count &gt;= 4
+}</code></pre>
 <h2 id="command-syntax---...">Command syntax - <code>{...}</code></h2>
 <p>Embed <strong>code syntax</strong>.</p>
 <pre><code>{ my_code }
@@ -56,60 +68,86 @@ h = {&quot;a&quot;: 1, **inner_hash, &quot;c&quot;: 3}
 arr = [1, *inner_arr, 4]
 # arr is now [1, 2, 3, 4]</code></pre>
 <h2 id="command-and-code-syntax---assignment">Command and code syntax - assignment</h2>
-<pre><code>var_name=expression</code></pre>
+<pre><code>var_name=expression
+var_name = expression</code></pre>
 <h2 id="command-and-code-syntax---f">Command and code syntax - <code>F</code></h2>
 <pre><code>F myfunc(required_arg, optional_arg=default_value, *rest_args, **rest_kw_args) {
     ...
+
+    if e1 { return e2 }
+
+    # syntactic sugar, same as above
+    e1 returns e2
+
+    ...
 }</code></pre>
-<h2 id="code-syntax---try-...-catch-...">Code syntax - try ... catch ...</h2>
+<p><code>*rest_args</code> gets any excessive positional arguments (or <code>[]</code> if there are none) <code>*rest_kw_args</code> gets all passed keyword arguments (or <code>{}</code> if there are none)</p>
+<h2 id="command-and-code-syntax---function-call">Command and code syntax - function call</h2>
+<pre><code>myfunc(required_arg, optional_arg=myval, *rest_args, **rest_kw_args)</code></pre>
+<p><code>*rest_args</code> - pass additional positional arguments <code>*rest_kw_args</code> - pass additional keyword arguments</p>
+<h2 id="code-syntax---trythrowcatch">Code syntax - try/throw/catch</h2>
 <pre><code>try {
-    code
+    # Try to execude this code - start
+    ...
+
+    if e1 { throw e2 }
+
+    # syntactic sugar, same as above
+    e1 throws e2
+    ...
+    # Try to execude this code - end
 }
 catch(e:E1) { result1 }
 catch(e:E2) { result2 }
 ...</code></pre>
-<p>Try to execute the <em>code</em>. If no excepion occurs, return the value of <em>code</em>. If an error of type <code>E1</code> occurs, execute <code>result1</code>. If an error of type <code>E2</code> occurs, execute <code>result2</code> and so on.</p>
+<p>Try to execute the code. If no exception occurs, return the value of the code. If an error of type <code>E1</code> occurs, execute <code>result1</code>. If an error of type <code>E2</code> occurs, execute <code>result2</code> and so on.</p>
 <pre><code>try {
     code
 }</code></pre>
 <p>If there are no <code>catch</code> clauses following the <code>try</code>, if any exception occurs in the <em>code</em>, the result of the <code>try</code> expression is <code>null</code>. Example:</p>
 <pre><code>v = try myhash[&#39;maybe-such-key-exists&#39;][&#39;and-then-some&#39;]</code></pre>
-<h2 id="code-syntax---forin-syntactic-sugar">Code syntax - for(i;n) syntactic sugar</h2>
-<pre><code>for(i;n) { code }</code></pre>
-<p>is same as</p>
-<pre><code>for(i=0; i&lt;n; i=i+1) { code }</code></pre>
+<h2 id="command-and-code-syntax---loops">Command and code syntax - loops</h2>
+<pre><code>for(i=0; i&lt;n; i=i+1) { code }
+
+# This is syntax sugar and is exactly as above
+for(i;n) { code }
+
+while cond_expr {
+    # following loop controls work in for too
+
+    if e1 { continue }
+
+    # syntactic sugar, same as above
+    e1 continues
+
+    if e2 { break }
+    # syntactic sugar, same as above
+    e2 breaks
+
+}</code></pre>
 <h2 id="code-syntax---collector-syntactic-sugar">Code syntax - collector syntactic sugar</h2>
-<pre><code>collector
+<pre><code># Example 1
+collector
     [1,2,3,4,5].each(F(elt) {
         collect(elt)
         if elt &gt; 2 collect(elt * 2)
     })</code></pre>
-<p>The expression evaluates to the array <strong>[1,2,3,6,4,8,5,10]</strong>. See stdlib.ngs for more <code>collector</code> usage examples.</p>
+<p>The expression evaluates to the array <strong>[1,2,3,6,4,8,5,10]</strong>.</p>
+<pre><code># Example 2, from stdlib
+F flatten(arr:Arr)
+    collector
+        arr.each(F(subarr) {
+            subarr.each(collect)
+        })</code></pre>
+<p>See <strong>stdlib.ngs</strong> for more <code>collector</code> usage examples.</p>
 <ul>
-<li><code>collector ... collect(x) ...</code> is equivalent to <code>collector([], code)</code>. The expression after <code>collector</code> is wrapped as <code>F(collect) { code }</code></li>
-<li><code>collector/expr ... collect(x) ...</code> is equivalent to <code>collector(expr, code)</code>. The expression after <code>collector</code> is wrapped as <code>F(collect) { code }</code></li>
+<li><code>collector ... collect(x) ...</code> is equivalent to <code>collector([], F(collect) { ... collect(x) ... })</code>.</li>
+<li><code>collector/expr ... collect(x) ...</code> is equivalent to <code>collector(expr, F(collect) { ... collect(x) ... })</code>.</li>
 </ul>
-<h2 id="code-syntax---throws-syntactic-sugar">Code syntax - throws syntactic sugar</h2>
-<pre><code>expr1 throws expr2
-# fd &lt;= 0 throws Exception(&quot;fetch(): failed to open file ${fname}&quot;)</code></pre>
-<p>is</p>
-<pre><code>if expr1 throw expr2</code></pre>
-<h2 id="code-syntax---returns-syntactic-sugar">Code syntax - returns syntactic sugar</h2>
-<pre><code>expr1 returns expr2
-# a.len() != b.len() returns false</code></pre>
-<p>is</p>
-<pre><code>if expr1 return expr2</code></pre>
-<h2 id="code-syntax---continues-syntactic-sugar">Code syntax - continues syntactic sugar</h2>
-<pre><code>expr continues
-# for(i;5) { i == 3 continues; echo(i) }
-# Outputs one per line: 0, 1, 2, 4</code></pre>
-<p>is</p>
-<pre><code>if expr continue</code></pre>
-<h2 id="code-syntax---breaks-syntactic-sugar">Code syntax - breaks syntactic sugar</h2>
-<pre><code>expr breaks
-# for(i;5) { i == 3 breaks; echo(i) }
-# Outputs one per line: 0, 1, 2</code></pre>
-<p>is</p>
-<pre><code>if expr break</code></pre>
+<p>Sample definition for <code>Arr</code> (array) collector from <strong>stdlib.ngs</strong>:</p>
+<pre><code>F collector(a:Arr, code:Fun) {
+    code(F(elt) a.push(elt))
+    a
+}</code></pre>
 </body>
 </html>
