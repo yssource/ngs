@@ -125,6 +125,41 @@ while cond_expr {
     e2 breaks
 
 }</code></pre>
+<h2 id="command-and-code-syntax---switch-match-cond">Command and code syntax - switch, match, cond</h2>
+<pre><code>switch value_expr {
+    expr1 code1
+    expr2 code2
+    ...
+}
+
+# Example:
+r = switch 1 {
+    1  2
+    10 20
+}
+# r is now 2</code></pre>
+<p>Evaluates code1 if <code>value_expr == expr1</code>, code2 if <code>value_expr==expr2</code> and so on. <code>value_expr</code> is computed only once.</p>
+<pre><code>match value_expr {
+    expr1 code1
+    expr2 code2
+    ...
+}</code></pre>
+<p>Similar to <code>switch</code> but the code is evaluated when <code>match(value_expr, exprN)</code>.</p>
+<pre><code>cond {
+    expr1 code1
+    expr2 code2
+    ...
+
+}
+
+# Example:
+r = cond {
+    a == b  1
+    b == c  2
+}</code></pre>
+<p>Similar to <code>switch</code> but the code is evaluated when <code>exprN</code> is true.</p>
+<p><code>switch</code>, <code>match</code> and <code>cond</code> do <em>not</em> have C-style fall-through semantics. They behave like there is a &quot;break&quot; after each <code>codeN</code>.</p>
+<p><code>eswitch</code>, <code>ematch</code> and <code>econd</code> work the same but if none of the clauses is matched (and no code is evaluated) the <code>SwitchFail</code> exception is thrown.</p>
 <h2 id="code-syntax---collector-syntactic-sugar">Code syntax - collector syntactic sugar</h2>
 <pre><code># Example 1
 collector
