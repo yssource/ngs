@@ -219,14 +219,49 @@
 <h1 id="error"><code>error</code></h1>
 <h2 id="errorsstr"><code>error(s:Str)</code></h2>
 <h1 id="expose"><code>expose</code></h1>
-<h2 id="exposechildnormaltype-attrstr"><code>expose(child:NormalType, attr:Str)</code></h2>
+<h2 id="exposetypnormaltype-attrstr"><code>expose(typ:NormalType, attr:Str)</code></h2>
+<h3 id="description-3">Description</h3>
+<pre><code>Exposes the given attribute so when there is ImplNotFound
+when the original call had instance of the given type as an argument
+the call is retried with the instance replaced by the given argument</code></pre>
+<h3 id="parameter-typnormaltype">Parameter typ:NormalType</h3>
+<pre><code>ImplNotFound with instance of this type will cause retry with the given attribute</code></pre>
+<h3 id="parameter-attrstr">Parameter attr:Str</h3>
+<pre><code>The exposed attribute that will be used on call retry</code></pre>
+<h3 id="returns">Returns</h3>
+<pre><code>typ</code></pre>
+<h3 id="example">Example</h3>
+<pre><code>{
+    type Stats
+    Stats.expose(&#39;h&#39;)
+}
+
+F init(s:Stats) {
+    s.h = {}
+}
+
+F Stats(a:Arr) {
+    s = Stats()
+    a.each(partial(push, s))
+    s
+}
+
+F push(s:Stats, k) {
+    s.h[k] = s.h.get(k, 0) + 1
+    s
+}
+
+# Usage:
+numbering = Stats()
+numbering.push(hostname_base)
+... numbering[hostname_base]} ...</code></pre>
 <h1 id="fetch"><code>fetch</code></h1>
 <h2 id="fetchfnamestr"><code>fetch(fname:Str)</code></h2>
-<h3 id="description-3">Description</h3>
+<h3 id="description-4">Description</h3>
 <pre><code>Fetches whole file</code></pre>
 <h3 id="parameter-fnamestr">Parameter fname:Str</h3>
 <pre><code>File name to fetch</code></pre>
-<h3 id="returns">Returns</h3>
+<h3 id="returns-1">Returns</h3>
 <pre><code>Whole file as a string</code></pre>
 <h1 id="filter"><code>filter</code></h1>
 <h2 id="filterarrarr-predicatefun-argsarr"><code>filter(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
@@ -252,6 +287,9 @@
 <h2 id="get_c_errno-1"><code>get_c_errno()</code></h2>
 <h1 id="global_not_found_hook"><code>global_not_found_hook</code></h1>
 <h2 id="global_not_found_hooknamestr"><code>global_not_found_hook(name:Str)</code></h2>
+<h3 id="description-5">Description</h3>
+<pre><code>Called when reading undefined global
+Implements autoloading</code></pre>
 <h1 id="globals"><code>globals</code></h1>
 <h2 id="globals-1"><code>globals()</code></h2>
 <h1 id="has"><code>has</code></h1>
@@ -267,8 +305,13 @@
 <h2 id="hashesttable"><code>Hashes(t:Table)</code></h2>
 <h1 id="identity"><code>identity</code></h1>
 <h2 id="identityxany"><code>identity(x:Any)</code></h2>
+<h3 id="returns-2">Returns</h3>
+<pre><code>The given argument</code></pre>
 <h1 id="impl_not_found_hook"><code>impl_not_found_hook</code></h1>
 <h2 id="impl_not_found_hookcallablefun-argsarr"><code>impl_not_found_hook(callable:Fun, *args:Arr)</code></h2>
+<h3 id="description-6">Description</h3>
+<pre><code>Called on ImplNotFound
+Implements expose() behaviour</code></pre>
 <h1 id="in"><code>in</code></h1>
 <h2 id="insymbolstr-libclib"><code>in(symbol:Str, lib:CLib)</code></h2>
 <h2 id="inxany-hhash"><code>in(x:Any, h:Hash)</code></h2>
@@ -278,15 +321,15 @@
 <h2 id="inherittnormaltype-parentnormaltype"><code>inherit(t:NormalType, parent:NormalType)</code></h2>
 <h1 id="init"><code>init</code></h1>
 <h2 id="initeexception"><code>init(e:Exception)</code></h2>
-<h3 id="returns-1">Returns</h3>
+<h3 id="returns-3">Returns</h3>
 <pre><code>Exception with .backtrace attribute</code></pre>
 <h2 id="initeexception-sstr"><code>init(e:Exception, s:Str)</code></h2>
 <h3 id="parameter-sstr">Parameter s:Str</h3>
 <pre><code>Goes into .info</code></pre>
-<h3 id="returns-2">Returns</h3>
+<h3 id="returns-4">Returns</h3>
 <pre><code>Exception with .backtrace and .info</code></pre>
 <h2 id="initeexception-causeexception"><code>init(e:Exception, cause:Exception)</code></h2>
-<h3 id="returns-3">Returns</h3>
+<h3 id="returns-5">Returns</h3>
 <pre><code>Exception with .backtrace and .cause</code></pre>
 <h2 id="initeindexnotfound-messagestr-containerany-keyany"><code>init(e:IndexNotFound, message:Str, container:Any, key:Any)</code></h2>
 <h2 id="initrrange-startany-endany"><code>init(r:Range, start:Any, end:Any)</code></h2>
@@ -319,7 +362,7 @@
 <h2 id="logsstr"><code>log(s:Str)</code></h2>
 <h1 id="lte"><code>lte</code></h1>
 <h2 id="lteastr-bstr"><code>lte(a:Str, b:Str)</code></h2>
-<h3 id="description-4">Description</h3>
+<h3 id="description-7">Description</h3>
 <pre><code>Case-insensitive LessThan or Equal comparison for strings</code></pre>
 <h1 id="map"><code>map</code></h1>
 <h2 id="maprrange-mapperfun-argsarr"><code>map(r:Range, mapper:Fun, *args:Arr)</code></h2>
@@ -341,21 +384,21 @@
 <h1 id="parse"><code>parse</code></h1>
 <h2 id="parsesstr"><code>parse(s:Str)</code></h2>
 <h2 id="parsesstr-hintshash"><code>parse(s:Str, hints:Hash)</code></h2>
-<h3 id="description-5">Description</h3>
+<h3 id="description-8">Description</h3>
 <pre><code>Returns the string as is</code></pre>
 <h2 id="parsesstr-hintshash-1"><code>parse(s:Str, hints:Hash)</code></h2>
-<h3 id="description-6">Description</h3>
+<h3 id="description-9">Description</h3>
 <pre><code>Parses JSON, continues with other implementations if fails.</code></pre>
 <h2 id="parsesstr-hintshash-2"><code>parse(s:Str, hints:Hash)</code></h2>
 <h1 id="partial"><code>partial</code></h1>
 <h2 id="partialffun-bind_argsarr"><code>partial(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-7">Description</h3>
+<h3 id="description-10">Description</h3>
 <pre><code>Returns partially-applied function</code></pre>
 <h3 id="parameter-ffun">Parameter f:Fun</h3>
 <pre><code>The base function</code></pre>
 <h1 id="partial_tail"><code>partial_tail</code></h1>
 <h2 id="partial_tailffun-bind_argsarr"><code>partial_tail(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-8">Description</h3>
+<h3 id="description-11">Description</h3>
 <pre><code>Same as partial() but the bound arguments are last ones</code></pre>
 <h1 id="path"><code>Path</code></h1>
 <h2 id="pathsstr"><code>Path(s:Str)</code></h2>
@@ -383,9 +426,9 @@
 <h2 id="realnint"><code>Real(n:Int)</code></h2>
 <h1 id="require"><code>require</code></h1>
 <h2 id="requirefnamestr"><code>require(fname:Str)</code></h2>
-<h3 id="description-9">Description</h3>
+<h3 id="description-12">Description</h3>
 <pre><code>Runs the given file</code></pre>
-<h3 id="returns-4">Returns</h3>
+<h3 id="returns-6">Returns</h3>
 <pre><code>Typically whatever the last expression in the file evaluates to</code></pre>
 <h1 id="resolve_ip"><code>resolve_ip</code></h1>
 <h2 id="resolve_ipipint"><code>resolve_ip(ip:Int)</code></h2>
@@ -413,8 +456,6 @@
 <h2 id="strrreal"><code>Str(r:Real)</code></h2>
 <h2 id="strnint"><code>Str(n:Int)</code></h2>
 <h2 id="strttype"><code>Str(t:Type)</code></h2>
-<h3 id="description-10">Description</h3>
-<pre><code>Unfinished</code></pre>
 <h2 id="strrexclusiverange"><code>Str(r:ExclusiveRange)</code></h2>
 <h2 id="strrinclusiverange"><code>Str(r:InclusiveRange)</code></h2>
 <h2 id="strsstr"><code>Str(s:Str)</code></h2>
@@ -438,20 +479,20 @@
 <h2 id="timesnint-cbfun-argsarr"><code>times(n:Int, cb:Fun, *args:Arr)</code></h2>
 <h1 id="to_exit_code"><code>to_exit_code</code></h1>
 <h2 id="to_exit_codexany"><code>to_exit_code(x:Any)</code></h2>
-<h3 id="returns-5">Returns</h3>
+<h3 id="returns-7">Returns</h3>
 <pre><code>Always 0</code></pre>
 <h2 id="to_exit_codebbool"><code>to_exit_code(b:Bool)</code></h2>
-<h3 id="returns-6">Returns</h3>
+<h3 id="returns-8">Returns</h3>
 <pre><code>0 for true, 1 for false </code></pre>
 <h2 id="to_exit_codenint"><code>to_exit_code(n:Int)</code></h2>
-<h3 id="returns-7">Returns</h3>
+<h3 id="returns-9">Returns</h3>
 <pre><code>n</code></pre>
 <h2 id="to_exit_codepprocess"><code>to_exit_code(p:Process)</code></h2>
 <h1 id="type"><code>Type</code></h1>
 <h2 id="typenamestr"><code>Type(name:Str)</code></h2>
 <h1 id="typeof"><code>typeof</code></h1>
 <h2 id="typeofxany"><code>typeof(x:Any)</code></h2>
-<h3 id="description-11">Description</h3>
+<h3 id="description-13">Description</h3>
 <pre><code>Returns type of the given instance</code></pre>
 <h3 id="parameter-xany">Parameter x:Any</h3>
 <pre><code>Instance (an object)</code></pre>
