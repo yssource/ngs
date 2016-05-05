@@ -233,7 +233,7 @@ the call is retried with the instance replaced by the given argument</code></pre
 <h3 id="example">Example</h3>
 <pre><code>{
     type Stats
-    Stats.expose(&#39;h&#39;)
+    Stats.expose(h)
 }
 
 F init(s:Stats) {
@@ -384,21 +384,17 @@ Implements expose() behaviour</code></pre>
 <h1 id="parse"><code>parse</code></h1>
 <h2 id="parsesstr"><code>parse(s:Str)</code></h2>
 <h2 id="parsesstr-hintshash"><code>parse(s:Str, hints:Hash)</code></h2>
-<h3 id="description-8">Description</h3>
-<pre><code>Returns the string as is</code></pre>
 <h2 id="parsesstr-hintshash-1"><code>parse(s:Str, hints:Hash)</code></h2>
-<h3 id="description-9">Description</h3>
-<pre><code>Parses JSON, continues with other implementations if fails.</code></pre>
 <h2 id="parsesstr-hintshash-2"><code>parse(s:Str, hints:Hash)</code></h2>
 <h1 id="partial"><code>partial</code></h1>
 <h2 id="partialffun-bind_argsarr"><code>partial(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-10">Description</h3>
+<h3 id="description-8">Description</h3>
 <pre><code>Returns partially-applied function</code></pre>
 <h3 id="parameter-ffun">Parameter f:Fun</h3>
 <pre><code>The base function</code></pre>
 <h1 id="partial_tail"><code>partial_tail</code></h1>
 <h2 id="partial_tailffun-bind_argsarr"><code>partial_tail(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-11">Description</h3>
+<h3 id="description-9">Description</h3>
 <pre><code>Same as partial() but the bound arguments are last ones</code></pre>
 <h1 id="path"><code>Path</code></h1>
 <h2 id="pathsstr"><code>Path(s:Str)</code></h2>
@@ -426,7 +422,7 @@ Implements expose() behaviour</code></pre>
 <h2 id="realnint"><code>Real(n:Int)</code></h2>
 <h1 id="require"><code>require</code></h1>
 <h2 id="requirefnamestr"><code>require(fname:Str)</code></h2>
-<h3 id="description-12">Description</h3>
+<h3 id="description-10">Description</h3>
 <pre><code>Runs the given file</code></pre>
 <h3 id="returns-6">Returns</h3>
 <pre><code>Typically whatever the last expression in the file evaluates to</code></pre>
@@ -480,10 +476,10 @@ Implements expose() behaviour</code></pre>
 <h1 id="to_exit_code"><code>to_exit_code</code></h1>
 <h2 id="to_exit_codexany"><code>to_exit_code(x:Any)</code></h2>
 <h3 id="returns-7">Returns</h3>
-<pre><code>Always 0</code></pre>
+<pre><code>always 0</code></pre>
 <h2 id="to_exit_codebbool"><code>to_exit_code(b:Bool)</code></h2>
 <h3 id="returns-8">Returns</h3>
-<pre><code>0 for true, 1 for false </code></pre>
+<pre><code>0 for true, 1 for false</code></pre>
 <h2 id="to_exit_codenint"><code>to_exit_code(n:Int)</code></h2>
 <h3 id="returns-9">Returns</h3>
 <pre><code>n</code></pre>
@@ -492,7 +488,7 @@ Implements expose() behaviour</code></pre>
 <h2 id="typenamestr"><code>Type(name:Str)</code></h2>
 <h1 id="typeof"><code>typeof</code></h1>
 <h2 id="typeofxany"><code>typeof(x:Any)</code></h2>
-<h3 id="description-13">Description</h3>
+<h3 id="description-11">Description</h3>
 <pre><code>Returns type of the given instance</code></pre>
 <h3 id="parameter-xany">Parameter x:Any</h3>
 <pre><code>Instance (an object)</code></pre>
