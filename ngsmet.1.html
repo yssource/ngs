@@ -6,19 +6,19 @@
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Ilya Sher" />
   <meta name="date" content="2016-01-01" />
-  <title>NGSMETHODS(1) NGS User Manual</title>
+  <title>NGSMET(1) NGS User Manual</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="pandoc.css" type="text/css" />
 </head>
 <body>
 <div id="header">
-<h1 class="title">NGSMETHODS(1) NGS User Manual</h1>
+<h1 class="title">NGSMET(1) NGS User Manual</h1>
 <h2 class="author">Ilya Sher</h2>
 <h3 class="date">2016</h3>
 </div>
 <h1 id="name">NAME</h1>
 <p>ngsmet - Next Generation Shell built-in and standard library methods.</p>
-<p>This page is work in progress and is now at very early stage.</p>
+<p>This page is work in progress and is now at very early stage. It is automatically generated from the <em>doc</em> directives in the source code.</p>
 <h1 id="methods">Methods: <code>!=</code></h1>
 <h2 id="aany-bany"><code>!=(a:Any, b:Any)</code></h2>
 <h1 id="methods-1">Methods: <code>!==</code></h1>
@@ -124,6 +124,8 @@
 <h1 id="type-basictype">Type: <code>BasicType</code></h1>
 <h1 id="type-basictypeinstance">Type: <code>BasicTypeInstance</code></h1>
 <h1 id="type-bool">Type: <code>Bool</code></h1>
+<h2 id="description-2">Description</h2>
+<pre><code>The only instances are true and false</code></pre>
 <h1 id="methods-bool">Methods: <code>Bool</code></h1>
 <h2 id="boolxany"><code>Bool(x:Any)</code></h2>
 <h2 id="boolppath"><code>Bool(p:Path)</code></h2>
@@ -131,7 +133,7 @@
 <h2 id="boolttable"><code>Bool(t:Table)</code></h2>
 <h1 id="methods-bootstrap">Methods: <code>bootstrap</code></h1>
 <h2 id="bootstrap"><code>bootstrap()</code></h2>
-<h3 id="description-2">Description</h3>
+<h3 id="description-3">Description</h3>
 <pre><code>Main entry point. Executed on NGS boot.</code></pre>
 <h1 id="methods-bootstrap_find_ngs_dir">Methods: <code>bootstrap_find_ngs_dir</code></h1>
 <h2 id="bootstrap_find_ngs_dir"><code>bootstrap_find_ngs_dir()</code></h2>
@@ -173,9 +175,17 @@
 <h1 id="type-callfail">Type: <code>CallFail</code></h1>
 <h1 id="methods-cell_display_width">Methods: <code>cell_display_width</code></h1>
 <h2 id="cell_display_widthxany"><code>cell_display_width(x:Any)</code></h2>
+<h3 id="description-4">Description</h3>
+<pre><code>Calculate cell display width - any Str()-able instance</code></pre>
 <h2 id="cell_display_widthxarr"><code>cell_display_width(x:Arr)</code></h2>
+<h3 id="description-5">Description</h3>
+<pre><code>Calculate cell display width for an array</code></pre>
 <h2 id="cell_display_widthxarr-1"><code>cell_display_width(x:Arr)</code></h2>
+<h3 id="description-6">Description</h3>
+<pre><code>Calculate cell display width for an empty array</code></pre>
 <h1 id="type-clib">Type: <code>CLib</code></h1>
+<h2 id="description-7">Description</h2>
+<pre><code>C library (unfinished, do not use)</code></pre>
 <h1 id="methods-clib">Methods: <code>CLib</code></h1>
 <h2 id="clibnamestr"><code>CLib(name:Str)</code></h2>
 <h1 id="methods-close_reading_end">Methods: <code>close_reading_end</code></h1>
@@ -205,6 +215,8 @@
 <h2 id="countarrarr-predicatefun-argsarr"><code>count(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
 <h2 id="counthhash-predicatefun-argsarr"><code>count(h:Hash, predicate:Fun, *args:Arr)</code></h2>
 <h1 id="type-csym">Type: <code>CSym</code></h1>
+<h2 id="description-8">Description</h2>
+<pre><code>C symbol (unfinished, do not use)</code></pre>
 <h1 id="methods-debug">Methods: <code>debug</code></h1>
 <h2 id="debugsstr"><code>debug(s:Str)</code></h2>
 <h1 id="methods-decode_json">Methods: <code>decode_json</code></h1>
@@ -239,7 +251,7 @@
 <h1 id="type-exclusiverange">Type: <code>ExclusiveRange</code></h1>
 <h1 id="methods-expose">Methods: <code>expose</code></h1>
 <h2 id="exposetypnormaltype-attrstr"><code>expose(typ:NormalType, attr:Str)</code></h2>
-<h3 id="description-3">Description</h3>
+<h3 id="description-9">Description</h3>
 <pre><code>Exposes the given attribute so when there is ImplNotFound
 when the original call had instance of the given type as an argument
 the call is retried with the instance replaced by the given argument</code></pre>
@@ -276,7 +288,7 @@ numbering.push(hostname_base)
 ... numbering[hostname_base]} ...</code></pre>
 <h1 id="methods-fetch">Methods: <code>fetch</code></h1>
 <h2 id="fetchfnamestr"><code>fetch(fname:Str)</code></h2>
-<h3 id="description-4">Description</h3>
+<h3 id="description-10">Description</h3>
 <pre><code>Fetches whole file</code></pre>
 <h3 id="parameter-fnamestr">Parameter fname:Str</h3>
 <pre><code>File name to fetch</code></pre>
@@ -310,7 +322,7 @@ numbering.push(hostname_base)
 <h2 id="get_c_errno"><code>get_c_errno()</code></h2>
 <h1 id="methods-global_not_found_hook">Methods: <code>global_not_found_hook</code></h1>
 <h2 id="global_not_found_hooknamestr"><code>global_not_found_hook(name:Str)</code></h2>
-<h3 id="description-5">Description</h3>
+<h3 id="description-11">Description</h3>
 <pre><code>Called when reading undefined global
 Implements autoloading</code></pre>
 <h1 id="type-globalnotfound">Type: <code>GlobalNotFound</code></h1>
@@ -334,7 +346,7 @@ Implements autoloading</code></pre>
 <pre><code>The given argument</code></pre>
 <h1 id="methods-impl_not_found_hook">Methods: <code>impl_not_found_hook</code></h1>
 <h2 id="impl_not_found_hookcallablefun-argsarr"><code>impl_not_found_hook(callable:Fun, *args:Arr)</code></h2>
-<h3 id="description-6">Description</h3>
+<h3 id="description-12">Description</h3>
 <pre><code>Called on ImplNotFound
 Implements expose() behaviour</code></pre>
 <h1 id="type-implnotfound">Type: <code>ImplNotFound</code></h1>
@@ -366,6 +378,8 @@ Implements expose() behaviour</code></pre>
 <h2 id="initffile-namestr"><code>init(f:File, name:Str)</code></h2>
 <h2 id="initffile-fdint"><code>init(f:File, fd:Int)</code></h2>
 <h2 id="initttable"><code>init(t:Table)</code></h2>
+<h3 id="description-13">Description</h3>
+<pre><code>Initialize rows to an empty array</code></pre>
 <h2 id="initttable-rows_hashesarr"><code>init(t:Table, rows_hashes:Arr)</code></h2>
 <h2 id="initsstats"><code>init(s:Stats)</code></h2>
 <h1 id="type-int">Type: <code>Int</code></h1>
@@ -394,7 +408,7 @@ Implements expose() behaviour</code></pre>
 <h1 id="type-lookupfail">Type: <code>LookupFail</code></h1>
 <h1 id="methods-lte">Methods: <code>lte</code></h1>
 <h2 id="lteastr-bstr"><code>lte(a:Str, b:Str)</code></h2>
-<h3 id="description-7">Description</h3>
+<h3 id="description-14">Description</h3>
 <pre><code>Case-insensitive LessThan or Equal comparison for strings</code></pre>
 <h1 id="methods-map">Methods: <code>map</code></h1>
 <h2 id="maprrange-mapperfun-argsarr"><code>map(r:Range, mapper:Fun, *args:Arr)</code></h2>
@@ -413,10 +427,8 @@ Implements expose() behaviour</code></pre>
 <h2 id="not-inaany-bany"><code>not in(a:Any, b:Any)</code></h2>
 <h1 id="type-notimplemented">Type: <code>NotImplemented</code></h1>
 <h1 id="type-null">Type: <code>Null</code></h1>
-<h2 id="description-8">Description</h2>
-<pre><code>Has only one instance, null.</code></pre>
-<h2 id="field-test">Field <code>test</code></h2>
-<pre><code>TEST</code></pre>
+<h2 id="description-15">Description</h2>
+<pre><code>Has only one instance, null</code></pre>
 <h1 id="methods-open">Methods: <code>open</code></h1>
 <h2 id="openffile-flagsstr"><code>open(f:File, flags:Str)</code></h2>
 <h1 id="methods-params">Methods: <code>params</code></h1>
@@ -429,13 +441,13 @@ Implements expose() behaviour</code></pre>
 <h2 id="parsesstr-hintshash-2"><code>parse(s:Str, hints:Hash)</code></h2>
 <h1 id="methods-partial">Methods: <code>partial</code></h1>
 <h2 id="partialffun-bind_argsarr"><code>partial(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-9">Description</h3>
+<h3 id="description-16">Description</h3>
 <pre><code>Returns partially-applied function</code></pre>
 <h3 id="parameter-ffun">Parameter f:Fun</h3>
 <pre><code>The base function</code></pre>
 <h1 id="methods-partial_tail">Methods: <code>partial_tail</code></h1>
 <h2 id="partial_tailffun-bind_argsarr"><code>partial_tail(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-10">Description</h3>
+<h3 id="description-17">Description</h3>
 <pre><code>Same as partial() but the bound arguments are last ones</code></pre>
 <h1 id="type-path">Type: <code>Path</code></h1>
 <h1 id="methods-path">Methods: <code>Path</code></h1>
@@ -460,10 +472,8 @@ Implements expose() behaviour</code></pre>
 <h2 id="pushttable-row_arrarr"><code>push(t:Table, row_arr:Arr)</code></h2>
 <h2 id="pushttable-row_hashhash"><code>push(t:Table, row_hash:Hash)</code></h2>
 <h2 id="pushsstats-kany"><code>push(s:Stats, k:Any)</code></h2>
-<h3 id="description-11">Description</h3>
+<h3 id="description-18">Description</h3>
 <pre><code>Increment the named counter</code></pre>
-<h3 id="parameter-kany">Parameter k:Any</h3>
-<pre><code>the name of the counter to increment</code></pre>
 <h1 id="type-range">Type: <code>Range</code></h1>
 <h1 id="methods-read">Methods: <code>read</code></h1>
 <h2 id="readfdint"><code>read(fd:Int)</code></h2>
@@ -474,7 +484,7 @@ Implements expose() behaviour</code></pre>
 <h1 id="type-redir">Type: <code>Redir</code></h1>
 <h1 id="methods-require">Methods: <code>require</code></h1>
 <h2 id="requirefnamestr"><code>require(fname:Str)</code></h2>
-<h3 id="description-12">Description</h3>
+<h3 id="description-19">Description</h3>
 <pre><code>Runs the given file</code></pre>
 <h3 id="returns-6">Returns</h3>
 <pre><code>Typically whatever the last expression in the file evaluates to</code></pre>
@@ -497,13 +507,13 @@ Implements expose() behaviour</code></pre>
 <h2 id="starts_withhaystackstr-needlestr"><code>starts_with(haystack:Str, needle:Str)</code></h2>
 <h2 id="starts_withhaystackstr-needlestr-1"><code>starts_with(haystack:Str, needle:Str)</code></h2>
 <h1 id="type-stats">Type: <code>Stats</code></h1>
-<h2 id="description-13">Description</h2>
+<h2 id="description-20">Description</h2>
 <pre><code>A group of named counters</code></pre>
 <h2 id="field-s">Field <code>s</code></h2>
 <pre><code>The underlying Hash, expose()d</code></pre>
 <h1 id="methods-stats">Methods: <code>Stats</code></h1>
 <h2 id="statsaarr"><code>Stats(a:Arr)</code></h2>
-<h3 id="description-14">Description</h3>
+<h3 id="description-21">Description</h3>
 <pre><code>Makes Stats, with each element in the array counted as if push()ed</code></pre>
 <h1 id="methods-status">Methods: <code>status</code></h1>
 <h2 id="statussstr"><code>status(s:Str)</code></h2>
@@ -534,9 +544,27 @@ Implements expose() behaviour</code></pre>
 <h2 id="strshhash"><code>Strs(h:Hash)</code></h2>
 <h1 id="type-switchfail">Type: <code>SwitchFail</code></h1>
 <h1 id="type-table">Type: <code>Table</code></h1>
+<h2 id="description-22">Description</h2>
+<pre><code>Manipulates tabular data</code></pre>
+<h2 id="field-name">Field <code>name</code></h2>
+<pre><code>Table name to display and for configuratio lookup</code></pre>
+<h2 id="field-col_name_to_idx">Field <code>col_name_to_idx</code></h2>
+<pre><code>Columns names&#39; indexes (ex: id:0, name:1, age:2)</code></pre>
+<h2 id="field-col_idx_to_name">Field <code>col_idx_to_name</code></h2>
+<pre><code>Columns indexes&#39; names (ex: 0:id, 1:name, 2:age)</code></pre>
 <h1 id="methods-table">Methods: <code>Table</code></h1>
 <h2 id="tablerows_hashesarr"><code>Table(rows_hashes:Arr)</code></h2>
+<h3 id="description-23">Description</h3>
+<pre><code>Create table containing provided rows</code></pre>
+<h3 id="parameter-rows_hashesarr">Parameter rows_hashes:Arr</h3>
+<pre><code>rows, each row is a Hash</code></pre>
 <h2 id="tablenamestr-rows_hashesarr"><code>Table(name:Str, rows_hashes:Arr)</code></h2>
+<h3 id="description-24">Description</h3>
+<pre><code>Create named table containing provided rows</code></pre>
+<h3 id="parameter-namestr">Parameter name:Str</h3>
+<pre><code>name of the table for display and for configuration purposes</code></pre>
+<h3 id="parameter-rows_hashesarr-1">Parameter rows_hashes:Arr</h3>
+<pre><code>rows, each row is a Hash</code></pre>
 <h1 id="methods-times">Methods: <code>times</code></h1>
 <h2 id="timesnint-cbfun-argsarr"><code>times(n:Int, cb:Fun, *args:Arr)</code></h2>
 <h1 id="methods-to_exit_code">Methods: <code>to_exit_code</code></h1>
@@ -556,7 +584,7 @@ Implements expose() behaviour</code></pre>
 <h2 id="typenamestr-docany"><code>Type(name:Str, doc:Any)</code></h2>
 <h1 id="methods-typeof">Methods: <code>typeof</code></h1>
 <h2 id="typeofxany"><code>typeof(x:Any)</code></h2>
-<h3 id="description-15">Description</h3>
+<h3 id="description-25">Description</h3>
 <pre><code>Returns type of the given instance</code></pre>
 <h3 id="parameter-xany">Parameter x:Any</h3>
 <pre><code>Instance (an object)</code></pre>
@@ -575,8 +603,8 @@ Implements expose() behaviour</code></pre>
 <h2 id="withoutarrarr-without_eltany"><code>without(arr:Arr, without_elt:Any)</code></h2>
 <h2 id="withouthhash-without_kany"><code>without(h:Hash, without_k:Any)</code></h2>
 <h1 id="methods-write">Methods: <code>write</code></h1>
-<h2 id="writeppipe-sstr"><code>write(p:Pipe, s:Str)</code></h2>
 <h2 id="writefdint-sstr"><code>write(fd:Int, s:Str)</code></h2>
+<h2 id="writeppipe-sstr"><code>write(p:Pipe, s:Str)</code></h2>
 <h1 id="methods-zip">Methods: <code>zip</code></h1>
 <h2 id="zipargsarr"><code>zip(*args:Arr)</code></h2>
 </body>
