@@ -104,6 +104,7 @@ Syntax: / is on same key as ? and similar to |</code></pre>
 <h2 id="anull-bnull"><code>==(a:Null, b:Null)</code></h2>
 <h2 id="aarr-barr-2"><code>==(a:Arr, b:Arr)</code></h2>
 <h2 id="ahash-bhash-1"><code>==(a:Hash, b:Hash)</code></h2>
+<h2 id="aippermbox-bippermbox"><code>==(a:IpPermBox, b:IpPermBox)</code></h2>
 <h1 id="methods-11">Methods: <code>===</code></h1>
 <h2 id="aany-bany-3"><code>===(a:Any, b:Any)</code></h2>
 <h1 id="methods-12">Methods: <code>&gt;</code></h1>
@@ -136,6 +137,16 @@ Syntax mnemonic: ? for predicate</code></pre>
 <pre><code>Call operator</code></pre>
 <h3 id="example-3">Example</h3>
 <pre><code>[1,2,3,4] \ echo</code></pre>
+<h1 id="methods-_get_find_command">Methods: <code>_get_find_command</code></h1>
+<h2 id="get_find_commandrdawsvpc"><code>_get_find_command(rd:AwsVpc)</code></h2>
+<h2 id="get_find_commandrdawssecgroup"><code>_get_find_command(rd:AwsSecGroup)</code></h2>
+<h2 id="get_find_commandrdawssubnet"><code>_get_find_command(rd:AwsSubnet)</code></h2>
+<h1 id="methods-_get_props">Methods: <code>_get_props</code></h1>
+<h2 id="get_propsrdawsrecordset"><code>_get_props(rd:AwsRecordSet)</code></h2>
+<h1 id="methods-_get_res_type">Methods: <code>_get_res_type</code></h1>
+<h2 id="get_res_typerdawsvpc"><code>_get_res_type(rd:AwsVpc)</code></h2>
+<h2 id="get_res_typerdawssecgroup"><code>_get_res_type(rd:AwsSecGroup)</code></h2>
+<h2 id="get_res_typerdawssubnet"><code>_get_res_type(rd:AwsSubnet)</code></h2>
 <h1 id="methods-18">Methods: <code>``</code></h1>
 <h2 id="ccommand-2">``<code>(c:Command)</code></h2>
 <h1 id="methods-19">Methods: <code>````</code></h1>
@@ -154,6 +165,7 @@ Syntax mnemonic: ? for predicate</code></pre>
 <h2 id="arrhhash"><code>Arr(h:Hash)</code></h2>
 <h2 id="arrarrarr"><code>Arr(arr:Arr)</code></h2>
 <h2 id="arrrrange"><code>Arr(r:Range)</code></h2>
+<h1 id="type-arriter">Type: <code>ArrIter</code></h1>
 <h1 id="methods-assert">Methods: <code>assert</code></h1>
 <h2 id="assertconditionbool-msgstr"><code>assert(condition:Bool, msg:Str)</code></h2>
 <h2 id="assertconditionbool"><code>assert(condition:Bool)</code></h2>
@@ -170,6 +182,25 @@ Syntax mnemonic: ? for predicate</code></pre>
 <h2 id="attrscclosure-datumany"><code>attrs(c:Closure, datum:Any)</code></h2>
 <h2 id="attrsttype"><code>attrs(t:Type)</code></h2>
 <h2 id="attrsttype-datumany"><code>attrs(t:Type, datum:Any)</code></h2>
+<h1 id="methods-aws_regions">Methods: <code>aws_regions</code></h1>
+<h2 id="aws_regions"><code>aws_regions()</code></h2>
+<h2 id="aws_regions-1"><code>aws_regions()</code></h2>
+<h1 id="type-awsancor">Type: <code>AwsAncor</code></h1>
+<h1 id="type-awselb">Type: <code>AwsElb</code></h1>
+<h1 id="type-awselbres">Type: <code>AwsElbRes</code></h1>
+<h1 id="type-awsinstance">Type: <code>AwsInstance</code></h1>
+<h1 id="type-awsinstanceres">Type: <code>AwsInstanceRes</code></h1>
+<h1 id="type-awsrecordset">Type: <code>AwsRecordSet</code></h1>
+<h1 id="type-awsrecordsetres">Type: <code>AwsRecordSetRes</code></h1>
+<h1 id="type-awsres">Type: <code>AwsRes</code></h1>
+<h1 id="type-awsresdef">Type: <code>AwsResDef</code></h1>
+<h1 id="type-awsresfindcommand">Type: <code>AwsResFindCommand</code></h1>
+<h1 id="type-awssecgroup">Type: <code>AwsSecGroup</code></h1>
+<h1 id="type-awssecgroupres">Type: <code>AwsSecGroupRes</code></h1>
+<h1 id="type-awssubnet">Type: <code>AwsSubnet</code></h1>
+<h1 id="type-awssubnetres">Type: <code>AwsSubnetRes</code></h1>
+<h1 id="type-awsvpc">Type: <code>AwsVpc</code></h1>
+<h1 id="type-awsvpcres">Type: <code>AwsVpcRes</code></h1>
 <h1 id="type-backtrace">Type: <code>Backtrace</code></h1>
 <h1 id="methods-backtrace">Methods: <code>Backtrace</code></h1>
 <h2 id="backtrace"><code>Backtrace()</code></h2>
@@ -188,6 +219,7 @@ Syntax mnemonic: ? for predicate</code></pre>
 <h2 id="boolpprocess"><code>Bool(p:Process)</code></h2>
 <h2 id="boolmymatchy"><code>Bool(my:MatchY)</code></h2>
 <h2 id="boolmymatchn"><code>Bool(my:MatchN)</code></h2>
+<h2 id="booliarriter"><code>Bool(i:ArrIter)</code></h2>
 <h2 id="boolttable"><code>Bool(t:Table)</code></h2>
 <h1 id="methods-bootstrap">Methods: <code>bootstrap</code></h1>
 <h2 id="bootstrap"><code>bootstrap()</code></h2>
@@ -282,6 +314,8 @@ Syntax mnemonic: ? for predicate</code></pre>
 <h2 id="cell_display_widthxarr-1"><code>cell_display_width(x:Arr)</code></h2>
 <h3 id="description-12">Description</h3>
 <pre><code>Calculate cell display width for an empty array</code></pre>
+<h1 id="methods-cleanup">Methods: <code>cleanup</code></h1>
+<h2 id="cleanupxippermbox"><code>cleanup(x:IpPermBox)</code></h2>
 <h1 id="type-clib">Type: <code>CLib</code></h1>
 <h2 id="description-13">Description</h2>
 <pre><code>C library, result of dlopen()</code></pre>
@@ -320,6 +354,8 @@ and not internal &#39;===&#39; for Hash keys.</code></pre>
 <h1 id="methods-config">Methods: <code>config</code></h1>
 <h2 id="configkstr"><code>config(k:Str)</code></h2>
 <h2 id="configsstr-xany"><code>config(s:Str, x:Any)</code></h2>
+<h1 id="methods-converge">Methods: <code>converge</code></h1>
+<h2 id="convergerresdef"><code>converge(r:ResDef)</code></h2>
 <h1 id="methods-copy">Methods: <code>copy</code></h1>
 <h2 id="copyarrarr"><code>copy(arr:Arr)</code></h2>
 <h3 id="returns">Returns</h3>
@@ -328,6 +364,11 @@ and not internal &#39;===&#39; for Hash keys.</code></pre>
 <h2 id="countarrarr-predicatefun-argsarr"><code>count(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
 <h2 id="countarrarr"><code>count(arr:Arr)</code></h2>
 <h2 id="counthhash-predicatefun-argsarr"><code>count(h:Hash, predicate:Fun, *args:Arr)</code></h2>
+<h1 id="type-counter">Type: <code>Counter</code></h1>
+<h1 id="methods-create">Methods: <code>create</code></h1>
+<h2 id="createrdawssecgroup"><code>create(rd:AwsSecGroup)</code></h2>
+<h2 id="createrdawselb"><code>create(rd:AwsElb)</code></h2>
+<h2 id="createrdawsrecordset"><code>create(rd:AwsRecordSet)</code></h2>
 <h1 id="type-csym">Type: <code>CSym</code></h1>
 <h2 id="description-15">Description</h2>
 <pre><code>C symbol, result of dlsym()</code></pre>
@@ -337,6 +378,8 @@ and not internal &#39;===&#39; for Hash keys.</code></pre>
 <h2 id="decode_jsonsstr"><code>decode_json(s:Str)</code></h2>
 <h1 id="methods-del">Methods: <code>del</code></h1>
 <h2 id="delhhash-kany"><code>del(h:Hash, k:Any)</code></h2>
+<h1 id="methods-delete">Methods: <code>delete</code></h1>
+<h2 id="deleteelbawselb"><code>delete(elb:AwsElb)</code></h2>
 <h1 id="methods-die">Methods: <code>die</code></h1>
 <h2 id="dieaarr"><code>die(a:Arr)</code></h2>
 <h2 id="diesstr"><code>die(s:Str)</code></h2>
@@ -378,6 +421,9 @@ and not internal &#39;===&#39; for Hash keys.</code></pre>
 <h1 id="type-exception">Type: <code>Exception</code></h1>
 <h1 id="type-exclusiverange">Type: <code>ExclusiveRange</code></h1>
 <h1 id="type-executablenotfound">Type: <code>ExecutableNotFound</code></h1>
+<h1 id="methods-expect">Methods: <code>expect</code></h1>
+<h2 id="expectrdresdef-eint"><code>expect(rd:ResDef, e:Int)</code></h2>
+<h2 id="expectrdresdef"><code>expect(rd:ResDef)</code></h2>
 <h1 id="methods-expose">Methods: <code>expose</code></h1>
 <h2 id="exposetypnormaltype-attrstr"><code>expose(typ:NormalType, attr:Str)</code></h2>
 <h3 id="description-17">Description</h3>
@@ -430,6 +476,12 @@ numbering.push(hostname_base)
 <h2 id="filterarrarr-predicatefun-argsarr"><code>filter(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
 <h2 id="filterarrarr"><code>filter(arr:Arr)</code></h2>
 <h2 id="filterhhash-predicatefun-argsarr"><code>filter(h:Hash, predicate:Fun, *args:Arr)</code></h2>
+<h1 id="methods-find">Methods: <code>find</code></h1>
+<h2 id="findrdawsresdef"><code>find(rd:AwsResDef)</code></h2>
+<h2 id="findrdawssecgroup"><code>find(rd:AwsSecGroup)</code></h2>
+<h2 id="findrdawsinstance"><code>find(rd:AwsInstance)</code></h2>
+<h2 id="findrdawselb"><code>find(rd:AwsElb)</code></h2>
+<h2 id="findrdawsrecordset"><code>find(rd:AwsRecordSet)</code></h2>
 <h1 id="methods-find_in_path">Methods: <code>find_in_path</code></h1>
 <h2 id="find_in_pathexecutable_namestr"><code>find_in_path(executable_name:Str)</code></h2>
 <h1 id="methods-finished_ok">Methods: <code>finished_ok</code></h1>
@@ -481,10 +533,17 @@ Implements autoloading</code></pre>
 <h2 id="hashesttable"><code>Hashes(t:Table)</code></h2>
 <h1 id="methods-id">Methods: <code>id</code></h1>
 <h2 id="idthreadc_pthread_t"><code>id(thread:c_pthread_t)</code></h2>
+<h2 id="idsgawssecgroupres"><code>id(sg:AwsSecGroupRes)</code></h2>
 <h1 id="methods-identity">Methods: <code>identity</code></h1>
 <h2 id="identityxany"><code>identity(x:Any)</code></h2>
 <h3 id="returns-3">Returns</h3>
 <pre><code>The given argument</code></pre>
+<h1 id="methods-ids">Methods: <code>ids</code></h1>
+<h2 id="idsrdawsvpc"><code>ids(rd:AwsVpc)</code></h2>
+<h2 id="idsrdawssecgroup"><code>ids(rd:AwsSecGroup)</code></h2>
+<h2 id="idsrdawssubnet"><code>ids(rd:AwsSubnet)</code></h2>
+<h2 id="idsrdawsinstance"><code>ids(rd:AwsInstance)</code></h2>
+<h2 id="idsrdawselb"><code>ids(rd:AwsElb)</code></h2>
 <h1 id="methods-impl_not_found_hook">Methods: <code>impl_not_found_hook</code></h1>
 <h2 id="impl_not_found_hookcallablefun-argsarr"><code>impl_not_found_hook(callable:Fun, *args:Arr)</code></h2>
 <h3 id="description-21">Description</h3>
@@ -528,6 +587,16 @@ Implements expose() behaviour</code></pre>
 <h2 id="initmfmatchfail-msgstr-containerany-patternany"><code>init(mf:MatchFail, msg:Str, container:Any, pattern:Any)</code></h2>
 <h2 id="initssubseq-argsarr"><code>init(s:SubSeq, *args:Arr)</code></h2>
 <h2 id="initssubseq-valany"><code>init(s:SubSeq, val:Any)</code></h2>
+<h2 id="initaawsancor-regionsanynull-tagsanynull"><code>init(a:AwsAncor, regions:Any=null, tags:Any=null)</code></h2>
+<h2 id="initcawsresfindcommand-cmdarr-supports_filtersbool"><code>init(c:AwsResFindCommand, cmd:Arr, supports_filters:Bool)</code></h2>
+<h2 id="initrnfresnotfound-rdresdef"><code>init(rnf:ResNotFound, rd:ResDef)</code></h2>
+<h2 id="initrdresdef-ancorany-propshash"><code>init(rd:ResDef, ancor:Any, props:Hash)</code></h2>
+<h2 id="initrdresdef-ancorany"><code>init(rd:ResDef, ancor:Any)</code></h2>
+<h2 id="initrres-rdresdef-propshash"><code>init(r:Res, rd:ResDef, props:Hash)</code></h2>
+<h2 id="initccounter"><code>init(c:Counter)</code></h2>
+<h2 id="initiarriter-arrarr"><code>init(i:ArrIter, arr:Arr)</code></h2>
+<h2 id="initkvkv-kany-vany"><code>init(kv:KV, k:Any, v:Any)</code></h2>
+<h2 id="initsstats"><code>init(s:Stats)</code></h2>
 <h2 id="initxtablemetanotifcol-col_namestr-dataany"><code>init(x:TableMetaNotIfCol, col_name:Str, data:Any)</code></h2>
 <h2 id="initxtablemetanotifcol-col_namesarr-dataany"><code>init(x:TableMetaNotIfCol, col_names:Arr, data:Any)</code></h2>
 <h2 id="initttable"><code>init(t:Table)</code></h2>
@@ -541,7 +610,8 @@ Implements expose() behaviour</code></pre>
 <h3 id="parameter-rows_hashesarr">Parameter rows_hashes:Arr</h3>
 <pre><code>rows, each row is a Hash</code></pre>
 <h2 id="initttable-rows_hashesarr"><code>init(t:Table, rows_hashes:Arr)</code></h2>
-<h2 id="initsstats"><code>init(s:Stats)</code></h2>
+<h2 id="inittthread-ffun-argany"><code>init(t:Thread, f:Fun, arg:Any)</code></h2>
+<h2 id="inittthread-ffun"><code>init(t:Thread, f:Fun)</code></h2>
 <h1 id="type-int">Type: <code>Int</code></h1>
 <h1 id="methods-int">Methods: <code>Int</code></h1>
 <h2 id="intsstr-baseint"><code>Int(s:Str, base:Int)</code></h2>
@@ -550,24 +620,33 @@ Implements expose() behaviour</code></pre>
 <h1 id="type-invalidargument">Type: <code>InvalidArgument</code></h1>
 <h1 id="methods-ip">Methods: <code>ip</code></h1>
 <h2 id="ipcclosure"><code>ip(c:Closure)</code></h2>
+<h1 id="type-ippermbox">Type: <code>IpPermBox</code></h1>
 <h1 id="methods-is">Methods: <code>is</code></h1>
 <h2 id="isobjany-ttype"><code>is(obj:Any, t:Type)</code></h2>
 <h1 id="methods-is-not">Methods: <code>is not</code></h1>
 <h2 id="is-notaany-bany"><code>is not(a:Any, b:Any)</code></h2>
 <h1 id="methods-isatty">Methods: <code>isatty</code></h1>
 <h2 id="isattyfdint"><code>isatty(fd:Int)</code></h2>
+<h1 id="type-iter">Type: <code>Iter</code></h1>
+<h1 id="methods-iter">Methods: <code>Iter</code></h1>
+<h2 id="iterarrarr"><code>Iter(arr:Arr)</code></h2>
 <h1 id="methods-join">Methods: <code>join</code></h1>
 <h2 id="joinarrarr-sstr"><code>join(arr:Arr, s:Str)</code></h2>
 <h2 id="joinaarr-sstr"><code>join(a:Arr, s:Str)</code></h2>
+<h2 id="jointhreadsarr"><code>join(threads:Arr)</code></h2>
+<h2 id="jointthread"><code>join(t:Thread)</code></h2>
 <h1 id="type-keynotfound">Type: <code>KeyNotFound</code></h1>
 <h1 id="methods-keys">Methods: <code>keys</code></h1>
 <h2 id="keyshhash"><code>keys(h:Hash)</code></h2>
+<h1 id="type-kv">Type: <code>KV</code></h1>
 <h1 id="methods-len">Methods: <code>len</code></h1>
 <h2 id="lenarrarr"><code>len(arr:Arr)</code></h2>
 <h2 id="lensstr"><code>len(s:Str)</code></h2>
 <h3 id="returns-7">Returns</h3>
 <pre><code>Length in bytes</code></pre>
 <h2 id="lenhhash"><code>len(h:Hash)</code></h2>
+<h2 id="lenrdresdef"><code>len(rd:ResDef)</code></h2>
+<h2 id="lenrdresdef-1"><code>len(rd:ResDef)</code></h2>
 <h2 id="lenttable"><code>len(t:Table)</code></h2>
 <h1 id="methods-limit">Methods: <code>limit</code></h1>
 <h2 id="limitaarr-lint"><code>limit(a:Arr, l:Int)</code></h2>
@@ -587,6 +666,7 @@ Implements expose() behaviour</code></pre>
 <h1 id="type-lockfail">Type: <code>LockFail</code></h1>
 <h1 id="methods-log">Methods: <code>log</code></h1>
 <h2 id="logsstr"><code>log(s:Str)</code></h2>
+<h2 id="logrdresdef-methodstr-sstr"><code>log(rd:ResDef, method:Str, s:Str)</code></h2>
 <h1 id="type-lookupfail">Type: <code>LookupFail</code></h1>
 <h1 id="methods-lte">Methods: <code>lte</code></h1>
 <h2 id="lteastr-bstr"><code>lte(a:Str, b:Str)</code></h2>
@@ -599,6 +679,7 @@ Implements expose() behaviour</code></pre>
 <h2 id="maphhash-mapperfun-argsarr"><code>map(h:Hash, mapper:Fun, *args:Arr)</code></h2>
 <h2 id="mapnint-mapperfun-argsarr"><code>map(n:Int, mapper:Fun, *args:Arr)</code></h2>
 <h1 id="type-match">Type: <code>Match</code></h1>
+<h1 id="type-matchedparam">Type: <code>MatchedParam</code></h1>
 <h1 id="type-matchfail">Type: <code>MatchFail</code></h1>
 <h1 id="type-matchn">Type: <code>MatchN</code></h1>
 <h1 id="type-matchy">Type: <code>MatchY</code></h1>
@@ -617,8 +698,12 @@ Implements expose() behaviour</code></pre>
 <h1 id="methods-n">Methods: <code>n</code></h1>
 <h2 id="nhhash"><code>n(h:Hash)</code></h2>
 <h1 id="type-nativemethod">Type: <code>NativeMethod</code></h1>
+<h1 id="methods-next">Methods: <code>next</code></h1>
+<h2 id="nextccounter"><code>next(c:Counter)</code></h2>
+<h2 id="nextiarriter"><code>next(i:ArrIter)</code></h2>
 <h1 id="methods-none">Methods: <code>none</code></h1>
 <h2 id="nonearrarr-predicatefun-argsarr"><code>none(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
+<h1 id="type-nonext">Type: <code>NoNext</code></h1>
 <h1 id="type-normaltype">Type: <code>NormalType</code></h1>
 <h1 id="type-normaltypeinstance">Type: <code>NormalTypeInstance</code></h1>
 <h1 id="methods-not">Methods: <code>not</code></h1>
@@ -667,6 +752,9 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h1 id="type-pipe">Type: <code>Pipe</code></h1>
 <h1 id="methods-pipe">Methods: <code>Pipe</code></h1>
 <h2 id="pipe"><code>Pipe()</code></h2>
+<h1 id="methods-pmap">Methods: <code>pmap</code></h1>
+<h2 id="pmapaarr-mapperfun"><code>pmap(a:Arr, mapper:Fun)</code></h2>
+<h2 id="pmapnint-mapperfun"><code>pmap(n:Int, mapper:Fun)</code></h2>
 <h1 id="methods-pop">Methods: <code>pop</code></h1>
 <h2 id="poparrarr"><code>pop(arr:Arr)</code></h2>
 <h1 id="methods-pos">Methods: <code>pos</code></h1>
@@ -682,13 +770,15 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h1 id="type-processfail">Type: <code>ProcessFail</code></h1>
 <h1 id="methods-processfail">Methods: <code>ProcessFail</code></h1>
 <h2 id="processfailpprocess"><code>ProcessFail(p:Process)</code></h2>
+<h1 id="methods-ptimes">Methods: <code>ptimes</code></h1>
+<h2 id="ptimesnint-cbfun"><code>ptimes(n:Int, cb:Fun)</code></h2>
 <h1 id="methods-push">Methods: <code>push</code></h1>
 <h2 id="pusharrarr-vany"><code>push(arr:Arr, v:Any)</code></h2>
-<h2 id="pushttable-row_arrarr"><code>push(t:Table, row_arr:Arr)</code></h2>
-<h2 id="pushttable-row_hashhash"><code>push(t:Table, row_hash:Hash)</code></h2>
 <h2 id="pushsstats-kany"><code>push(s:Stats, k:Any)</code></h2>
 <h3 id="description-31">Description</h3>
 <pre><code>Increment the named counter</code></pre>
+<h2 id="pushttable-row_arrarr"><code>push(t:Table, row_arr:Arr)</code></h2>
+<h2 id="pushttable-row_hashhash"><code>push(t:Table, row_hash:Hash)</code></h2>
 <h1 id="type-range">Type: <code>Range</code></h1>
 <h1 id="methods-read">Methods: <code>read</code></h1>
 <h2 id="readfdint"><code>read(fd:Int)</code></h2>
@@ -707,6 +797,9 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h3 id="returns-8">Returns</h3>
 <pre><code>Typically whatever the last expression in the file evaluates to</code></pre>
 <h1 id="type-requrefail">Type: <code>RequreFail</code></h1>
+<h1 id="type-res">Type: <code>Res</code></h1>
+<h1 id="type-resdef">Type: <code>ResDef</code></h1>
+<h1 id="type-resnotfound">Type: <code>ResNotFound</code></h1>
 <h1 id="methods-resolve_instruction_pointer">Methods: <code>resolve_instruction_pointer</code></h1>
 <h2 id="resolve_instruction_pointeripint"><code>resolve_instruction_pointer(ip:Int)</code></h2>
 <h3 id="description-33">Description</h3>
@@ -720,6 +813,9 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h2 id="reversearrarr"><code>reverse(arr:Arr)</code></h2>
 <h1 id="methods-round">Methods: <code>round</code></h1>
 <h2 id="roundrreal"><code>round(r:Real)</code></h2>
+<h1 id="methods-run">Methods: <code>run</code></h1>
+<h2 id="runrawsres-log_pfxstr-cmdcommand"><code>run(r:AwsRes, log_pfx:Str, cmd:Command)</code></h2>
+<h2 id="runrdawsresdef-log_pfxstr-cmdcommand"><code>run(rd:AwsResDef, log_pfx:Str, cmd:Command)</code></h2>
 <h1 id="type-seq">Type: <code>Seq</code></h1>
 <h1 id="methods-set">Methods: <code>set</code></h1>
 <h2 id="setobjany-attrstr-valany"><code>set(obj:Any, attr:Str, val:Any)</code></h2>
@@ -759,6 +855,8 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h1 id="methods-stdlib_aws_straighten_tags">Methods: <code>stdlib_aws_straighten_tags</code></h1>
 <h2 id="stdlib_aws_straighten_tagsaarr"><code>stdlib_aws_straighten_tags(a:Arr)</code></h2>
 <h2 id="stdlib_aws_straighten_tagshhash"><code>stdlib_aws_straighten_tags(h:Hash)</code></h2>
+<h1 id="methods-stdlib_aws_tags">Methods: <code>stdlib_aws_tags</code></h1>
+<h2 id="stdlib_aws_tagshhash"><code>stdlib_aws_tags(h:Hash)</code></h2>
 <h1 id="type-str">Type: <code>Str</code></h1>
 <h1 id="methods-str">Methods: <code>Str</code></h1>
 <h2 id="strrreal"><code>Str(r:Real)</code></h2>
@@ -782,8 +880,14 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h2 id="strrredir"><code>Str(r:Redir)</code></h2>
 <h2 id="strpprocess"><code>Str(p:Process)</code></h2>
 <h2 id="strssubseq"><code>Str(s:SubSeq)</code></h2>
-<h2 id="strxtablemetanotifcol"><code>Str(x:TableMetaNotIfCol)</code></h2>
+<h2 id="strrdresdef"><code>Str(rd:ResDef)</code></h2>
+<h2 id="strrresdef"><code>Str(r:ResDef)</code></h2>
+<h2 id="strrres"><code>Str(r:Res)</code></h2>
+<h2 id="strrawsvpc"><code>Str(r:AwsVpc)</code></h2>
+<h2 id="striarriter"><code>Str(i:ArrIter)</code></h2>
+<h2 id="strkvkv"><code>Str(kv:KV)</code></h2>
 <h2 id="strsstats"><code>Str(s:Stats)</code></h2>
+<h2 id="strxtablemetanotifcol"><code>Str(x:TableMetaNotIfCol)</code></h2>
 <h1 id="methods-strfortable">Methods: <code>StrForTable</code></h1>
 <h2 id="strfortablexany"><code>StrForTable(x:Any)</code></h2>
 <h2 id="strfortablexany-widthint"><code>StrForTable(x:Any, width:Int)</code></h2>
@@ -810,6 +914,7 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h1 id="type-tablemetanotifcol">Type: <code>TableMetaNotIfCol</code></h1>
 <h2 id="description-39">Description</h2>
 <pre><code>Do not show the data below if the named column is present</code></pre>
+<h1 id="type-thread">Type: <code>Thread</code></h1>
 <h1 id="methods-time">Methods: <code>time</code></h1>
 <h2 id="time"><code>time()</code></h2>
 <h1 id="methods-times">Methods: <code>times</code></h1>
@@ -843,10 +948,31 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h1 id="type-undefinedlocalvar">Type: <code>UndefinedLocalVar</code></h1>
 <h1 id="methods-uniq">Methods: <code>uniq</code></h1>
 <h2 id="uniqarrarr"><code>uniq(arr:Arr)</code></h2>
+<h1 id="type-unmatchedparam">Type: <code>UnmatchedParam</code></h1>
 <h1 id="methods-update">Methods: <code>update</code></h1>
 <h2 id="updatedsthash-srchash"><code>update(dst:Hash, src:Hash)</code></h2>
+<h2 id="updatesgawssecgroupres"><code>update(sg:AwsSecGroupRes)</code></h2>
+<h2 id="updateelbawselbres"><code>update(elb:AwsElbRes)</code></h2>
+<h2 id="updaterrsetawsrecordsetres"><code>update(rrset:AwsRecordSetRes)</code></h2>
+<h1 id="methods-update_tags">Methods: <code>update_tags</code></h1>
+<h2 id="update_tagsrawsres"><code>update_tags(r:AwsRes)</code></h2>
+<h1 id="methods-users_ids">Methods: <code>users_ids</code></h1>
+<h2 id="users_idsrawssecgroup"><code>users_ids(r:AwsSecGroup)</code></h2>
+<h1 id="methods-validate">Methods: <code>validate</code></h1>
+<h2 id="validaterdawssecgroup"><code>validate(rd:AwsSecGroup)</code></h2>
+<h2 id="validaterdawselb"><code>validate(rd:AwsElb)</code></h2>
+<h2 id="validaterdawsrecordset"><code>validate(rd:AwsRecordSet)</code></h2>
 <h1 id="methods-values">Methods: <code>values</code></h1>
 <h2 id="valueshhash"><code>values(h:Hash)</code></h2>
+<h1 id="methods-vpc_id">Methods: <code>vpc_id</code></h1>
+<h2 id="vpc_idrdawssecgroup"><code>vpc_id(rd:AwsSecGroup)</code></h2>
+<h2 id="vpc_idrdawssecgroup-1"><code>vpc_id(rd:AwsSecGroup)</code></h2>
+<h1 id="methods-vpc_id_args">Methods: <code>vpc_id_args</code></h1>
+<h2 id="vpc_id_argsrdawssecgroup"><code>vpc_id_args(rd:AwsSecGroup)</code></h2>
+<h2 id="vpc_id_argsrdawssecgroup-1"><code>vpc_id_args(rd:AwsSecGroup)</code></h2>
+<h1 id="methods-vpc_id_filter">Methods: <code>vpc_id_filter</code></h1>
+<h2 id="vpc_id_filterrdawssecgroup"><code>vpc_id_filter(rd:AwsSecGroup)</code></h2>
+<h2 id="vpc_id_filterrdawssecgroup-1"><code>vpc_id_filter(rd:AwsSecGroup)</code></h2>
 <h1 id="methods-wait">Methods: <code>wait</code></h1>
 <h2 id="waitpprocess"><code>wait(p:Process)</code></h2>
 <h1 id="methods-width">Methods: <code>width</code></h1>
@@ -863,5 +989,6 @@ If my_vpc_id() is null the whole array is not needed</code></pre>
 <h1 id="methods-20">Methods: <code>~</code></h1>
 <h2 id="sstr-pfxpfx-1"><code>~(s:Str, pfx:Pfx)</code></h2>
 <h2 id="sstr-sfxsfx-1"><code>~(s:Str, sfx:Sfx)</code></h2>
+<h2 id="argvarr-cclosure"><code>~(argv:Arr, c:Closure)</code></h2>
 </body>
 </html>
