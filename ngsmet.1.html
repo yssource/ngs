@@ -27,21 +27,40 @@
 <h2 id="ccommand"><code>$()(c:Command)</code></h2>
 <h1 id="methods-3">Methods: <code>%</code></h1>
 <h2 id="aint-bint"><code>%(a:Int, b:Int)</code></h2>
-<h1 id="methods-4">Methods: <code>*</code></h1>
+<h2 id="xany-cbfun"><code>%(x:Any, cb:Fun)</code></h2>
+<h3 id="description">Description</h3>
+<pre><code>Each operator
+Syntax: % is similar to /</code></pre>
+<h3 id="example">Example</h3>
+<pre><code>[1,2,3,4] % echo</code></pre>
+<h1 id="methods-4">Methods: <code>%()</code></h1>
+<h2 id="ccommand-1"><code>%()(c:Command)</code></h2>
+<h1 id="methods-5">Methods: <code>*</code></h1>
 <h2 id="areal-breal"><code>*(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-1"><code>*(a:Int, b:Int)</code></h2>
 <h2 id="arrarr-nint"><code>*(arr:Arr, n:Int)</code></h2>
 <h2 id="sstr-nint"><code>*(s:Str, n:Int)</code></h2>
-<h1 id="methods-5">Methods: <code>+</code></h1>
+<h2 id="cbfun-nint-argsarr"><code>*(cb:Fun, n:Int, *args:Arr)</code></h2>
+<h1 id="methods-6">Methods: <code>+</code></h1>
 <h2 id="areal-breal-1"><code>+(a:Real, b:Real)</code></h2>
 <h2 id="aarr-barr"><code>+(a:Arr, b:Arr)</code></h2>
 <h2 id="aint-bint-2"><code>+(a:Int, b:Int)</code></h2>
 <h2 id="s1str-s2str"><code>+(s1:Str, s2:Str)</code></h2>
 <h2 id="ahash-bhash"><code>+(a:Hash, b:Hash)</code></h2>
+<h2 id="sstr-aarr"><code>+(s:Str, a:Arr)</code></h2>
+<h3 id="description-1">Description</h3>
+<pre><code>Prepend each line in a with s</code></pre>
+<h2 id="aarr-sstr"><code>+(a:Arr, s:Str)</code></h2>
+<h3 id="description-2">Description</h3>
+<pre><code>Append s to each line in a</code></pre>
 <h1 id="methods--">Methods: <code>-</code></h1>
 <h2 id="areal-breal-2"><code>-(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-3"><code>-(a:Int, b:Int)</code></h2>
+<h2 id="aarr-barr-1"><code>-(a:Arr, b:Arr)</code></h2>
+<h2 id="sstr-pfxpfx"><code>-(s:Str, pfx:Pfx)</code></h2>
+<h2 id="sstr-sfxsfx"><code>-(s:Str, sfx:Sfx)</code></h2>
 <h1 id="methods-.">Methods: <code>.</code></h1>
+<h2 id="pac_pthread_attr_t-attrstr"><code>.(pa:c_pthread_attr_t, attr:Str)</code></h2>
 <h2 id="objbasictype-attrstr"><code>.(obj:BasicType, attr:Str)</code></h2>
 <h2 id="objnormaltype-attrstr"><code>.(obj:NormalType, attr:Str)</code></h2>
 <h2 id="objnormaltypeinstance-attrstr"><code>.(obj:NormalTypeInstance, attr:Str)</code></h2>
@@ -54,50 +73,79 @@
 <h1 id="methods-.-1">Methods: <code>.=</code></h1>
 <h2 id="objnormaltypeinstance-attrstr-vany"><code>.=(obj:NormalTypeInstance, attr:Str, v:Any)</code></h2>
 <h2 id="hhash-attrstr-vany"><code>.=(h:Hash, attr:Str, v:Any)</code></h2>
-<h1 id="methods-6">Methods: <code>/</code></h1>
+<h1 id="methods-7">Methods: <code>/</code></h1>
 <h2 id="areal-breal-3"><code>/(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-4"><code>/(a:Int, b:Int)</code></h2>
-<h1 id="methods-7">Methods: <code>&lt;</code></h1>
+<h2 id="xany-mapperfun"><code>/(x:Any, mapper:Fun)</code></h2>
+<h3 id="description-3">Description</h3>
+<pre><code>Map operator
+Syntax: / is on same key as ? and similar to |</code></pre>
+<h3 id="example-1">Example</h3>
+<pre><code>[1,2,3,4] / F(x) x * 10</code></pre>
+<h2 id="astr-bstr"><code>/(a:Str, b:Str)</code></h2>
+<h2 id="apath-bpath"><code>/(a:Path, b:Path)</code></h2>
+<h1 id="methods-8">Methods: <code>&lt;</code></h1>
 <h2 id="areal-breal-4"><code>&lt;(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-5"><code>&lt;(a:Int, b:Int)</code></h2>
-<h1 id="methods-8">Methods: <code>&lt;=</code></h1>
+<h1 id="methods-9">Methods: <code>&lt;=</code></h1>
 <h2 id="areal-breal-5"><code>&lt;=(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-6"><code>&lt;=(a:Int, b:Int)</code></h2>
-<h1 id="methods-9">Methods: <code>==</code></h1>
+<h2 id="astr-bstr-1"><code>&lt;=(a:Str, b:Str)</code></h2>
+<h1 id="methods-10">Methods: <code>==</code></h1>
+<h2 id="aany-bany-2"><code>==(a:Any, b:Any)</code></h2>
+<h2 id="atype-btype"><code>==(a:Type, b:Type)</code></h2>
 <h2 id="aclosure-bclosure"><code>==(a:Closure, b:Closure)</code></h2>
 <h2 id="areal-breal-6"><code>==(a:Real, b:Real)</code></h2>
 <h2 id="abool-bbool"><code>==(a:Bool, b:Bool)</code></h2>
-<h2 id="astr-bstr"><code>==(a:Str, b:Str)</code></h2>
+<h2 id="astr-bstr-2"><code>==(a:Str, b:Str)</code></h2>
 <h2 id="aint-bint-7"><code>==(a:Int, b:Int)</code></h2>
 <h2 id="anull-bany"><code>==(a:Null, b:Any)</code></h2>
 <h2 id="aany-bnull"><code>==(a:Any, b:Null)</code></h2>
 <h2 id="anull-bnull"><code>==(a:Null, b:Null)</code></h2>
-<h2 id="aarr-barr-1"><code>==(a:Arr, b:Arr)</code></h2>
+<h2 id="aarr-barr-2"><code>==(a:Arr, b:Arr)</code></h2>
 <h2 id="ahash-bhash-1"><code>==(a:Hash, b:Hash)</code></h2>
-<h1 id="methods-10">Methods: <code>===</code></h1>
-<h2 id="aany-bany-2"><code>===(a:Any, b:Any)</code></h2>
-<h1 id="methods-11">Methods: <code>&gt;</code></h1>
+<h1 id="methods-11">Methods: <code>===</code></h1>
+<h2 id="aany-bany-3"><code>===(a:Any, b:Any)</code></h2>
+<h1 id="methods-12">Methods: <code>&gt;</code></h1>
 <h2 id="areal-breal-7"><code>&gt;(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-8"><code>&gt;(a:Int, b:Int)</code></h2>
-<h1 id="methods-12">Methods: <code>&gt;=</code></h1>
+<h1 id="methods-13">Methods: <code>&gt;=</code></h1>
 <h2 id="areal-breal-8"><code>&gt;=(a:Real, b:Real)</code></h2>
 <h2 id="aint-bint-9"><code>&gt;=(a:Int, b:Int)</code></h2>
-<h1 id="methods-13">Methods: <code>[]</code></h1>
+<h1 id="methods-14">Methods: <code>?</code></h1>
+<h2 id="xany-predicatefun"><code>?(x:Any, predicate:Fun)</code></h2>
+<h3 id="description-4">Description</h3>
+<pre><code>Filter operator
+Syntax mnemonic: ? for predicate</code></pre>
+<h3 id="example-2">Example</h3>
+<pre><code>[1,2,3,4] ? F(x) x &gt; 2</code></pre>
+<h1 id="methods-15">Methods: <code>[]</code></h1>
 <h2 id="libclib-symbolstr"><code>[](lib:CLib, symbol:Str)</code></h2>
 <h2 id="arrarr-idxint"><code>[](arr:Arr, idx:Int)</code></h2>
 <h2 id="sstr-rangerange"><code>[](s:Str, range:Range)</code></h2>
 <h2 id="hhash-kany"><code>[](h:Hash, k:Any)</code></h2>
+<h2 id="arrarr-idxint-1"><code>[](arr:Arr, idx:Int)</code></h2>
 <h2 id="arrarr-indexesarr"><code>[](arr:Arr, indexes:Arr)</code></h2>
 <h2 id="arrarr-rangerange"><code>[](arr:Arr, range:Range)</code></h2>
-<h1 id="methods-14">Methods: <code>[]=</code></h1>
+<h1 id="methods-16">Methods: <code>[]=</code></h1>
 <h2 id="arrarr-idxint-vany"><code>[]=(arr:Arr, idx:Int, v:Any)</code></h2>
 <h2 id="hhash-kany-vany"><code>[]=(h:Hash, k:Any, v:Any)</code></h2>
-<h1 id="methods-15">Methods: <code>``</code></h1>
-<h2 id="ccommand-1">``<code>(c:Command)</code></h2>
-<h1 id="methods-16">Methods: <code>````</code></h1>
-<h2 id="ccommand-2">````<code>(c:Command)</code></h2>
+<h1 id="methods-17">Methods: <code>\</code></h1>
+<h2 id="xany-ffun"><code>\(x:Any, f:Fun)</code></h2>
+<h3 id="description-5">Description</h3>
+<pre><code>Call operator</code></pre>
+<h3 id="example-3">Example</h3>
+<pre><code>[1,2,3,4] \ echo</code></pre>
+<h1 id="methods-18">Methods: <code>``</code></h1>
+<h2 id="ccommand-2">``<code>(c:Command)</code></h2>
+<h1 id="methods-19">Methods: <code>````</code></h1>
+<h2 id="ccommand-3">````<code>(c:Command)</code></h2>
+<h1 id="methods-acquire">Methods: <code>acquire</code></h1>
+<h2 id="acquirellock"><code>acquire(l:Lock)</code></h2>
+<h2 id="acquirellock-cbfun"><code>acquire(l:Lock, cb:Fun)</code></h2>
 <h1 id="methods-all">Methods: <code>all</code></h1>
 <h2 id="allarrarr-predicatefun-argsarr"><code>all(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
+<h2 id="allhhash-predicatefun-argsarr"><code>all(h:Hash, predicate:Fun, *args:Arr)</code></h2>
 <h1 id="type-any">Type: <code>Any</code></h1>
 <h1 id="methods-any">Methods: <code>any</code></h1>
 <h2 id="anyarrarr-predicatefun-argsarr"><code>any(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
@@ -106,13 +154,17 @@
 <h2 id="arrhhash"><code>Arr(h:Hash)</code></h2>
 <h2 id="arrarrarr"><code>Arr(arr:Arr)</code></h2>
 <h2 id="arrrrange"><code>Arr(r:Range)</code></h2>
+<h1 id="methods-assert">Methods: <code>assert</code></h1>
+<h2 id="assertconditionbool-msgstr"><code>assert(condition:Bool, msg:Str)</code></h2>
+<h2 id="assertconditionbool"><code>assert(condition:Bool)</code></h2>
+<h1 id="type-assertfail">Type: <code>AssertFail</code></h1>
 <h1 id="type-attrnotfound">Type: <code>AttrNotFound</code></h1>
 <h1 id="methods-attrs">Methods: <code>attrs</code></h1>
 <h2 id="attrsmnativemethod"><code>attrs(m:NativeMethod)</code></h2>
-<h3 id="description">Description</h3>
+<h3 id="description-6">Description</h3>
 <pre><code>Gets native method attribues. Usually a Hash with name and doc keys.</code></pre>
 <h2 id="attrsmnativemethod-datumany"><code>attrs(m:NativeMethod, datum:Any)</code></h2>
-<h3 id="description-1">Description</h3>
+<h3 id="description-7">Description</h3>
 <pre><code>Sets native method attribues. Should be a Hash.</code></pre>
 <h2 id="attrscclosure"><code>attrs(c:Closure)</code></h2>
 <h2 id="attrscclosure-datumany"><code>attrs(c:Closure, datum:Any)</code></h2>
@@ -121,491 +173,29 @@
 <h1 id="type-backtrace">Type: <code>Backtrace</code></h1>
 <h1 id="methods-backtrace">Methods: <code>Backtrace</code></h1>
 <h2 id="backtrace"><code>Backtrace()</code></h2>
+<h1 id="methods-basename">Methods: <code>basename</code></h1>
+<h2 id="basenamesstr"><code>basename(s:Str)</code></h2>
 <h1 id="type-basictype">Type: <code>BasicType</code></h1>
 <h1 id="type-basictypeinstance">Type: <code>BasicTypeInstance</code></h1>
 <h1 id="type-bool">Type: <code>Bool</code></h1>
-<h2 id="description-2">Description</h2>
+<h2 id="description-8">Description</h2>
 <pre><code>The only instances are true and false</code></pre>
 <h1 id="methods-bool">Methods: <code>Bool</code></h1>
 <h2 id="boolxany"><code>Bool(x:Any)</code></h2>
+<h2 id="boolfbfullbox"><code>Bool(fb:FullBox)</code></h2>
+<h2 id="boolebemptybox"><code>Bool(eb:EmptyBox)</code></h2>
 <h2 id="boolppath"><code>Bool(p:Path)</code></h2>
 <h2 id="boolpprocess"><code>Bool(p:Process)</code></h2>
+<h2 id="boolmymatchy"><code>Bool(my:MatchY)</code></h2>
+<h2 id="boolmymatchn"><code>Bool(my:MatchN)</code></h2>
 <h2 id="boolttable"><code>Bool(t:Table)</code></h2>
 <h1 id="methods-bootstrap">Methods: <code>bootstrap</code></h1>
 <h2 id="bootstrap"><code>bootstrap()</code></h2>
-<h3 id="description-3">Description</h3>
+<h3 id="description-9">Description</h3>
 <pre><code>Main entry point. Executed on NGS boot.</code></pre>
 <h1 id="methods-bootstrap_find_ngs_dir">Methods: <code>bootstrap_find_ngs_dir</code></h1>
 <h2 id="bootstrap_find_ngs_dir"><code>bootstrap_find_ngs_dir()</code></h2>
-<h1 id="methods-c_close">Methods: <code>c_close</code></h1>
-<h2 id="c_closefdint"><code>c_close(fd:Int)</code></h2>
-<h1 id="methods-c_dup2">Methods: <code>c_dup2</code></h1>
-<h2 id="c_dup2oldfdint-newfdint"><code>c_dup2(oldfd:Int, newfd:Int)</code></h2>
-<h2 id="c_dup2oldfdint-newfdint-1"><code>c_dup2(oldfd:Int, newfd:Int)</code></h2>
-<h1 id="methods-c_execve">Methods: <code>c_execve</code></h1>
-<h2 id="c_execvefilenamestr-argvarr-envparr"><code>c_execve(filename:Str, argv:Arr, envp:Arr)</code></h2>
-<h1 id="methods-c_exit">Methods: <code>c_exit</code></h1>
-<h2 id="c_exitstatusint"><code>c_exit(status:Int)</code></h2>
-<h1 id="methods-c_fork">Methods: <code>c_fork</code></h1>
-<h2 id="c_fork"><code>c_fork()</code></h2>
-<h1 id="methods-c_isatty">Methods: <code>c_isatty</code></h1>
-<h2 id="c_isattyfdint"><code>c_isatty(fd:Int)</code></h2>
-<h1 id="methods-c_lseek">Methods: <code>c_lseek</code></h1>
-<h2 id="c_lseekfdint-offsetint-whencestr"><code>c_lseek(fd:Int, offset:Int, whence:Str)</code></h2>
-<h3 id="parameter-whencestr">Parameter whence:Str</h3>
-<pre><code>One of: set, cur, end</code></pre>
-<h1 id="methods-c_open">Methods: <code>c_open</code></h1>
-<h2 id="c_openpathnamestr-flagsstr"><code>c_open(pathname:Str, flags:Str)</code></h2>
-<h3 id="parameter-flagsstr">Parameter flags:Str</h3>
-<pre><code>r - O_RDONLY; w - O_WRONLY | O_CREAT | O_TRUNC; a - O_WRONLY | O_CREAT | O_APPEND</code></pre>
-<h1 id="methods-c_pipe">Methods: <code>c_pipe</code></h1>
-<h2 id="c_pipe"><code>c_pipe()</code></h2>
-<h1 id="methods-c_read">Methods: <code>c_read</code></h1>
-<h2 id="c_readfdint-countint"><code>c_read(fd:Int, count:Int)</code></h2>
-<h1 id="methods-c_strcasecmp">Methods: <code>c_strcasecmp</code></h1>
-<h2 id="c_strcasecmpastr-bstr"><code>c_strcasecmp(a:Str, b:Str)</code></h2>
-<h1 id="methods-c_waitpid">Methods: <code>c_waitpid</code></h1>
-<h2 id="c_waitpidpidint"><code>c_waitpid(pid:Int)</code></h2>
-<h1 id="methods-c_wexitstatus">Methods: <code>C_WEXITSTATUS</code></h1>
-<h2 id="c_wexitstatusstatusint"><code>C_WEXITSTATUS(status:Int)</code></h2>
-<h1 id="methods-c_write">Methods: <code>c_write</code></h1>
-<h2 id="c_writefdint-sstr"><code>c_write(fd:Int, s:Str)</code></h2>
-<h1 id="methods-c_wtermsig">Methods: <code>C_WTERMSIG</code></h1>
-<h2 id="c_wtermsigstatusint"><code>C_WTERMSIG(status:Int)</code></h2>
-<h1 id="type-callfail">Type: <code>CallFail</code></h1>
-<h1 id="methods-cell_display_width">Methods: <code>cell_display_width</code></h1>
-<h2 id="cell_display_widthxany"><code>cell_display_width(x:Any)</code></h2>
-<h3 id="description-4">Description</h3>
-<pre><code>Calculate cell display width - any Str()-able instance</code></pre>
-<h2 id="cell_display_widthxarr"><code>cell_display_width(x:Arr)</code></h2>
-<h3 id="description-5">Description</h3>
-<pre><code>Calculate cell display width for an array</code></pre>
-<h2 id="cell_display_widthxarr-1"><code>cell_display_width(x:Arr)</code></h2>
-<h3 id="description-6">Description</h3>
-<pre><code>Calculate cell display width for an empty array</code></pre>
-<h1 id="type-clib">Type: <code>CLib</code></h1>
-<h2 id="description-7">Description</h2>
-<pre><code>C library (unfinished, do not use)</code></pre>
-<h1 id="methods-clib">Methods: <code>CLib</code></h1>
-<h2 id="clibnamestr"><code>CLib(name:Str)</code></h2>
-<h1 id="methods-close_reading_end">Methods: <code>close_reading_end</code></h1>
-<h2 id="close_reading_endppipe"><code>close_reading_end(p:Pipe)</code></h2>
-<h1 id="methods-close_writing_end">Methods: <code>close_writing_end</code></h1>
-<h2 id="close_writing_endppipe"><code>close_writing_end(p:Pipe)</code></h2>
-<h1 id="type-closure">Type: <code>Closure</code></h1>
-<h1 id="methods-collector">Methods: <code>collector</code></h1>
-<h2 id="collectoraarr-codefun"><code>collector(a:Arr, code:Fun)</code></h2>
-<h2 id="collectorhhash-codefun"><code>collector(h:Hash, code:Fun)</code></h2>
-<h2 id="collectornint-codefun"><code>collector(n:Int, code:Fun)</code></h2>
-<h1 id="methods-column">Methods: <code>column</code></h1>
-<h2 id="columnttable-kstr"><code>column(t:Table, k:Str)</code></h2>
-<h2 id="columnttable-nint"><code>column(t:Table, n:Int)</code></h2>
-<h1 id="methods-columns">Methods: <code>columns</code></h1>
-<h2 id="columnsttable"><code>columns(t:Table)</code></h2>
-<h1 id="type-command">Type: <code>Command</code></h1>
-<h1 id="methods-compile">Methods: <code>compile</code></h1>
-<h2 id="compilecodestr-fnamestr"><code>compile(code:Str, fname:Str)</code></h2>
-<h1 id="type-compilefail">Type: <code>CompileFail</code></h1>
-<h1 id="methods-config">Methods: <code>config</code></h1>
-<h2 id="configkstr"><code>config(k:Str)</code></h2>
-<h2 id="configsstr-xany"><code>config(s:Str, x:Any)</code></h2>
-<h1 id="methods-copy">Methods: <code>copy</code></h1>
-<h2 id="copyarrarr"><code>copy(arr:Arr)</code></h2>
-<h1 id="methods-count">Methods: <code>count</code></h1>
-<h2 id="countarrarr-predicatefun-argsarr"><code>count(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
-<h2 id="counthhash-predicatefun-argsarr"><code>count(h:Hash, predicate:Fun, *args:Arr)</code></h2>
-<h1 id="type-csym">Type: <code>CSym</code></h1>
-<h2 id="description-8">Description</h2>
-<pre><code>C symbol (unfinished, do not use)</code></pre>
-<h1 id="methods-debug">Methods: <code>debug</code></h1>
-<h2 id="debugsstr"><code>debug(s:Str)</code></h2>
-<h1 id="methods-decode_json">Methods: <code>decode_json</code></h1>
-<h2 id="decode_jsonsstr"><code>decode_json(s:Str)</code></h2>
-<h1 id="methods-del">Methods: <code>del</code></h1>
-<h2 id="delhhash-kany"><code>del(h:Hash, k:Any)</code></h2>
-<h1 id="type-dontknowhowtocall">Type: <code>DontKnowHowToCall</code></h1>
-<h1 id="methods-dump">Methods: <code>dump</code></h1>
-<h2 id="dumpobjany"><code>dump(obj:Any)</code></h2>
-<h1 id="methods-dup2">Methods: <code>dup2</code></h1>
-<h2 id="dup2oldfdint-newfdint"><code>dup2(oldfd:Int, newfd:Int)</code></h2>
-<h1 id="methods-dup2_reading_end">Methods: <code>dup2_reading_end</code></h1>
-<h2 id="dup2_reading_endppipe-newfdint"><code>dup2_reading_end(p:Pipe, newfd:Int)</code></h2>
-<h1 id="methods-dup2_writing_end">Methods: <code>dup2_writing_end</code></h1>
-<h2 id="dup2_writing_endppipe-newfdint"><code>dup2_writing_end(p:Pipe, newfd:Int)</code></h2>
-<h1 id="methods-each">Methods: <code>each</code></h1>
-<h2 id="eachrrange-cbfun-argsarr"><code>each(r:Range, cb:Fun, *args:Arr)</code></h2>
-<h2 id="eacharrarr-cbfun-argsarr"><code>each(arr:Arr, cb:Fun, *args:Arr)</code></h2>
-<h2 id="eachhhash-cbfun-argsarr"><code>each(h:Hash, cb:Fun, *args:Arr)</code></h2>
-<h2 id="eachnint-cbfun-argsarr"><code>each(n:Int, cb:Fun, *args:Arr)</code></h2>
-<h2 id="eachttable-cbfun-argsarr"><code>each(t:Table, cb:Fun, *args:Arr)</code></h2>
-<h1 id="methods-echo">Methods: <code>echo</code></h1>
-<h2 id="echosstr"><code>echo(s:Str)</code></h2>
-<h2 id="echoxany"><code>echo(x:Any)</code></h2>
-<h2 id="echottable"><code>echo(t:Table)</code></h2>
-<h1 id="methods-encode_json">Methods: <code>encode_json</code></h1>
-<h2 id="encode_jsonobjany"><code>encode_json(obj:Any)</code></h2>
-<h1 id="type-error">Type: <code>Error</code></h1>
-<h1 id="methods-error">Methods: <code>error</code></h1>
-<h2 id="errorsstr"><code>error(s:Str)</code></h2>
-<h1 id="type-exception">Type: <code>Exception</code></h1>
-<h1 id="type-exclusiverange">Type: <code>ExclusiveRange</code></h1>
-<h1 id="methods-expose">Methods: <code>expose</code></h1>
-<h2 id="exposetypnormaltype-attrstr"><code>expose(typ:NormalType, attr:Str)</code></h2>
-<h3 id="description-9">Description</h3>
-<pre><code>Exposes the given attribute so when there is ImplNotFound
-when the original call had instance of the given type as an argument
-the call is retried with the instance replaced by the given argument</code></pre>
-<h3 id="parameter-typnormaltype">Parameter typ:NormalType</h3>
-<pre><code>ImplNotFound with instance of this type will cause retry with the given attribute</code></pre>
-<h3 id="parameter-attrstr">Parameter attr:Str</h3>
-<pre><code>The exposed attribute that will be used on call retry</code></pre>
-<h3 id="returns">Returns</h3>
-<pre><code>typ</code></pre>
-<h3 id="example">Example</h3>
-<pre><code>{
-    type Stats
-    Stats.expose(h)
-}
-
-F init(s:Stats) {
-    s.h = {}
-}
-
-F Stats(a:Arr) {
-    s = Stats()
-    a.each(partial(push, s))
-    s
-}
-
-F push(s:Stats, k) {
-    s.h[k] = s.h.get(k, 0) + 1
-    s
-}
-
-# Usage:
-numbering = Stats()
-numbering.push(hostname_base)
-... numbering[hostname_base]} ...</code></pre>
-<h1 id="methods-fetch">Methods: <code>fetch</code></h1>
-<h2 id="fetchfnamestr"><code>fetch(fname:Str)</code></h2>
-<h3 id="description-10">Description</h3>
-<pre><code>Fetches whole file</code></pre>
-<h3 id="parameter-fnamestr">Parameter fname:Str</h3>
-<pre><code>File name to fetch</code></pre>
-<h3 id="returns-1">Returns</h3>
-<pre><code>Whole file as a string</code></pre>
-<h1 id="type-fetchfail">Type: <code>FetchFail</code></h1>
-<h1 id="type-file">Type: <code>File</code></h1>
-<h1 id="type-fileiofail">Type: <code>FileIOFail</code></h1>
-<h1 id="methods-filter">Methods: <code>filter</code></h1>
-<h2 id="filterarrarr-predicatefun-argsarr"><code>filter(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
-<h2 id="filterarrarr"><code>filter(arr:Arr)</code></h2>
-<h2 id="filterhhash-predicatefun-argsarr"><code>filter(h:Hash, predicate:Fun, *args:Arr)</code></h2>
-<h1 id="methods-find_in_path">Methods: <code>find_in_path</code></h1>
-<h2 id="find_in_pathexecutable_namestr"><code>find_in_path(executable_name:Str)</code></h2>
-<h1 id="methods-finished_ok">Methods: <code>finished_ok</code></h1>
-<h2 id="finished_okpprocess"><code>finished_ok(p:Process)</code></h2>
-<h2 id="finished_okpprocess-1"><code>finished_ok(p:Process)</code></h2>
-<h2 id="finished_okpprocess-2"><code>finished_ok(p:Process)</code></h2>
-<h1 id="methods-first">Methods: <code>first</code></h1>
-<h2 id="firstrrange-predicatefun-argsarr"><code>first(r:Range, predicate:Fun, *args:Arr)</code></h2>
-<h2 id="firstarrarr"><code>first(arr:Arr)</code></h2>
-<h2 id="firstarrarr-predicatefun-argsarr"><code>first(arr:Arr, predicate:Fun, *args:Arr)</code></h2>
-<h1 id="methods-flatten">Methods: <code>flatten</code></h1>
-<h2 id="flattenarrarr"><code>flatten(arr:Arr)</code></h2>
-<h1 id="type-fun">Type: <code>Fun</code></h1>
-<h1 id="methods-get">Methods: <code>get</code></h1>
-<h2 id="getarrarr-idxint-dfltany"><code>get(arr:Arr, idx:Int, dflt:Any)</code></h2>
-<h2 id="gethhash-kany-dfltany"><code>get(h:Hash, k:Any, dflt:Any)</code></h2>
-<h2 id="gethhash-kany"><code>get(h:Hash, k:Any)</code></h2>
-<h1 id="methods-get_c_errno">Methods: <code>get_c_errno</code></h1>
-<h2 id="get_c_errno"><code>get_c_errno()</code></h2>
-<h1 id="methods-global_not_found_hook">Methods: <code>global_not_found_hook</code></h1>
-<h2 id="global_not_found_hooknamestr"><code>global_not_found_hook(name:Str)</code></h2>
-<h3 id="description-11">Description</h3>
-<pre><code>Called when reading undefined global
-Implements autoloading</code></pre>
-<h1 id="type-globalnotfound">Type: <code>GlobalNotFound</code></h1>
-<h1 id="methods-globals">Methods: <code>globals</code></h1>
-<h2 id="globals"><code>globals()</code></h2>
-<h1 id="methods-has">Methods: <code>has</code></h1>
-<h2 id="hascontainerany-elementany"><code>has(container:Any, element:Any)</code></h2>
-<h1 id="type-hash">Type: <code>Hash</code></h1>
-<h1 id="methods-hash">Methods: <code>Hash</code></h1>
-<h2 id="hasharrarr"><code>Hash(arr:Arr)</code></h2>
-<h2 id="hasharrarr-vany"><code>Hash(arr:Arr, v:Any)</code></h2>
-<h2 id="hashtuplearr-namesarr"><code>Hash(tuple:Arr, names:Arr)</code></h2>
-<h2 id="hashttable-row_numberint"><code>Hash(t:Table, row_number:Int)</code></h2>
-<h1 id="methods-hash-1">Methods: <code>hash</code></h1>
-<h2 id="hashxany"><code>hash(x:Any)</code></h2>
-<h1 id="methods-hashes">Methods: <code>Hashes</code></h1>
-<h2 id="hashesttable"><code>Hashes(t:Table)</code></h2>
-<h1 id="methods-identity">Methods: <code>identity</code></h1>
-<h2 id="identityxany"><code>identity(x:Any)</code></h2>
-<h3 id="returns-2">Returns</h3>
-<pre><code>The given argument</code></pre>
-<h1 id="methods-impl_not_found_hook">Methods: <code>impl_not_found_hook</code></h1>
-<h2 id="impl_not_found_hookcallablefun-argsarr"><code>impl_not_found_hook(callable:Fun, *args:Arr)</code></h2>
-<h3 id="description-12">Description</h3>
-<pre><code>Called on ImplNotFound
-Implements expose() behaviour</code></pre>
-<h1 id="type-implnotfound">Type: <code>ImplNotFound</code></h1>
-<h1 id="methods-in">Methods: <code>in</code></h1>
-<h2 id="insymbolstr-libclib"><code>in(symbol:Str, lib:CLib)</code></h2>
-<h2 id="inxany-hhash"><code>in(x:Any, h:Hash)</code></h2>
-<h2 id="inxany-arrarr"><code>in(x:Any, arr:Arr)</code></h2>
-<h2 id="inneedlestr-haystackstr"><code>in(needle:Str, haystack:Str)</code></h2>
-<h1 id="type-inclusiverange">Type: <code>InclusiveRange</code></h1>
-<h1 id="type-indexnotfound">Type: <code>IndexNotFound</code></h1>
-<h1 id="methods-inherit">Methods: <code>inherit</code></h1>
-<h2 id="inherittnormaltype-parentnormaltype"><code>inherit(t:NormalType, parent:NormalType)</code></h2>
-<h1 id="methods-init">Methods: <code>init</code></h1>
-<h2 id="initeexception"><code>init(e:Exception)</code></h2>
-<h3 id="returns-3">Returns</h3>
-<pre><code>Exception with .backtrace attribute</code></pre>
-<h2 id="initeexception-sstr"><code>init(e:Exception, s:Str)</code></h2>
-<h3 id="parameter-sstr">Parameter s:Str</h3>
-<pre><code>Goes into .info</code></pre>
-<h3 id="returns-4">Returns</h3>
-<pre><code>Exception with .backtrace and .info</code></pre>
-<h2 id="initeexception-causeexception"><code>init(e:Exception, cause:Exception)</code></h2>
-<h3 id="returns-5">Returns</h3>
-<pre><code>Exception with .backtrace and .cause</code></pre>
-<h2 id="initeindexnotfound-messagestr-containerany-keyany"><code>init(e:IndexNotFound, message:Str, container:Any, key:Any)</code></h2>
-<h2 id="initrrange-startany-endany"><code>init(r:Range, start:Any, end:Any)</code></h2>
-<h2 id="initffstdlibfirstfound-iint"><code>init(ff:StdlibFirstFound, i:Int)</code></h2>
-<h2 id="initfailfileiofail-namestr-errnoint-messagestr"><code>init(fail:FileIOFail, name:Str, errno:Int, message:Str)</code></h2>
-<h2 id="initffile-namestr"><code>init(f:File, name:Str)</code></h2>
-<h2 id="initffile-fdint"><code>init(f:File, fd:Int)</code></h2>
-<h2 id="initttable"><code>init(t:Table)</code></h2>
-<h3 id="description-13">Description</h3>
-<pre><code>Initialize rows to an empty array</code></pre>
-<h2 id="initttable-rows_hashesarr"><code>init(t:Table, rows_hashes:Arr)</code></h2>
-<h2 id="initsstats"><code>init(s:Stats)</code></h2>
-<h1 id="type-int">Type: <code>Int</code></h1>
-<h1 id="type-invalidargument">Type: <code>InvalidArgument</code></h1>
-<h1 id="methods-is">Methods: <code>is</code></h1>
-<h2 id="isobjany-ttype"><code>is(obj:Any, t:Type)</code></h2>
-<h1 id="methods-is-not">Methods: <code>is not</code></h1>
-<h2 id="is-notaany-bany"><code>is not(a:Any, b:Any)</code></h2>
-<h1 id="methods-isatty">Methods: <code>isatty</code></h1>
-<h2 id="isattyfdint"><code>isatty(fd:Int)</code></h2>
-<h1 id="methods-join">Methods: <code>join</code></h1>
-<h2 id="joinarrarr-sstr"><code>join(arr:Arr, s:Str)</code></h2>
-<h1 id="type-keynotfound">Type: <code>KeyNotFound</code></h1>
-<h1 id="methods-keys">Methods: <code>keys</code></h1>
-<h2 id="keyshhash"><code>keys(h:Hash)</code></h2>
-<h1 id="methods-len">Methods: <code>len</code></h1>
-<h2 id="lenarrarr"><code>len(arr:Arr)</code></h2>
-<h2 id="lensstr"><code>len(s:Str)</code></h2>
-<h2 id="lenhhash"><code>len(h:Hash)</code></h2>
-<h2 id="lenrringbuffer"><code>len(r:RingBuffer)</code></h2>
-<h2 id="lenttable"><code>len(t:Table)</code></h2>
-<h1 id="methods-load">Methods: <code>load</code></h1>
-<h2 id="loadbytecodestr-func_namestr"><code>load(bytecode:Str, func_name:Str)</code></h2>
-<h1 id="methods-log">Methods: <code>log</code></h1>
-<h2 id="logsstr"><code>log(s:Str)</code></h2>
-<h1 id="type-lookupfail">Type: <code>LookupFail</code></h1>
-<h1 id="methods-lte">Methods: <code>lte</code></h1>
-<h2 id="lteastr-bstr"><code>lte(a:Str, b:Str)</code></h2>
-<h3 id="description-14">Description</h3>
-<pre><code>Case-insensitive LessThan or Equal comparison for strings</code></pre>
-<h1 id="methods-map">Methods: <code>map</code></h1>
-<h2 id="maprrange-mapperfun-argsarr"><code>map(r:Range, mapper:Fun, *args:Arr)</code></h2>
-<h2 id="maparrarr-mapperfun-argsarr"><code>map(arr:Arr, mapper:Fun, *args:Arr)</code></h2>
-<h2 id="maphhash-mapperfun-argsarr"><code>map(h:Hash, mapper:Fun, *args:Arr)</code></h2>
-<h2 id="mapnint-mapperfun-argsarr"><code>map(n:Int, mapper:Fun, *args:Arr)</code></h2>
-<h1 id="methods-merge_sorted">Methods: <code>merge_sorted</code></h1>
-<h2 id="merge_sortedaarr-barr-ltefun"><code>merge_sorted(a:Arr, b:Arr, lte:Fun)</code></h2>
-<h1 id="type-nativemethod">Type: <code>NativeMethod</code></h1>
-<h1 id="type-normaltype">Type: <code>NormalType</code></h1>
-<h1 id="type-normaltypeinstance">Type: <code>NormalTypeInstance</code></h1>
-<h1 id="methods-not">Methods: <code>not</code></h1>
-<h2 id="notxbool"><code>not(x:Bool)</code></h2>
-<h2 id="notxany"><code>not(x:Any)</code></h2>
-<h1 id="methods-not-in">Methods: <code>not in</code></h1>
-<h2 id="not-inaany-bany"><code>not in(a:Any, b:Any)</code></h2>
-<h1 id="type-notimplemented">Type: <code>NotImplemented</code></h1>
-<h1 id="type-null">Type: <code>Null</code></h1>
-<h2 id="description-15">Description</h2>
-<pre><code>Has only one instance, null</code></pre>
-<h1 id="methods-open">Methods: <code>open</code></h1>
-<h2 id="openffile-flagsstr"><code>open(f:File, flags:Str)</code></h2>
-<h1 id="methods-params">Methods: <code>params</code></h1>
-<h2 id="paramsmnativemethod"><code>params(m:NativeMethod)</code></h2>
-<h2 id="paramscclosure"><code>params(c:Closure)</code></h2>
-<h1 id="methods-parse">Methods: <code>parse</code></h1>
-<h2 id="parsesstr"><code>parse(s:Str)</code></h2>
-<h2 id="parsesstr-hintshash"><code>parse(s:Str, hints:Hash)</code></h2>
-<h2 id="parsesstr-hintshash-1"><code>parse(s:Str, hints:Hash)</code></h2>
-<h2 id="parsesstr-hintshash-2"><code>parse(s:Str, hints:Hash)</code></h2>
-<h1 id="methods-partial">Methods: <code>partial</code></h1>
-<h2 id="partialffun-bind_argsarr"><code>partial(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-16">Description</h3>
-<pre><code>Returns partially-applied function</code></pre>
-<h3 id="parameter-ffun">Parameter f:Fun</h3>
-<pre><code>The base function</code></pre>
-<h1 id="methods-partial_tail">Methods: <code>partial_tail</code></h1>
-<h2 id="partial_tailffun-bind_argsarr"><code>partial_tail(f:Fun, *bind_args:Arr)</code></h2>
-<h3 id="description-17">Description</h3>
-<pre><code>Same as partial() but the bound arguments are last ones</code></pre>
-<h1 id="type-path">Type: <code>Path</code></h1>
-<h1 id="methods-path">Methods: <code>Path</code></h1>
-<h2 id="pathsstr"><code>Path(s:Str)</code></h2>
-<h1 id="type-pipe">Type: <code>Pipe</code></h1>
-<h1 id="methods-pipe">Methods: <code>Pipe</code></h1>
-<h2 id="pipe"><code>Pipe()</code></h2>
-<h1 id="methods-pop">Methods: <code>pop</code></h1>
-<h2 id="poparrarr"><code>pop(arr:Arr)</code></h2>
-<h1 id="methods-pos">Methods: <code>pos</code></h1>
-<h2 id="poshaystackstr-needlestr-startint"><code>pos(haystack:Str, needle:Str, start:Int)</code></h2>
-<h2 id="poshaystackstr-needlestr"><code>pos(haystack:Str, needle:Str)</code></h2>
-<h1 id="type-process">Type: <code>Process</code></h1>
-<h1 id="methods-process">Methods: <code>Process</code></h1>
-<h2 id="processccommand"><code>Process(c:Command)</code></h2>
-<h1 id="type-processfailed">Type: <code>ProcessFailed</code></h1>
-<h1 id="methods-processfailed">Methods: <code>ProcessFailed</code></h1>
-<h2 id="processfailedpprocess"><code>ProcessFailed(p:Process)</code></h2>
-<h1 id="methods-push">Methods: <code>push</code></h1>
-<h2 id="pusharrarr-vany"><code>push(arr:Arr, v:Any)</code></h2>
-<h2 id="pushrringbuffer-xany"><code>push(r:RingBuffer, x:Any)</code></h2>
-<h2 id="pushttable-row_arrarr"><code>push(t:Table, row_arr:Arr)</code></h2>
-<h2 id="pushttable-row_hashhash"><code>push(t:Table, row_hash:Hash)</code></h2>
-<h2 id="pushsstats-kany"><code>push(s:Stats, k:Any)</code></h2>
-<h3 id="description-18">Description</h3>
-<pre><code>Increment the named counter</code></pre>
-<h1 id="type-range">Type: <code>Range</code></h1>
-<h1 id="methods-read">Methods: <code>read</code></h1>
-<h2 id="readfdint"><code>read(fd:Int)</code></h2>
-<h2 id="readppipe"><code>read(p:Pipe)</code></h2>
-<h1 id="type-real">Type: <code>Real</code></h1>
-<h1 id="methods-real">Methods: <code>Real</code></h1>
-<h2 id="realnint"><code>Real(n:Int)</code></h2>
-<h1 id="type-redir">Type: <code>Redir</code></h1>
-<h1 id="methods-require">Methods: <code>require</code></h1>
-<h2 id="requirefnamestr"><code>require(fname:Str)</code></h2>
-<h3 id="description-19">Description</h3>
-<pre><code>Runs the given file</code></pre>
-<h3 id="returns-6">Returns</h3>
-<pre><code>Typically whatever the last expression in the file evaluates to</code></pre>
-<h1 id="type-requrefail">Type: <code>RequreFail</code></h1>
-<h1 id="methods-resolve_ip">Methods: <code>resolve_ip</code></h1>
-<h2 id="resolve_ipipint"><code>resolve_ip(ip:Int)</code></h2>
-<h1 id="type-ringbuffer">Type: <code>RingBuffer</code></h1>
-<h1 id="methods-ringbuffer">Methods: <code>RingBuffer</code></h1>
-<h2 id="ringbuffermax_sizeint"><code>RingBuffer(max_size:Int)</code></h2>
-<h1 id="type-seq">Type: <code>Seq</code></h1>
-<h1 id="methods-shift">Methods: <code>shift</code></h1>
-<h2 id="shiftarrarr"><code>shift(arr:Arr)</code></h2>
-<h2 id="shiftarrarr-dfltany"><code>shift(arr:Arr, dflt:Any)</code></h2>
-<h1 id="methods-sort">Methods: <code>sort</code></h1>
-<h2 id="sortaarr"><code>sort(a:Arr)</code></h2>
-<h2 id="sortaarr-ltefun"><code>sort(a:Arr, lte:Fun)</code></h2>
-<h1 id="methods-split">Methods: <code>split</code></h1>
-<h2 id="splitsstr-delimstr"><code>split(s:Str, delim:Str)</code></h2>
-<h1 id="methods-starts_with">Methods: <code>starts_with</code></h1>
-<h2 id="starts_withhaystackstr-needlestr"><code>starts_with(haystack:Str, needle:Str)</code></h2>
-<h2 id="starts_withhaystackstr-needlestr-1"><code>starts_with(haystack:Str, needle:Str)</code></h2>
-<h1 id="type-stats">Type: <code>Stats</code></h1>
-<h2 id="description-20">Description</h2>
-<pre><code>A group of named counters</code></pre>
-<h2 id="field-s">Field <code>s</code></h2>
-<pre><code>The underlying Hash, expose()d</code></pre>
-<h1 id="methods-stats">Methods: <code>Stats</code></h1>
-<h2 id="statsaarr"><code>Stats(a:Arr)</code></h2>
-<h3 id="description-21">Description</h3>
-<pre><code>Makes Stats, with each element in the array counted as if push()ed</code></pre>
-<h1 id="methods-status">Methods: <code>status</code></h1>
-<h2 id="statussstr"><code>status(s:Str)</code></h2>
-<h1 id="methods-stdlib_aws_straighten_tags">Methods: <code>stdlib_aws_straighten_tags</code></h1>
-<h2 id="stdlib_aws_straighten_tagsaarr"><code>stdlib_aws_straighten_tags(a:Arr)</code></h2>
-<h2 id="stdlib_aws_straighten_tagshhash"><code>stdlib_aws_straighten_tags(h:Hash)</code></h2>
-<h1 id="type-stdlibfirstfound">Type: <code>StdlibFirstFound</code></h1>
-<h1 id="type-str">Type: <code>Str</code></h1>
-<h1 id="methods-str">Methods: <code>Str</code></h1>
-<h2 id="strrreal"><code>Str(r:Real)</code></h2>
-<h2 id="strnint"><code>Str(n:Int)</code></h2>
-<h2 id="strttype"><code>Str(t:Type)</code></h2>
-<h2 id="strrexclusiverange"><code>Str(r:ExclusiveRange)</code></h2>
-<h2 id="strrinclusiverange"><code>Str(r:InclusiveRange)</code></h2>
-<h2 id="strsstr"><code>Str(s:Str)</code></h2>
-<h2 id="strnnull"><code>Str(n:Null)</code></h2>
-<h2 id="strbbool"><code>Str(b:Bool)</code></h2>
-<h2 id="straarr"><code>Str(a:Arr)</code></h2>
-<h2 id="strhhash"><code>Str(h:Hash)</code></h2>
-<h2 id="strxany-target_widthint"><code>Str(x:Any, target_width:Int)</code></h2>
-<h2 id="strsstr-target_widthint"><code>Str(s:Str, target_width:Int)</code></h2>
-<h2 id="strnint-target_widthint"><code>Str(n:Int, target_width:Int)</code></h2>
-<h2 id="strppath"><code>Str(p:Path)</code></h2>
-<h2 id="strffile"><code>Str(f:File)</code></h2>
-<h2 id="strrredir"><code>Str(r:Redir)</code></h2>
-<h2 id="strpprocess"><code>Str(p:Process)</code></h2>
-<h1 id="methods-strs">Methods: <code>Strs</code></h1>
-<h2 id="strshhash"><code>Strs(h:Hash)</code></h2>
-<h1 id="type-switchfail">Type: <code>SwitchFail</code></h1>
-<h1 id="type-table">Type: <code>Table</code></h1>
-<h2 id="description-22">Description</h2>
-<pre><code>Manipulates tabular data</code></pre>
-<h2 id="field-name">Field <code>name</code></h2>
-<pre><code>Table name to display and for configuratio lookup</code></pre>
-<h2 id="field-col_name_to_idx">Field <code>col_name_to_idx</code></h2>
-<pre><code>Columns names&#39; indexes (ex: id:0, name:1, age:2)</code></pre>
-<h2 id="field-col_idx_to_name">Field <code>col_idx_to_name</code></h2>
-<pre><code>Columns indexes&#39; names (ex: 0:id, 1:name, 2:age)</code></pre>
-<h1 id="methods-table">Methods: <code>Table</code></h1>
-<h2 id="tablerows_hashesarr"><code>Table(rows_hashes:Arr)</code></h2>
-<h3 id="description-23">Description</h3>
-<pre><code>Create table containing provided rows</code></pre>
-<h3 id="parameter-rows_hashesarr">Parameter rows_hashes:Arr</h3>
-<pre><code>rows, each row is a Hash</code></pre>
-<h2 id="tablenamestr-rows_hashesarr"><code>Table(name:Str, rows_hashes:Arr)</code></h2>
-<h3 id="description-24">Description</h3>
-<pre><code>Create named table containing provided rows</code></pre>
-<h3 id="parameter-namestr">Parameter name:Str</h3>
-<pre><code>name of the table for display and for configuration purposes</code></pre>
-<h3 id="parameter-rows_hashesarr-1">Parameter rows_hashes:Arr</h3>
-<pre><code>rows, each row is a Hash</code></pre>
-<h1 id="methods-times">Methods: <code>times</code></h1>
-<h2 id="timesnint-cbfun-argsarr"><code>times(n:Int, cb:Fun, *args:Arr)</code></h2>
-<h1 id="methods-to_exit_code">Methods: <code>to_exit_code</code></h1>
-<h2 id="to_exit_codexany"><code>to_exit_code(x:Any)</code></h2>
-<h3 id="returns-7">Returns</h3>
-<pre><code>always 0</code></pre>
-<h2 id="to_exit_codebbool"><code>to_exit_code(b:Bool)</code></h2>
-<h3 id="returns-8">Returns</h3>
-<pre><code>0 for true, 1 for false</code></pre>
-<h2 id="to_exit_codenint"><code>to_exit_code(n:Int)</code></h2>
-<h3 id="returns-9">Returns</h3>
-<pre><code>n</code></pre>
-<h2 id="to_exit_codepprocess"><code>to_exit_code(p:Process)</code></h2>
-<h1 id="type-type">Type: <code>Type</code></h1>
-<h1 id="methods-type">Methods: <code>Type</code></h1>
-<h2 id="typenamestr"><code>Type(name:Str)</code></h2>
-<h2 id="typenamestr-docany"><code>Type(name:Str, doc:Any)</code></h2>
-<h1 id="methods-typeof">Methods: <code>typeof</code></h1>
-<h2 id="typeofxany"><code>typeof(x:Any)</code></h2>
-<h3 id="description-25">Description</h3>
-<pre><code>Returns type of the given instance</code></pre>
-<h3 id="parameter-xany">Parameter x:Any</h3>
-<pre><code>Instance (an object)</code></pre>
-<h1 id="methods-uniq">Methods: <code>uniq</code></h1>
-<h2 id="uniqarrarr"><code>uniq(arr:Arr)</code></h2>
-<h1 id="methods-update">Methods: <code>update</code></h1>
-<h2 id="updatedsthash-srchash"><code>update(dst:Hash, src:Hash)</code></h2>
-<h1 id="methods-values">Methods: <code>values</code></h1>
-<h2 id="valueshhash"><code>values(h:Hash)</code></h2>
-<h2 id="valuesrringbuffer"><code>values(r:RingBuffer)</code></h2>
-<h1 id="methods-wait">Methods: <code>wait</code></h1>
-<h2 id="waitpprocess"><code>wait(p:Process)</code></h2>
-<h1 id="methods-width">Methods: <code>width</code></h1>
-<h2 id="widthttable"><code>width(t:Table)</code></h2>
-<h1 id="methods-without">Methods: <code>without</code></h1>
-<h2 id="withoutarrarr-without_eltany"><code>without(arr:Arr, without_elt:Any)</code></h2>
-<h2 id="withouthhash-without_kany"><code>without(h:Hash, without_k:Any)</code></h2>
-<h1 id="methods-write">Methods: <code>write</code></h1>
-<h2 id="writefdint-sstr"><code>write(fd:Int, s:Str)</code></h2>
-<h2 id="writeppipe-sstr"><code>write(p:Pipe, s:Str)</code></h2>
-<h1 id="methods-zip">Methods: <code>zip</code></h1>
-<h2 id="zipargsarr"><code>zip(*args:Arr)</code></h2>
+<h2 id="bootstrap_find_ngs_dir-1"><code>bootstrap_find_ngs_dir()</code></h2>
+<p>========= Uncaught exception of type 'ImplNotFound' ========= ====== Exception of type 'ImplNotFound' ====== === [ dump callable ] === * array of length 1 * ip=38587 locals_including_params=2 req_params=2 opt_params=0 n_uplevels=1 params_flags=0 * closure attributes * hash with total of 2 items in 2 buckets at 0x946b40 * bucket # 0 * item at 0xbdb1c0 with hash() of 797654004 insertion_order_prev=0xbdb200 insertion_order_next=(nil) * key * string(len=4) name * value * string(len=16) print_method_doc * bucket # 1 * item at 0xbdb200 with hash() of 546651177 insertion_order_prev=(nil) insertion_order_next=0xbdb1c0 * key * string(len=3) doc * value * null * required parameter 1 (name and type follow) * string(len=4) name * type (name and optionally constructors and parents follow) id=386 ptr=(nil) * string(len=3) Str * required parameter 2 (name and type follow) * string(len=5) value * type (name and optionally constructors and parents follow) id=42 ptr=(nil) * string(len=3) Any === [ dump args ] === * array of length 2 * string(len=28) bootstrap_ngs_dir_candidates * array of length 4 * string(len=18) /usr/local/etc/ngs * string(len=20) /usr/local/share/ngs * string(len=8) /etc/ngs * string(len=14) /usr/share/ngs === [ backtrace ] === [Frame #0] /etc/ngs/bootstrap.ngs:196:1 - 196:10 [in <anonymous>][Frame #1] /etc/ngs/bootstrap.ngs:182:11 - 182:23 [in bootstrap][Frame #2] ./make_methods_markdown.ngs:9:2 - 9:2 [in <anonymous>][Frame #3] ./make_methods_markdown.ngs:108:22 - 108:26 [in <anonymous>][Frame #4] /usr/share/ngs/stdlib.ngs:395:11 - 395:13 [in each][Frame #5] ./make_methods_markdown.ngs:112:6 - 112:22 [in <anonymous>]</p>
 </body>
 </html>
