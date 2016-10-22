@@ -20,12 +20,15 @@
 <p>ngslang - Next Generation Shell language overview.</p>
 <h1 id="language-principles-overview">LANGUAGE PRINCIPLES OVERVIEW</h1>
 <ul>
+<li><p>Systems engineers language - NGS is a domain-specific language. It is aimed to solve system tasks in a convenient manner.</p></li>
 <li>Do the most practical thing
 <ul>
 <li><code>read('myfile.json')</code> will parse the JSON and return the data structure.</li>
 <li>The <code>``my_command``</code> will parse the command output (JSON for example) and return the data structure.</li>
 <li><code>my_array.my_prop</code> returns an array of <code>.my_prop</code> properties of each element.</li>
 </ul></li>
+<li><p>Uniformity unless contradicted by the above rule or seems to be too much work, which results will not be used.</p></li>
+<li><p>Power. Trade-offs between power and not allowing to shoot yourself in the foot usually produce the power solution. The language is aimed at experienced engineers which use their own judgement. The language should be powerful enough to shoot all feet in the building at once.</p></li>
 <li><p>Simple methods naming for less guess work. <code>1+2</code> adds the numbers (method name <code>+</code>), <code>arr1+arr2</code> adds (concatenates) arrays and <code>hash1+hash2</code> produces merged hash.</p></li>
 <li>Extensibility
 <ul>
@@ -38,8 +41,41 @@
 <li>No classes. Only types, methods and multiple dispatch (picking the right method implementation by matching types of parameters and arguments)</li>
 <li>Simple type system.</li>
 </ul></li>
+<li><p>Familiarity - many concepts and syntax constructs come from other languages</p></li>
 </ul>
-<h1 id="language-gotchas---read-first">LANGUAGE GOTCHAS - READ FIRST</h1>
+<h1 id="language-overview-and-general-feel">LANGUAGE OVERVIEW AND GENERAL FEEL</h1>
+<ul>
+<li><p>The language is functional in a sense that:</p>
+<ul>
+<li><p>A function is a first class citizen, which can for example be assigned to a variable and passed as a function argument to another function. Example:</p>
+<pre><code>doc Make a new function that given an argument,
+doc will apply the original function f twice to the argument x
+doc f - original function
+F twice(f)
+    F(x) f(f(x))
+
+F f(x) x+3
+
+g = twice(f)
+
+echo(g(7))
+
+# Output: 13</code></pre></li>
+<li><p>Standard library defines many <a href="https://en.wikipedia.org/wiki/Higher-order_function">higher-order-functions</a> such as <code>each</code>, <code>map</code>, <code>any</code>, <code>all</code>, etc.</p></li>
+</ul></li>
+<li><p>Most of the language operators, such as <code>+</code>, are really a function calls. This gives uniformity, ability to pass an operator as a function to a higher-order-function and customizability.</p>
+<pre><code>echo([1, 2, 3].map((+), 1))
+# Outputs: [2,3,4]
+
+# 1+1 is same as (+)(1, 1)</code></pre></li>
+<li><p>Types have constructors. To minimize the &quot;how I create a Hash&quot; searches for example, <code>Hash</code> has many constructors so the first place and most probably answer is that you should look at <a href="ngstyp.1.html#Hash"><code>Hash</code></a> type documentation and not search for an unknown function. Example is a <code>Hash(arr, cb)</code> which has an array and a callback as arguments and builds a <code>Hash</code> where the keys come from the given array and the values are calculated by the callback.</p>
+<pre><code>echo([1, 2, 3].Hash(F(elt) &quot;ab&quot; * elt))
+# Outputs: {1=ab, 2=abab, 3=ababab}</code></pre></li>
+</ul>
+<h1 id="language-gotchas">LANGUAGE GOTCHAS</h1>
+<p>This section will be expanded as I get feedback :)</p>
+<h2 id="ngs-should-not-be-your-first-language">NGS should not be your first language</h2>
+<p>I do not recommend NGS as your first language. Python for example would be a much better choice. Programming experience is assumed prior to using NGS.</p>
 <h2 id="keyword-arguments-gotchas">Keyword arguments gotchas</h2>
 <p>Keyword arguments implementation is preliminary so:</p>
 <pre><code># Keyword arguments are silently ignored if corresponding positional argument is passed.
@@ -55,14 +91,14 @@ kwargs = {&quot;a&quot;: 10}
 F f(a=1) a; f(a=10, **kwargs) == 1
 
 # For speed and implementation simplicity reasons, the **kw parameter has all keys,
-# even if some of them matched and used for parameters. 
+# even if some of them matched and used for parameters.
 # This is somewhat likely to change in the future.
 kwargs = {&quot;a&quot;: 10}
 F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {&quot;a&quot;: 10}]</code></pre>
 <h1 id="main-language-concepts">MAIN LANGUAGE CONCEPTS</h1>
 <h2 id="types">Types</h2>
 <p>In NGS, each value is of some type. <code>1</code> for example is an <code>Int</code>, <code>&quot;xyz&quot;</code> is a <code>Str</code> and <code>[1,2,3]</code> is an <code>Arr</code>.</p>
-<p>Define <code>Counter</code> type and a few methods for it (code syntax):</p>
+<p>Define <code>Counter</code> type and a few methods for it (code syntax, must be inside <code>{...}</code>):</p>
 <pre><code>type Counter
 
 F init(c:Counter) c.counter = 0
@@ -73,16 +109,31 @@ F incr(c:Counter) {
 }
 
 F get(c:Counter) c.counter</code></pre>
-<p>Using the <code>Counter</code> type:</p>
+<p>Use the <code>Counter</code> type:</p>
 <pre><code>c = Counter()
 c.incr()
-echo(c.get())</code></pre>
+echo(c.get())
+# Output: 1</code></pre>
 <p><code>c.incr()</code> and <code>incr(c)</code> are syntactically equivalent.</p>
+<p>Inheritance:</p>
+<pre><code>type MyCounter(Counter)</code></pre>
+<p><code>MyCounter</code> inherits from <code>Counter</code> meaning that any method that works with <code>Counter</code> also works with <code>MyCounter</code>:</p>
+<pre><code>F incr(c:MyCounter) {
+    c.counter = c.counter + 10
+    c
+}
+
+c = MyCounter()
+c.incr()
+echo(c.get())
+# Output: 10</code></pre>
+<p><code>incr</code> method now has two <strong>method implementations</strong>: one for <code>Counter</code> and one for <code>MyCounter</code> so <code>incr</code> method behaves differently for these types.</p>
+<p><code>get</code> method still has one <strong>method implementation</strong> which is handling both <code>Counter</code> and <code>MyCounter</code> types.</p>
 <h2 id="methods-method-implementations-and-calling">Methods, method implementations and calling</h2>
-<p>A method in NGS is an <code>Arr</code> of functions. Each function is called <strong>method implementation</strong>.</p>
+<p>A method in NGS is an <code>Arr</code> (array) of functions. Each function in such array is called <strong>method implementation</strong>.</p>
 <pre><code>F bigger(x:Int) x+1
 F bigger(s:Str) &quot;+${s}+&quot;</code></pre>
-<p><code>bigger</code> is now an <code>Arr</code> with two elements, the functions defined by <code>F</code>. When calling an <code>Arr</code>, NGS scans the array backwards and invokes the <strong>method implementation</strong> that matches the given arguments (this matching is called multiple dispatch). Example:</p>
+<p><code>bigger</code> is now an <code>Arr</code> with two elements, the functions defined by <code>F</code>. When calling an <code>Arr</code>, NGS scans the array backwards and invokes the <strong>method implementation</strong> that matches the given arguments (this matching process is called multiple dispatch). Example:</p>
 <pre><code>echo(bigger(&quot;x&quot;))
 # Output: +x+
 
@@ -90,10 +141,10 @@ echo(bigger(1))
 # Output: 2</code></pre>
 <p>No matching <strong>method implementation</strong> causes <code>ImplNotFound</code> exception.</p>
 <pre><code>echo(bigger(true))
-# Causes ImplNotFound exception</code></pre>
-<h2 id="customizaion-using-methods">Customizaion using methods</h2>
-<p>Most language syntax constructs are actually a method calls. For example <code>1 + 2</code> is <code>+(1,2)</code> . The method named <code>+</code> is called with 1 and 2 as arguments. This means you can customize what a <code>+</code> does when applied to your types. Since types are &quot;open&quot;, you can also define what a <code>+</code> means for existing types too.</p>
-<p>Backwards array scanning allows later code (your code as opposed to previously loaded library for example) to override the behaviour. This override can be narrowed to specific cases using the <code>guard</code> clause. Continuing the example above:</p>
+# ImplNotFound exception</code></pre>
+<h2 id="customization-using-methods">Customization using methods</h2>
+<p>Sometimes, like in the <code>Counter</code> and <code>MyCounter</code> example above, it's enough to define a new <strong>method implementation</strong> and let the arguments matching do the work of figuring out which <strong>method implementation</strong> to run.</p>
+<p>In other cases, a finer-grained approach is needed. That's when a <code>guard</code> is needed. If <code>guard</code> condition evaluates to true, it tells NGS that this <strong>method implementation</strong> is the correct one. If <code>guard</code> condition evaluates to false, it tells NGS to keep searching for the correct <strong>method implementation</strong> up the <code>Arr</code> it was looking at. Note that using guards does not cancel argument matching done by NGS. Regarding the <code>guard</code>, a <strong>method implementation</strong> is only invoked when arguments matched the parameters.</p>
 <pre><code>F bigger(x:Int) {
     guard x &gt;= 100
     x + 10
@@ -102,14 +153,127 @@ echo(bigger(1))
 echo(bigger(100))
 
 # Outputs one per line: 2, 110</code></pre>
-<p>When the condition following the <code>guard</code> clause is true, the execution continues. When the condition is false, method implementation execution is terminated and the search in the array of method implementations continues as if this implementation did not match the types of the arguments. I recommend not to cause any side effects inside the method implementation in statements above <code>guard</code>, if you have any.</p>
-<h1 id="language-hooks">LANGUAGE HOOKS</h1>
-<h2 id="impl_not_found_hook"><code>impl_not_found_hook</code></h2>
-<p>... is called when a method was called but no <strong>method implementation</strong> matched the arguments. Use <code>F impl_not_found_hook(callable:Fun, *args) ...</code> to add your behaviours.</p>
-<h2 id="global_not_found_hook"><code>global_not_found_hook</code></h2>
-<p>... is called on attempt to read from an undefined global variable. Sample usage from <strong>stdlib.ngs</strong></p>
-<pre><code>F global_not_found_hook(name:Str) {
+<p>The example above added second <strong>method implementation</strong> with the <code>x:Int</code> argument.</p>
+<h1 id="handlers-and-hooks">HANDLERS AND HOOKS</h1>
+<p>Handlers and hooks are called by NGS when a certain condition occurs. What exactly happens when they are called differs between handlers and hooks.</p>
+<p><strong>A handler</strong> is a regular method (<code>Arr</code> of <strong>method implementations</strong>). Like with any other method, you can override what it does by defining your own <strong>method implementation</strong> with the same name further down in the code. Since standard handlers are defined in <strong>stdlib.ngs</strong> which is typically loaded first, your own <strong>method implementation</strong> will be &quot;further down&quot;.</p>
+<p><strong>A hook</strong> is an instance of the <code>Hook</code> type. Some hooks are called by NGS when a certain condition occurs. You are free to create and use your own hooks. When called, it executes all registered functions. The main difference is that using hook you get accumulative behaviour instead of overriding behaviour.</p>
+<p>User-defined hook example:</p>
+<pre><code>{
+    h = Hook()
+    h.push({ echo(&quot;A&quot;) })
+    h.push({ echo(&quot;B&quot;) })
+    h()
+}
+# Outputs one per line: A, B</code></pre>
+<p>Same example using decorators syntax:</p>
+<pre><code>h = Hook()
+@h {
+    echo(&quot;A&quot;)
+}
+@h {
+    echo(&quot;B&quot;)
+}
+h()</code></pre>
+<p>And finally practical example:</p>
+<pre><code>@exit_hook {
+    # Remove my temp files
+}</code></pre>
+<h2 id="impl_not_found_handler"><code>impl_not_found_handler</code></h2>
+<p><code>impl_not_found_handler</code> is called when a method was called but no <strong>method implementation</strong> matched the arguments. Use <code>F impl_not_found_handler(callable:Fun, *args) ...</code> to add your behaviours.</p>
+<h2 id="global_not_found_handler"><code>global_not_found_handler</code></h2>
+<p><code>global_not_found_handler</code> is called on attempt to read from an undefined global variable. Sample usage from <strong>stdlib.ngs</strong></p>
+<pre><code>F global_not_found_handler(name:Str) {
     require(&quot;${NGS_DIR}/autoload/${name}.ngs&quot;)
 }</code></pre>
+<h2 id="exit_hook"><code>exit_hook</code></h2>
+<p><code>exit_hook</code> is called when NGS is about to exit. Typical cases are:</p>
+<ul>
+<li>All of the given code was executed.</li>
+<li><code>throw</code> was invoked and no matching <code>catch</code> was found.</li>
+</ul>
+<p>Method signature: <code>exit_hook(exit_info:Hash)</code>. <code>exit_info</code> currently has two keys: <code>exit_code</code> and <code>exception</code>. <strong>stdlib.ngs</strong> defines two standard hooks.</p>
+<pre><code># ngs -pi &#39;exit_hook.handlers&#39;
+Hash of size 2
+[print_exception] = &lt;Closure &lt;anonymous&gt; at /usr/share/ngs/stdlib.ngs:2110&gt;
+[exception_to_exit_code] = &lt;Closure &lt;anonymous&gt; at /usr/share/ngs/stdlib.ngs:2117&gt;</code></pre>
+<ul>
+<li><code>print_exception</code> prints exception details if an exception occured.</li>
+<li><code>exception_to_exit_code</code> sets the exit code using <code>to_exit_code</code>. Unless defined for your specific exception, <code>to_exit_code</code> of an <code>Exception</code> returns <strong>200</strong>.</li>
+</ul>
+<h1 id="variables-scoping-rules">VARIABLES SCOPING RULES</h1>
+<h2 id="default-scoping-rules">Default scoping rules</h2>
+<p>In a function, any variable that is not assigned to inside the function is looked up as an <strong>upvar</strong> (enclosing functions) and as <strong>global</strong>.</p>
+<pre><code>a = 1
+F f() {
+    echo(a)
+}
+f()
+# Output: 1
+
+a = 1
+F f() {
+    a = 2
+    F g() {
+        echo(a)
+    }
+    g()
+}
+f()
+# Output: 2</code></pre>
+<p>In a function, any identifier that is mentioned in any of the enclosing functions is automatically <code>upvar</code> - references the variable in the outer scope.</p>
+<pre><code>a = 1
+F f() {
+    a = 2
+    F g() {
+        a = 10
+    }
+    g()
+    echo(a)
+}
+f()
+echo(a)
+# Output: 10
+# Output: 1</code></pre>
+<p>In a function, any variable that is assigned to (including the <code>i</code> in constuct <code>for(i;10) ...</code>) in the function is automatically <code>local</code> unless it's an <code>upvar</code> as described above.</p>
+<pre><code>a = 1
+F f() {
+    a = 2
+    echo(a)
+}
+f()
+echo(a)
+# Output: 2
+# Output: 1</code></pre>
+<h2 id="modifying-variables-scoping">Modifying variables' scoping</h2>
+<p>You can modify default scoping using the <code>global</code> and <code>local</code> keywords.</p>
+<pre><code>a = 1
+F f() {
+    a = 2
+    F g() {
+        # local instead of upvar
+        local a
+        a = 3
+    }
+    g()
+    echo(a)
+}
+f()
+# Output: 2
+
+a = 1
+F f() {
+    a = 2
+    F g() {
+        # global instead of upvar
+        global a
+        a = 3
+    }
+    g()
+    echo(a)
+}
+f()
+# Does not work yet due to a bug, &quot;a&quot; stays upvar
+# Output: 3</code></pre>
 </body>
 </html>

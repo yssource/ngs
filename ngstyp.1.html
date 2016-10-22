@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Ilya Sher" />
-  <meta name="date" content="2015-01-01" />
+  <meta name="date" content="2016-01-01" />
   <title>NGSTYP(1) NGS User Manual</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="pandoc.css" type="text/css" />
@@ -14,75 +14,321 @@
 <div id="header">
 <h1 class="title">NGSTYP(1) NGS User Manual</h1>
 <h2 class="author">Ilya Sher</h2>
-<h3 class="date">2015</h3>
+<h3 class="date">2016</h3>
 </div>
 <h1 id="name">NAME</h1>
-<p>ngstyp - Next Generation Shell language types.</p>
-<h1 id="language-data-types">LANGUAGE DATA TYPES</h1>
-<h2 id="basic-types">Basic types</h2>
-<p>Basic types are implemented in C. User-defined types <em>can not</em> inherit from a basic type.</p>
+<p>ngstyp - Next Generation Shell built-in and standard library types.</p>
+<p>This page is work in progress and is now at very early stage. It is automatically generated from the <em>doc</em> directives in the source code.</p>
+<h1 id="types">TYPES</h1>
 <ul>
-<li>Null</li>
-<li>Bool</li>
-<li>Int</li>
-<li>Str</li>
-<li>Arr</li>
-<li>Fun</li>
-<li>Any
+<li><p><strong>Any</strong></p>
+<p><em>Description</em></p>
+<p>All instances in NGS are of type Any. F(x) ... is same as F(x:Any) ...</p></li>
+<li><strong>ArgsMismatch</strong></li>
+<li><strong>ArgvMatcherDecorator</strong></li>
+<li><p><strong>Arr</strong></p>
+<p><em>Description</em></p>
+<p>Array type</p>
+<p><em>Constructors</em></p>
 <ul>
-<li>BasicTypeInstance</li>
-<li>NormalTypeInstance</li>
+<li><p>Arr(h:Hash)</p></li>
+<li><p>Arr(arr:Arr)</p></li>
+<li><p>Arr(r:Range)</p></li>
 </ul></li>
-<li>Seq</li>
-<li>Type
+<li><strong>ArrIter</strong></li>
+<li><strong>AssertFail</strong></li>
+<li><strong>AttrNotFound</strong></li>
+<li><strong>AwsAncor</strong></li>
+<li><strong>AwsElb</strong></li>
+<li><strong>AwsElbRes</strong></li>
+<li><strong>AwsImage</strong></li>
+<li><strong>AwsImageRes</strong></li>
+<li><strong>AwsInstance</strong></li>
+<li><strong>AwsInstanceRes</strong></li>
+<li><strong>AwsRecordSet</strong></li>
+<li><strong>AwsRecordSetRes</strong></li>
+<li><strong>AwsRes</strong></li>
+<li><strong>AwsResDef</strong></li>
+<li><strong>AwsResFindCommand</strong></li>
+<li><strong>AwsSecGroup</strong></li>
+<li><strong>AwsSecGroupRes</strong></li>
+<li><strong>AwsSubnet</strong></li>
+<li><strong>AwsSubnetRes</strong></li>
+<li><strong>AwsVpc</strong></li>
+<li><strong>AwsVpcRes</strong></li>
+<li><p><strong>Backtrace</strong></p>
+<p><em>Constructors</em></p>
 <ul>
-<li>BasicType</li>
-<li>NormalType</li>
+<li>Backtrace()</li>
 </ul></li>
-<li>Hash</li>
-<li>CLib</li>
-<li>CSym</li>
+<li><p><strong>BasicType</strong></p>
+<p><em>Description</em></p>
+<p>Type for builtin types. F f(t:BasicType) ...; f(Arr)</p></li>
+<li><p><strong>BasicTypeInstance</strong></p>
+<p><em>Description</em></p>
+<p>A type for instances of builtin types</p></li>
+<li><p><strong>Bool</strong></p>
+<p><em>Description</em></p>
+<p>Boolean type. The only instances are true and false</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Bool(x:Any)</p></li>
+<li><p>Bool(fb:FullBox)</p></li>
+<li><p>Bool(eb:EmptyBox)</p></li>
+<li><p>Bool(p:Path)</p></li>
+<li><p>Bool(p:Process)</p></li>
+<li><p>Bool(my:MatchY)</p></li>
+<li><p>Bool(my:MatchN)</p></li>
+<li><p>Bool(i:ArrIter)</p></li>
+<li><p>Bool(i:HashIter)</p></li>
+<li><p>Bool(t:Table)</p></li>
+</ul></li>
+<li><strong>Box</strong></li>
+<li><strong>c_ffi_cif</strong></li>
+<li><strong>c_ffi_type</strong></li>
+<li><p><strong>c_pthread_attr_t</strong></p>
+<p><em>Constructors</em></p>
+<ul>
+<li>c_pthread_attr_t()</li>
+</ul></li>
+<li><p><strong>c_pthread_mutex_t</strong></p>
+<p><em>Constructors</em></p>
+<ul>
+<li>c_pthread_mutex_t()</li>
+</ul></li>
+<li><strong>c_pthread_t</strong></li>
+<li><strong>CallFail</strong></li>
+<li><p><strong>CLib</strong></p>
+<p><em>Description</em></p>
+<p>C library, result of dlopen(), not used yet</p></li>
+<li><p><strong>Closure</strong></p>
+<p><em>Description</em></p>
+<p>Closure type. User-defined functions/methods are Closures</p></li>
+<li><strong>Command</strong></li>
+<li><strong>CompileFail</strong></li>
+<li><strong>Counter</strong></li>
+<li><p><strong>CSym</strong></p>
+<p><em>Description</em></p>
+<p>C symbol, result of dlsym(), not used yet</p></li>
+<li><strong>DivisionByZero</strong></li>
+<li><strong>DlopenFail</strong></li>
+<li><strong>DontKnowHowToCall</strong></li>
+<li><strong>EmptyBox</strong></li>
+<li><strong>Error</strong></li>
+<li><strong>Exception</strong></li>
+<li><strong>ExclusiveRange</strong></li>
+<li><strong>ExecutableNotFound</strong></li>
+<li><strong>FetchFail</strong></li>
+<li><strong>File</strong></li>
+<li><strong>FileIOFail</strong></li>
+<li><strong>FullBox</strong></li>
+<li><p><strong>Fun</strong></p>
+<p><em>Description</em></p>
+<p>Function type: an Array of Closures, a Closure, or a native method</p></li>
+<li><strong>GlobalNotFound</strong></li>
+<li><p><strong>Hash</strong></p>
+<p><em>Description</em></p>
+<p>Hash (dictionary) type</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Hash(obj:NormalTypeInstance)</p>
+<p><em>Description</em></p>
+<p>Returns all fields of the type instance</p></li>
+<li><p>Hash(arr:Arr)</p></li>
+<li><p>Hash(arr:Arr, attr:Str)</p></li>
+<li><p>Hash(arr:Arr, cb:Fun)</p></li>
+<li><p>Hash(tuple:Arr, names:Arr)</p></li>
+<li><p>Hash(t:Table, row_number:Int)</p></li>
+</ul></li>
+<li><strong>HashIter</strong></li>
+<li><strong>Hook</strong></li>
+<li><strong>HookDecorator</strong></li>
+<li><strong>ImplNotFound</strong></li>
+<li><strong>InclusiveRange</strong></li>
+<li><strong>IndexNotFound</strong></li>
+<li><p><strong>Int</strong></p>
+<p><em>Description</em></p>
+<p>Integer type. On 64 bit platforms it's a 61 bit signed integer</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Int(s:Str, base:Int)</p></li>
+<li><p>Int(s:Str)</p></li>
+<li><p>Int(b:Bool)</p></li>
+</ul></li>
+<li><strong>InternalError</strong></li>
+<li><strong>InvalidArgument</strong></li>
+<li><strong>IpPermBox</strong></li>
+<li><p><strong>Iter</strong></p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Iter(arr:Arr)</p></li>
+<li><p>Iter(h:Hash)</p></li>
+</ul></li>
+<li><strong>KeyNotFound</strong></li>
+<li><strong>KV</strong></li>
+<li><strong>Lock</strong></li>
+<li><strong>LockFail</strong></li>
+<li><strong>LookupFail</strong></li>
+<li><strong>MainFail</strong></li>
+<li><p><strong>Match</strong></p>
+<p><em>Description</em></p>
+<p>Sucessfull or unsucessfull match result</p></li>
+<li><strong>MatchedParam</strong></li>
+<li><strong>MatchFail</strong></li>
+<li><p><strong>MatchN</strong></p>
+<p><em>Description</em></p>
+<p>Unsucessfull match result</p></li>
+<li><p><strong>MatchY</strong></p>
+<p><em>Description</em></p>
+<p>Sucessfull match result</p>
+<p><em>Field</em> <strong>matches</strong></p>
+<p>succsessfull matches</p></li>
+<li><strong>MaybePfx</strong></li>
+<li><strong>MaybeSfx</strong></li>
+<li><strong>MustPfx</strong></li>
+<li><strong>MustSfx</strong></li>
+<li><p><strong>NativeMethod</strong></p>
+<p><em>Description</em></p>
+<p>Native method type</p></li>
+<li><strong>NoNext</strong></li>
+<li><p><strong>NormalType</strong></p>
+<p><em>Description</em></p>
+<p>Type for user-defined types. type T1; F f(t:NormalType) ...; f(T1)</p></li>
+<li><p><strong>NormalTypeInstance</strong></p>
+<p><em>Description</em></p>
+<p>A type for instances of user-defined types</p></li>
+<li><strong>NotImplemented</strong></li>
+<li><p><strong>Null</strong></p>
+<p><em>Description</em></p>
+<p>Null type. Has only one instance, null</p></li>
+<li><p><strong>Path</strong></p>
+<p><em>Constructors</em></p>
+<ul>
+<li>Path(s:Str)</li>
+</ul></li>
+<li><p><strong>Pfx</strong></p>
+<p><em>Description</em></p>
+<p>Prefix subsequence of a sequence</p>
+<p><em>Constructors</em></p>
+<ul>
+<li>Pfx(val:Any)</li>
+</ul></li>
+<li><strong>Pipe</strong></li>
+<li><strong>Process</strong></li>
+<li><p><strong>Props</strong></p>
+<p><em>Description</em></p>
+<p>Don't use this type. It might be replaced.</p></li>
+<li><strong>Range</strong></li>
+<li><p><strong>Real</strong></p>
+<p><em>Description</em></p>
+<p>Real/Float type. Equivalent to the 'double' type in C</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Real(n:Int)</p></li>
+<li><p>Real(s:Str)</p></li>
+</ul></li>
+<li><strong>Redir</strong></li>
+<li><strong>RegExp</strong></li>
+<li><strong>RegExpCompileFail</strong></li>
+<li><strong>RequreFail</strong></li>
+<li><strong>Res</strong></li>
+<li><strong>ResDef</strong></li>
+<li><strong>ResNotFound</strong></li>
+<li><p><strong>Return</strong></p>
+<p><em>Constructors</em></p>
+<ul>
+<li>Return()</li>
+</ul></li>
+<li><p><strong>Seq</strong></p>
+<p><em>Description</em></p>
+<p>Unused type</p></li>
+<li><p><strong>Sfx</strong></p>
+<p><em>Description</em></p>
+<p>Suffix subsequence of a sequence</p>
+<p><em>Constructors</em></p>
+<ul>
+<li>Sfx(val:Any)</li>
+</ul></li>
+<li><strong>StackDepthFail</strong></li>
+<li><p><strong>Stats</strong></p>
+<p><em>Description</em></p>
+<p>A group of named counters</p>
+<p><em>Field</em> <strong>s</strong></p>
+<p>The underlying Hash, expose()d</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Stats(a:Arr)</p>
+<p><em>Description</em></p>
+<p>Makes Stats, with each element in the array counted as if push()ed</p></li>
+</ul></li>
+<li><p><strong>Str</strong></p>
+<p><em>Description</em></p>
+<p>String type</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Str(regexp:RegExp)</p></li>
+<li><p>Str(r:Real)</p></li>
+<li><p>Str(n:Int)</p></li>
+<li><p>Str(c:NativeMethod)</p></li>
+<li><p>Str(c:Closure)</p></li>
+<li><p>Str(t:Type)</p></li>
+<li><p>Str(i:NormalTypeInstance)</p></li>
+<li><p>Str(r:ExclusiveRange)</p></li>
+<li><p>Str(r:InclusiveRange)</p></li>
+<li><p>Str(s:Str)</p></li>
+<li><p>Str(n:Null)</p></li>
+<li><p>Str(b:Bool)</p></li>
+<li><p>Str(a:Arr)</p></li>
+<li><p>Str(h:Hash)</p></li>
+<li><p>Str(x:Any, target_width:Int)</p></li>
+<li><p>Str(s:Str, target_width:Int)</p></li>
+<li><p>Str(n:Int, target_width:Int)</p></li>
+<li><p>Str(p:Path)</p></li>
+<li><p>Str(p:Pipe)</p></li>
+<li><p>Str(f:File)</p></li>
+<li><p>Str(r:Redir)</p></li>
+<li><p>Str(p:Process)</p></li>
+<li><p>Str(s:SubSeq)</p></li>
+<li><p>Str(rd:ResDef)</p></li>
+<li><p>Str(r:Res)</p></li>
+<li><p>Str(r:AwsVpc)</p></li>
+<li><p>Str(i:ArrIter)</p></li>
+<li><p>Str(i:HashIter)</p></li>
+<li><p>Str(kv:KV)</p></li>
+<li><p>Str(s:Stats)</p></li>
+<li><p>Str(x:TableMetaNotIfCol)</p></li>
+</ul></li>
+<li><strong>SubSeq</strong></li>
+<li><strong>SwitchFail</strong></li>
+<li><p><strong>Table</strong></p>
+<p><em>Description</em></p>
+<p>Manipulates tabular data</p>
+<p><em>Field</em> <strong>name</strong></p>
+<p>Table name to display and for configuratio lookup</p>
+<p><em>Field</em> <strong>col_name_to_idx</strong></p>
+<p>Columns names' indexes (ex: id:0, name:1, age:2)</p>
+<p><em>Field</em> <strong>col_idx_to_name</strong></p>
+<p>Columns indexes' names (ex: 0:id, 1:name, 2:age)</p></li>
+<li><p><strong>TableMeta</strong></p>
+<p><em>Description</em></p>
+<p>Additional information to be used when processing a Table</p>
+<p><em>Field</em> <strong>data</strong></p>
+<p>underlying data</p></li>
+<li><p><strong>TableMetaNotIfCol</strong></p>
+<p><em>Description</em></p>
+<p>Do not show the data below if the named column is present</p></li>
+<li><strong>Thread</strong></li>
+<li><p><strong>Type</strong></p>
+<p><em>Description</em></p>
+<p>Type for types. F f(t:Type) ...; f(Arr) ...</p>
+<p><em>Constructors</em></p>
+<ul>
+<li><p>Type(name:Str, doc:Any)</p></li>
+<li><p>Type(t:Str, doc:Any, parent:Type)</p></li>
+<li><p>Type(t:Str, doc:Any, parents:Arr)</p></li>
+</ul></li>
+<li><strong>UndefinedLocalVar</strong></li>
+<li><p><strong>UnmatchedParam</strong></p></li>
 </ul>
-<h2 id="normal-types">Normal types</h2>
-<p>User-defined types <em>can</em> inherit from a normal type.</p>
-<ul>
-<li>Exception
-<ul>
-<li>Error
-<ul>
-<li>LookupFail
-<ul>
-<li>KeyNotFound</li>
-<li>IndexNotFound</li>
-<li>AttrNotFound</li>
-<li>GlobalNotFound</li>
-</ul></li>
-<li>InvalidArgument</li>
-<li>CompileFail</li>
-<li>CallFail
-<ul>
-<li>DontKnowHowToCall</li>
-<li>ImplNotFound</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li>Backtrace</li>
-<li>Command</li>
-<li>Range
-<ul>
-<li>InclusiveRange</li>
-<li>ExclusiveRange</li>
-</ul></li>
-</ul>
-<p>... and all types defined with <code>type</code>.</p>
-<h2 id="defining-your-types">Defining your types</h2>
-<p>TODO, WIP</p>
-<pre><code>type T1
-type T2
-T2.inherit(T1)
-t2 = T2()
-echo(t2 is T2)
-echo(t2 is T1)
-# Outputs one per line: true, true</code></pre>
 </body>
 </html>

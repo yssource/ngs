@@ -20,13 +20,18 @@
 <p>ngs - Next Generation Shell.</p>
 <h1 id="synopsis">SYNOPSIS</h1>
 <p><strong>ngs</strong> <em>script_name</em><br />
-<strong>ngs</strong> [<strong>-e</strong>|<strong>-E</strong>] <em>expression</em></p>
+<strong>ngs</strong> [<strong>-e</strong>|<strong>-E</strong>|<strong>-p</strong>|<strong>-pi</strong>|<strong>-pj</strong>] <em>expression</em></p>
 <h1 id="description">DESCRIPTION</h1>
 <p><strong>ngs</strong> is a Next Generation Shell. It has two main parts: the language and the interactive shell.</p>
 <p>This project contains the language part which is under development. The interactive part will be dealt with later. This manual covers both implemented and unimplemented parts.</p>
 <h1 id="options">OPTIONS</h1>
 <p>Given <em>script_name</em> runs the script.</p>
-<p>Using <em>expression</em> is equivalent to running a script that consists of <code>{</code> <em>expression</em> <code>}</code>. <strong>-e</strong> loads stdlib.ngs before evaluating the expression, <strong>-E</strong> skips the loading of stdlib.ngs.</p>
+<p>Using <em>expression</em> is equivalent to running a script that consists of <code>{</code> <em>expression</em> <code>}</code>.</p>
+<p><strong>-e</strong> evaluates the <em>expression</em>.</p>
+<p><strong>-E</strong> prevents loading of <strong>stdlib.ngs</strong> and evaluates the <em>expression</em>.</p>
+<p><strong>-p</strong> prints the resulting <em>expression</em> value in a human readable NGS format.</p>
+<p><strong>-pi</strong> prints <code>inspect(...)</code> (detailed information) of the resulting <em>expression</em> value.</p>
+<p><strong>-pj</strong> prints the resulting <em>expression</em> value as JSON.</p>
 <h2 id="motivation">MOTIVATION</h2>
 <p>NGS tries to fill the void between classical shells such as <strong>bash</strong> and general-purpose programming languages such as <strong>Ruby</strong>, <strong>Python</strong>, <strong>Perl</strong>, <strong>Go</strong>. The shells are domain-specific languages but the domain has changed so classical shells are not optimal for today's tasks. General-purpose languages on the other hand are not domain-specific so they are not good as shells and too verbose for system tasks scripting, not a good fit.</p>
 <h1 id="exit-status">EXIT STATUS</h1>
@@ -55,9 +60,9 @@
 <h2 id="bootstrap.ngs">bootstrap.ngs</h2>
 <p>Typically located in <code>NGS_DIR</code>. Responsible for bootstrapping NGS.</p>
 <ul>
-<li>Loads <strong>stdlib.ngs</strong> if needed</li>
-<li>Handles <strong>-e</strong> and <strong>-E</strong> switches</li>
-<li>Runs the script specified in the command line.</li>
+<li>Loads <strong>stdlib.ngs</strong> if needed.</li>
+<li>Runs the script specified in the command line or exectes <em>expression</em> according to swithces.</li>
+<li>Prints <em>expression</em> value if needed.</li>
 </ul>
 <h2 id="stdlib.ngs">stdlib.ngs</h2>
 <p>Located in <code>NGS_DIR</code>. Standard library. Defines many methods and autoloading behaviour.</p>
@@ -65,20 +70,20 @@
 <table>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="ngslang.1.html">ngslang(1)</a></td>
-<td align="left">NGS language overview and starting point</td>
+<td><a href="ngslang.1.html">ngslang(1)</a></td>
+<td>NGS language overview and starting point</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="ngssyn.1.html">ngssyn(1)</a></td>
-<td align="left">NGS language syntax</td>
+<td><a href="ngssyn.1.html">ngssyn(1)</a></td>
+<td>NGS language syntax</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="ngstyp.1.html">ngstyp(1)</a></td>
-<td align="left">NGS language pre-defined types</td>
+<td><a href="ngstyp.1.html">ngstyp(1)</a></td>
+<td>NGS language pre-defined types</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="ngsmet.1.html">ngsmet(1)</a></td>
-<td align="left">NGS language pre-defined methods</td>
+<td><a href="ngsmet.1.html">ngsmet(1)</a></td>
+<td>NGS language pre-defined methods</td>
 </tr>
 </tbody>
 </table>
