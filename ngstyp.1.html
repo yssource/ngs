@@ -98,6 +98,7 @@
 </ul></li>
 <li><strong>c_pthread_t</strong></li>
 <li><strong>CallFail</strong></li>
+<li><strong>CException</strong></li>
 <li><p><strong>CLib</strong></p>
 <p><em>Description</em></p>
 <p>C library, result of dlopen(), not used yet</p></li>
@@ -137,7 +138,7 @@
 <li><p>Hash(arr:Arr)</p></li>
 <li><p>Hash(arr:Arr, attr:Str)</p></li>
 <li><p>Hash(arr:Arr, cb:Fun)</p></li>
-<li><p>Hash(tuple:Arr, names:Arr)</p></li>
+<li><p>Hash(keys:Arr, values:Arr)</p></li>
 <li><p>Hash(t:Table, row_number:Int)</p></li>
 </ul></li>
 <li><strong>HashIter</strong></li>
@@ -151,6 +152,7 @@
 <p>Integer type. On 64 bit platforms it's a 61 bit signed integer</p>
 <p><em>Constructors</em></p>
 <ul>
+<li><p>Int(r:Real)</p></li>
 <li><p>Int(s:Str, base:Int)</p></li>
 <li><p>Int(s:Str)</p></li>
 <li><p>Int(b:Bool)</p></li>
@@ -165,6 +167,7 @@
 <li><p>Iter(h:Hash)</p></li>
 </ul></li>
 <li><strong>KeyNotFound</strong></li>
+<li><strong>KillFail</strong></li>
 <li><strong>KV</strong></li>
 <li><strong>Lock</strong></li>
 <li><strong>LockFail</strong></li>

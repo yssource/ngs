@@ -51,6 +51,7 @@ Syntax: % is similar to /</p>
 <li><p>*(a:Real, b:Real)</p></li>
 <li><p>*(a:Int, b:Int)</p></li>
 <li><p>*(arr:Arr, n:Int)</p></li>
+<li><p>*(a:Arr, b:Arr)</p></li>
 <li><p>*(s:Str, n:Int)</p></li>
 <li><p>*(cb:Fun, n:Int, *args:Arr)</p></li>
 </ul></li>
@@ -340,6 +341,10 @@ Syntax mnemonic: ? for predicate</p>
 <ul>
 <li>c_isatty(fd:Int)</li>
 </ul></li>
+<li><strong>c_kill</strong>
+<ul>
+<li>c_kill(pid:Int, sig:Int)</li>
+</ul></li>
 <li><strong>c_lseek</strong>
 <ul>
 <li><p>c_lseek(fd:Int, offset:Int, whence:Str)</p>
@@ -407,6 +412,10 @@ Syntax mnemonic: ? for predicate</p>
 <li><strong>c_strcmp</strong>
 <ul>
 <li>c_strcmp(a:Str, b:Str)</li>
+</ul></li>
+<li><strong>c_strerror</strong>
+<ul>
+<li>c_strerror(errnum:Int)</li>
 </ul></li>
 <li><strong>c_waitpid</strong>
 <ul>
@@ -682,10 +691,10 @@ numbering.push(hostname_base)
 </ul></li>
 <li><strong>filter</strong>
 <ul>
-<li><p>filter(something:Any, like:Any)</p></li>
 <li><p>filter(something:Any, predicate:Fun, *args:Arr)</p></li>
 <li><p>filter(something:Any)</p></li>
 <li><p>filter(h:Hash, predicate:Fun, *args:Arr)</p></li>
+<li><p>filter(something:Any, r:RegExp)</p></li>
 </ul></li>
 <li><strong>finally</strong>
 <ul>
@@ -838,7 +847,8 @@ F init(t:MyType, a, b) init(args())</code></pre></li>
 <li><p>init(hook:Hook, combiner:Any=[<Native method values\>])</p></li>
 <li><p>init(hd:HookDecorator, hook:Hook)</p></li>
 <li><p>init(hd:HookDecorator, hook:Hook, name:Str)</p></li>
-<li><p>init(r:Range, start:Any, end:Any)</p></li>
+<li><p>init(e:CException, message:Str)</p></li>
+<li><p>init(r:Range, start:Any, end:Any, step:Any=1)</p></li>
 <li><p>init(b:FullBox, *args:Arr)</p></li>
 <li><p>init(b:FullBox, val:Any)</p></li>
 <li><p>init(e:LockFail, op:Str, code:Int, msg:Str)</p></li>
@@ -917,6 +927,11 @@ F init(t:MyType, a, b) init(args())</code></pre></li>
 <li><strong>keys</strong>
 <ul>
 <li>keys(h:Hash)</li>
+</ul></li>
+<li><strong>kill</strong>
+<ul>
+<li><p>kill(pid:Int, sig:Int=15)</p></li>
+<li><p>kill(p:Process, sig:Int=15)</p></li>
 </ul></li>
 <li><strong>latest</strong>
 <ul>
@@ -1113,6 +1128,20 @@ If my_vpc_id() is null the whole array is not needed</p></li>
 <li><p>push(t:Table, row_arr:Arr)</p></li>
 <li><p>push(t:Table, row_hash:Hash)</p></li>
 </ul></li>
+<li><strong>rand</strong>
+<ul>
+<li><p>rand()</p></li>
+<li><p>rand(something:Any, n:Int)</p></li>
+<li><p>rand(n:Int)</p></li>
+<li><p>rand(a:Arr)</p></li>
+<li><p>rand(a:Str)</p></li>
+<li><p>rand(a:Str, n:Int)</p></li>
+<li><p>rand(r:Range)</p></li>
+</ul></li>
+<li><strong>rand_uniq</strong>
+<ul>
+<li>rand_uniq(something:Any, n:Int)</li>
+</ul></li>
 <li><strong>read</strong>
 <ul>
 <li><p>read(fd:Int)</p>
@@ -1195,6 +1224,10 @@ If my_vpc_id() is null the whole array is not needed</p></li>
 <li><p>split(s:Str, delim:Str)</p></li>
 <li><p>split(s:Str, r:RegExp)</p></li>
 </ul></li>
+<li><strong>srand</strong>
+<ul>
+<li>srand(seed:Int)</li>
+</ul></li>
 <li><strong>starts_with</strong>
 <ul>
 <li>starts_with(haystack:Str, needle:Str)</li>
@@ -1234,7 +1267,7 @@ If my_vpc_id() is null the whole array is not needed</p></li>
 </ul></li>
 <li><strong>sum</strong>
 <ul>
-<li>sum(arr:Arr)</li>
+<li>sum(something:Any)</li>
 </ul></li>
 <li><strong>throw_if_no_next</strong>
 <ul>

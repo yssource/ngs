@@ -1,208 +1,971 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <meta name="author" content="Ilya Sher" />
-  <meta name="date" content="2015-01-01" />
-  <title>NGSLANG(1) NGS User Manual</title>
-  <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="pandoc.css" type="text/css" />
-</head>
-<body>
-<div id="header">
-<h1 class="title">NGSLANG(1) NGS User Manual</h1>
-<h2 class="author">Ilya Sher</h2>
-<h3 class="date">2015</h3>
-</div>
-<h1 id="name">NAME</h1>
-<p>ngslang - Next Generation Shell language overview.</p>
-<h1 id="language-principles-overview">LANGUAGE PRINCIPLES OVERVIEW</h1>
+<p>% NGSLANG(1) NGS User Manual
+% Ilya Sher
+% 2015</p>
+<h1>NAME</h1>
+<p>ngslang - Next Generation Shell language tutorial.</p>
+<h1>WHAT IS NGS?</h1>
+<p>NGS is an alternative shell. At it's core is a domain-specific language that was specifically designed to be a shell language.</p>
+<p>NGS is under development. The language part is already good enough to write some useful scripts. CLI does not exist yet. It will be written using the same language.</p>
+<h1>RUNNING NGS</h1>
+<p><strong>ngs</strong> <em>script_name.ngs</em></p>
+<p>You can put the following line as first line of your script:</p>
+<pre><code>#!/usr/bin/env ngs
+</code></pre>
+<p>If you do, you can run the script as <code>./script_name.ngs</code> or <code>/full/path/to/script_name.ngs</code> (you must make your script executable, <code>chmod 655 script_name.ngs</code>.</p>
+<p>See more about running NGS in <a href="ngs.1.html">ngs(1)</a>.</p>
+<h1>WHY NGS?</h1>
+<p>If your attitude towards system tools is like mine, NGS would resonate better with how you think than bash, Python, Ruby, Perl or any other language for systems administration tasks.</p>
+<h2>NGS was built for systems administration tasks</h2>
+<p>NGS is optimized by design to perform easily typical systems administration tasks. The following tasks are common so NGS either has a syntax or features to make these tasks easy:</p>
 <ul>
-<li><p>Systems engineers language - NGS is a domain-specific language. It is aimed to solve system tasks in a convenient manner.</p></li>
-<li>Do the most practical thing
+<li>Running external commands</li>
+<li>Manipulating data</li>
+<li>Simple remote execution (not implemented yet)</li>
+</ul>
+<p>Example of running external command + data manipulation (detailed explanation later):</p>
+<pre><code>ngs -pi '``aws ec2 describe-instances``.InstanceId'
+
+# Output:
+Array of size 37
+[0] = i-0a0xxxxxxxxxxxxxx
+[1] = i-04dxxxxxxxxxxxxxx
+...
+</code></pre>
+<p>You might want to process the output above with an external tool but it's in a human-readable and not-machine-parseble format. No problem, use the <strong>-pj</strong> (print JSON) switch:</p>
+<pre><code>ngs -pj '``aws ec2 describe-instances``.InstanceId'
+
+# Output:
+[ "i-0a0xxxxxxxxxxxxxx", "i-04dxxxxxxxxxxxxxx", ... ]
+</code></pre>
+<p>We all know that life is not that simple so here is a bit more complex situation where the field might or might not appear in the data (also outputting space delimited items):</p>
+<pre><code>ngs -p '``aws ec2 describe-instances``.map({A.PublicIpAddress tor "-"}).join(" ")'
+
+# Output:
+52.58.XXX.XX 52.59.XX.XX 52.29.XXX.XX 52.57.XXX.XXX - 52.57.XX.XXX ...
+</code></pre>
+<h2>Your current situation with languages sucks</h2>
+<p>Currently, as a systems engineer you are probably using bash combined with of one or more high-level languages.</p>
+<p><strong>bash</strong></p>
+<p>You are using bash because it's domain-specific and allows you to get some tasks done easily. On the other hand, bash can not manipulate nested data structures in a sane way. So you need an external tool:</p>
+<pre><code>aws ec2 describe-instances | jq -r '.Reservations[].Instances[].PublicIpAddress'
+
+# Output:
+52.58.XXX.XX
+52.59.XX.XX
+52.29.XXX.XX
+52.57.XXX.XXX
+null
+...
+</code></pre>
+<p><code>jq</code> is fine till you need to work with tags (thanks AWS for list instead of hash!) or do something more complex. It starts looking bad really fast. It probably can be done with <code>jq</code> but why get yourself into this instead of using a normal programming language. You can do chess in <code>sed</code> too (actually done) but it doesn't mean you should unless it's for fun and not to get the job done quickly.</p>
+<p>Yes, there is also built-in <code>jmespath</code> in <code>awscli</code>. It won't be much better than <code>jq</code> - OK for simple cases. Why bother then? I've read the specs once and decided it was not worth the trouble if you already know how to use <code>jq</code>.</p>
+<p><strong>other languages</strong></p>
+<p>You are probably using Python or Ruby or Perl (and if you are like me, Perl is out of the question because of it's syntax horror). You use one of the above languages because bash is not powerful enough / not convenient enough to do the tasks that these languages do. On the other hand something as simple as <code>echo mystring &gt;myfile</code> or run an external program is not as convenient to do in these languages. Yes all of the languages above support system tasks to some degree. None of these languages support system tasks as a language that was built ground-up for system tasks. See the double-backtick examples above... for example.</p>
+<h2>You are using configuration management tools</h2>
+<p>I've seen unjustified usage of configuration management tools too much. Yes, these are the "Cool Shiny New DevOps" hype tools: Chef, Puppet, Ansible and friends. I assume that in many situations it would be better to script these tasks instead of using configuration management tools. They are very complex and they take control away from you. The price of complexity is too high in many cases in my opinion. Any system beyond the most simple will need customization/wrapping/forking of ready-made modules for these configuration management systems to such degree that usage of such systems will be at very least questionable TCO-wise.</p>
+<p>Why not make your own clean solution that matches your own needs exactly? I mean except for being unpopular. The issue is that currently there is no good language to make these scripts. It would be inconvenient to script the task even if you wanted. I hope NGS will enable easy scripting of system tasks.</p>
+<h1>LANGUAGE PRINCIPLES OVERVIEW</h1>
+<p>This section is about principles behind NGS language design.</p>
+<h2>Systems engineers language</h2>
+<p>NGS is a domain-specific language. It is aimed to solve common system tasks in a convenient manner.</p>
+<h2>Do the most practical thing</h2>
 <ul>
-<li><code>read('myfile.json')</code> will parse the JSON and return the data structure.</li>
-<li>The <code>``my_command``</code> will parse the command output (JSON for example) and return the data structure.</li>
+<li><code>read('myfile.json')</code> will parse the JSON and return the data structure. (Use <code>fetch()</code> to get raw contents).</li>
+<li>The <code>``my_command``</code> will parse the command output (JSON for example) and return the data structure. Note that <code>``aws ...``</code> will be parsed even further (not just JSON) to return more usable data structures.</li>
 <li><code>my_array.my_prop</code> returns an array of <code>.my_prop</code> properties of each element.</li>
-</ul></li>
-<li><p>Uniformity unless contradicted by the above rule or seems to be too much work, which results will not be used.</p></li>
-<li><p>Power. Trade-offs between power and not allowing to shoot yourself in the foot usually produce the power solution. The language is aimed at experienced engineers which use their own judgement. The language should be powerful enough to shoot all feet in the building at once.</p></li>
-<li><p>Simple methods naming for less guess work. <code>1+2</code> adds the numbers (method name <code>+</code>), <code>arr1+arr2</code> adds (concatenates) arrays and <code>hash1+hash2</code> produces merged hash.</p></li>
-<li>Extensibility
+</ul>
+<h2>Uniformity</h2>
+<p>NGS tries to be uniform wherever possible to minimize surprises.</p>
+<h2>Power</h2>
+<p>Trade-offs between power and not allowing to shoot yourself in the foot are usually resolved in favor of the power solution. The language is aimed at experienced engineers which use their own judgement. The language should be powerful enough to shoot all feet in the building at once.</p>
+<h2>Simple methods naming for less guess work</h2>
+<ul>
+<li><code>1+2</code> adds the numbers (method name <code>+</code>)</li>
+<li><code>arr1+arr2</code> adds (concatenates) arrays</li>
+<li><code>hash1+hash2</code> produces merged hash.</li>
+</ul>
+<h2>Extensibility</h2>
 <ul>
 <li><code>read('your_file.super-format')</code> can be extended to parse your format.</li>
 <li><code>fetch</code>, which reads from a file, can be extended to support HTTP or S3.</li>
-<li>Define any operator on your custom types or for existing types.</li>
-</ul></li>
-<li>Simplicity
+<li>Define any operator for existing or your custom types.</li>
+</ul>
+<h2>Simplicity</h2>
 <ul>
+<li>Minimal possible number of concepts in the language.</li>
 <li>No classes. Only types, methods and multiple dispatch (picking the right method implementation by matching types of parameters and arguments)</li>
 <li>Simple type system.</li>
-</ul></li>
-<li><p>Familiarity - many concepts and syntax constructs come from other languages</p></li>
 </ul>
-<h1 id="language-overview-and-general-feel">LANGUAGE OVERVIEW AND GENERAL FEEL</h1>
+<h2>Familiarity</h2>
+<p>Many concepts and syntax constructs come from other languages.</p>
+<h1>SYNTAX AND BASIC FUNCTIONALITY</h1>
+<p>NGS has two syntaxes: <strong>command syntax</strong> and <strong>code syntax</strong>.</p>
+<h2>Command syntax</h2>
+<p>This is the close-to-bash syntax geared towards running external programs and i/o redirection.
+Command syntax is the syntax at the top level of every NGS script. The most simple NGS scripts might look very similar to bash scripts. Commands are separated by either newlines or by semicolon (<code>;</code>).</p>
+<p>Example:</p>
+<pre><code>cat a.txt; touch myfile
+echo mystr &gt;myfile
+</code></pre>
+<p>In addition to running commands and performing redirections, there are several expressions that are also supported in the <strong>commands syntax</strong>. Note <code>code</code> below means <strong>code syntax</strong> expressions.</p>
 <ul>
-<li><p>The language is functional in a sense that:</p>
-<ul>
-<li><p>A function is a first class citizen, which can for example be assigned to a variable and passed as a function argument to another function. Example:</p>
-<pre><code>doc Make a new function that given an argument,
-doc will apply the original function f twice to the argument x
-doc f - original function
-F twice(f)
-    F(x) f(f(x))
-
-F f(x) x+3
-
-g = twice(f)
-
-echo(g(7))
-
-# Output: 13</code></pre></li>
-<li><p>Standard library defines many <a href="https://en.wikipedia.org/wiki/Higher-order_function">higher-order-functions</a> such as <code>each</code>, <code>map</code>, <code>any</code>, <code>all</code>, etc.</p></li>
-</ul></li>
-<li><p>Most of the language operators, such as <code>+</code>, are really a function calls. This gives uniformity, ability to pass an operator as a function to a higher-order-function and customizability.</p>
-<pre><code>echo([1, 2, 3].map((+), 1))
-# Outputs: [2,3,4]
-
-# 1+1 is same as (+)(1, 1)</code></pre></li>
-<li><p>Types have constructors. To minimize the &quot;how I create a Hash&quot; searches for example, <code>Hash</code> has many constructors so the first place and most probably answer is that you should look at <a href="ngstyp.1.html#Hash"><code>Hash</code></a> type documentation and not search for an unknown function. Example is a <code>Hash(arr, cb)</code> which has an array and a callback as arguments and builds a <code>Hash</code> where the keys come from the given array and the values are calculated by the callback.</p>
-<pre><code>echo([1, 2, 3].Hash(F(elt) &quot;ab&quot; * elt))
-# Outputs: {1=ab, 2=abab, 3=ababab}</code></pre></li>
+<li><code>{ code }</code> - see <strong>Switching between syntaxes</strong> below</li>
+<li>assignment: <code>myvar = code</code> (<code>myvar = 1 + 2</code>)</li>
+<li>in-place assignment: <code>myvar += code</code> (<code>myvar += 10</code>)</li>
+<li>wrapper (also called decorator): <code>@code code</code></li>
+<li>function definition: <code>F myfunc(params...) code</code> (<code>F myfunc(n:Int) echo(n*10)</code>)</li>
+<li>function call: <code>myfunc(arguments...)</code> (<code>myfunc(7)</code>)</li>
+<li><code>if condition_code [then] yes_code [else] no_code</code></li>
+<li><code>while condition_code body_code</code></li>
+<li><code>for(...) body_code</code></li>
+<li>comment: <code>#</code> and till end of line</li>
 </ul>
-<h1 id="language-gotchas">LANGUAGE GOTCHAS</h1>
+<p>TODO: redirection syntax</p>
+<h2>Code syntax</h2>
+<p>Code syntax resembles other high-level languages such as Python or Ruby.</p>
+<p>Example:</p>
+<pre><code>1 + 2 * 3; %[abc def ghi].without('ghi').each(echo)
+</code></pre>
+<p>Expressions are separated by either newlines or by semicolon (<code>;</code>).</p>
+<p><strong>code syntax</strong> is the syntax of <strong>-e</strong>, <strong>-E</strong>, <strong>-p</strong>, <strong>-pi</strong> and <strong>-pj</strong> switches to <code>ngs</code> interpreter. Example:</p>
+<pre><code>ngs -p '(1...10).filter(F(num) num % 2 == 0)'
+
+# Output:
+[2,4,6,8,10]
+</code></pre>
+<p>If the above example looks too verbose, here is the shorter and uglier alternative:</p>
+<pre><code>ngs -p '(1...10)?{A%2==0}'
+</code></pre>
+<h2>Switching between syntaxes</h2>
+<p>In <strong>command syntax</strong> it is possible to switch to <strong>code syntax</strong> in one of the following ways:</p>
+<p><strong>Simple switching</strong> (for a lack of better name)</p>
+<pre><code>ls
+{ code syntax here }
+</code></pre>
+<p>Use the kind of switching to above when an expression that you are writing is not supported in <strong>command syntax</strong>.</p>
+<p>It's not uncommon that the whole file is inside <code>{...}</code>:</p>
+<pre><code>{
+    %[abc def ghi].without('ghi').each(echo)
+}
+</code></pre>
+<p><strong>Singe argument substitution switch</strong></p>
+<pre><code>ls ${ code that computes the file name and returns a string,
+spaces don't matter, expaned into single argument of ls }
+</code></pre>
+<p><strong>Multiple arguments substitution switch</strong></p>
+<pre><code>ls $*{ code that computes the files names and returns array of
+strings. Spaces don't matter, each element is expaned into single
+argument of ls }
+</code></pre>
+<p>In <strong>code syntax</strong> it is possible to switch to <strong>command syntax</strong> in one of the following ways:</p>
+<p><strong>Capture switch</strong></p>
+<pre><code>out = `commands syntax`
+myvar = "mystring\n" + `my other command`
+</code></pre>
+<p><strong>Capture and parse switch</strong></p>
+<pre><code>parsed_data_structure = ``commands syntax``
+n = ``curl https://example.com/myservice/stats``.number_of_items_in_storage
+</code></pre>
+<p><strong>Command switch</strong></p>
+<pre><code>my_process = $( commands syntax )
+</code></pre>
+<h2>Quick dive into syntax and basic functionality</h2>
+<p>Comment</p>
+<pre><code># comment till end of line
+</code></pre>
+<p>Calling a function</p>
+<pre><code>echo('Hello world')
+{
+    'Hello world'.echo()
+}
+
+# Output:
+#   Hello world
+#   Hello world
+</code></pre>
+<p>Variables</p>
+<pre><code>echo(defined a)
+a = 1 + 2
+echo(defined a)
+echo(a)
+
+# Output:
+#   false
+#   true
+#   3
+</code></pre>
+<p>String interpolation</p>
+<pre><code>a = 1
+echo("A is now $a")
+echo('A is now $a')
+# Output:
+#   A is now 1
+#   A is now $a
+
+echo("Calculation result A: ${10+20}")
+echo("Calculation result B: ${ [1,2,3].map((*), 10).join(',') }")
+# Output:
+#   Calculation result A: 30
+#   Calculation result B: 10,20,30
+</code></pre>
+<p>Basic constants: true, false, null</p>
+<pre><code>if true echo("if true")
+if false echo("if false")
+if null echo("if null")
+# Output:
+#   if true
+
+echo(1 == 1)
+# Output:
+#   true
+
+echo(1 == 2)
+# Output:
+#   false
+
+echo("abcd".pos("c"))
+echo("abcd".pos("x"))
+# Output:
+#   2
+#   null
+</code></pre>
+<p>Arrays</p>
+<pre><code>x = ["first", "second", "third", "fourth"]
+
+echo(x)
+# Output:
+#   ['first','second','third','fourth']
+
+echo(x.len())
+# Output:
+#   4
+
+echo('first' in x)
+# Output:
+#   true
+
+echo('fifth' in x)
+# Output:
+#   false
+
+echo(x[1])
+# Output:
+#   second
+
+echo(x[1..3])
+# Output:
+# ['second','third']
+
+echo(x == %[first second third fourth])
+# Output:
+#   true
+
+x = [
+    "blah"
+    2
+    'some text'
+]
+echo(x)
+# Output:
+#   ['blah',2,'some text']
+
+echo(x[10])
+# ... Exception of type IndexNotFound occured ...
+</code></pre>
+<p>Hashes</p>
+<pre><code>x = {"a": 1, "b": 2}
+
+echo(x)
+# Output:
+#   {a=1, b=2}
+
+echo(x['a'])
+echo(x.a)
+# Output:
+#   1
+#   1
+
+{
+    x.b = 20
+}
+
+echo(x.len())
+# Output:
+#   2
+
+echo(x.keys())
+# Output:
+#   ['a','b']
+
+echo(x.values())
+# Output:
+#   [1,20]
+
+x = {
+    "c": 1
+    "d": 2
+}
+
+echo(x)
+# Output:
+#   {c=1, d=2}
+
+echo('c' in x)
+# Output:
+#   true
+
+echo(1 in x)
+# Output:
+#   false
+
+echo(x.get('d'))
+# Output:
+#   2
+
+echo(x.get('e'))
+# Output:
+#   null
+
+echo(x.get('e', 'my_default'))
+# Output:
+#   my_default
+
+echo(x.e)
+# ... Exception of type KeyNotFound occured ...
+</code></pre>
+<p>Defining a type</p>
+<pre><code># Switch to code syntax inside { ... }. "type" currently does not work in command syntax
+{
+    # Define type
+    type Vehicle
+
+    # Define sub-type
+    type Car(Vehicle)
+}
+echo(Vehicle)
+echo(Car)
+
+# Output:
+#   &lt;Type Vehicle&gt;
+#   &lt;Type Car&gt;
+
+v = Vehicle()
+c = Car()
+echo("v is Vehicle: ${v is Vehicle}")
+echo("v is Car: ${v is Car}")
+echo("c is Vehicle: ${c is Vehicle}")
+echo("c is Car: ${c is Car}")
+
+# Output:
+#   v is Vehicle: true
+#   v is Car: false
+#   c is Vehicle: true
+#   c is Car: true
+</code></pre>
+<p>Defining a method</p>
+<pre><code>{
+    type Vehicle
+    type Car(Vehicle)
+}
+
+# c - parameter name
+# Car - parameter type
+F drive(c:Car) {
+    echo("Driving the car")
+}
+
+mycar = Car()
+drive(mycar)
+# Output: Driving the car
+
+
+# Defining method with single expression as body
+# does not require { ... } around the method body
+F park(c:Car) echo("Parking the car")
+
+park(mycar)
+# Output: Parking the car
+
+# There is no method drive() that takes a string as an argument
+drive("well...")
+# ... Exception of type ImplNotFound occured ...
+</code></pre>
+<p>Method optional parameters</p>
+<pre><code>F mysum(a:Int, b:Int=100) a+b
+
+echo(mysum(5))
+# Output: 105
+
+echo(mysum(5, 200))
+# Output: 205
+</code></pre>
+<p>Method "rest" parameter</p>
+<pre><code>F print_with_prefix(prefix:Str, *strings) {
+    strings.each(F(s) {
+        echo("$prefix$s")
+    })
+    echo("Printed ${strings.len()} lines with prefix")
+}
+
+print_with_prefix('-&gt; ', 'abc', 'def')
+# Output:
+#   -&gt; abc
+#   -&gt; def
+#   Printed 2 lines with prefix
+</code></pre>
+<p>Method "rest keywords" parameter</p>
+<pre><code>F print_properties(separator:Str, **kw_args) {
+    kw_args.each(F(name, value) {
+        echo("$name$separator$value")
+    })
+}
+
+print_properties(' =&gt; ', a=10, b=20)
+
+# Output:
+#   a =&gt; 10
+#   b =&gt; 20
+</code></pre>
+<p>Method guard</p>
+<pre><code>F gg(i:Int) {
+    echo("First gg active")
+    echo(i*10)
+}
+gg(1)
+gg(5)
+# Output:
+#   First gg active
+#   10
+#   First gg active
+#   50
+
+F gg(i:Int) {
+    echo("Second gg checking guard")
+    guard i &gt; 3
+    echo("Second gg active")
+    echo(i*100)
+}
+gg(1)
+gg(5)
+# Output:
+#   Second gg checking guard
+#   First gg active
+#   10
+#   Second gg checking guard
+#   Second gg active
+#   500
+</code></pre>
+<p>Call super methods</p>
+<pre><code>F sup(x) x+1
+
+F sup(x) super(x) * 10
+
+echo(sup(5))
+# Output: 60
+</code></pre>
+<p>Anonymous function (method) literal</p>
+<pre><code>f = F(item) { echo("Item: $item") }
+echo("F is $f")
+# Output: F is &lt;Closure &lt;anonymous&gt; at 1.ngs:1&gt;
+
+each([10,20,30], f)
+# Output:
+#   Item: 10
+#   Item: 20
+#   Item: 30
+
+echo([1,2,3].map(F(x) x*5))
+# Output: [5,10,15]
+</code></pre>
+<p>Anonymous function literal using magical X, Y or Z variables</p>
+<pre><code>echo([1,2,3].map(X*5))
+# Output: [5,10,15]
+
+echo({"a": "one", "b": "two"}.map("Key:" + X))
+# Output: ['Key:a','Key:b']
+
+echo({"a": "one", "b": "two"}.map("Val:" + Y))
+# Output: ['Val:one','Val:two']
+
+echo({"a": 1, "b": 2}.map("Key $X, Value $Y"))
+# Output: ['Key a, Value 1','Key b, Value 2']
+
+echo([1,2,3,11,12].count(X&gt;10))
+# Output: 2
+</code></pre>
+<p>Anonymous function literal using magical A, B or C variables</p>
+<pre><code># X*5 + 1 would not work as X*5 itself would be anonymous function
+echo([1,2,3].map({ A*5 + 1 }))
+# Output: [6,11,16]
+</code></pre>
+<p>Method-related flow control</p>
+<pre><code>F flow_ret(x) {
+    if x &lt; 0 {
+        unrelated_calculation = 1
+        return "negative"
+    }
+    x == 0 returns "zero"
+    "positive"
+}
+echo(flow_ret(-1))
+echo(flow_ret( 0))
+echo(flow_ret( 1))
+# Output:
+#   negative
+#   zero
+#   positive
+
+F find_the_one(haystack:Arr, needle) {
+    ret_from_find_the_one = Return()
+    echo(ret_from_find_the_one)
+    haystack.each(F(elt) {
+        elt == needle throws ret_from_find_the_one("Found it!")
+    })
+    "Not found"
+}
+echo([10,20].find_the_one(20))
+echo([10,20].find_the_one(30))
+# Output:
+#   &lt;Return closure=&lt;Closure find_the_one at 1.ngs:2&gt; depth=7 val=null&gt;
+#   Found it!
+#   &lt;Return closure=&lt;Closure find_the_one at 1.ngs:2&gt; depth=7 val=null&gt;
+#   Not found
+</code></pre>
+<p>Short circuit binary operators</p>
+<pre><code>a = 1 and 2                    # a = 2
+a = null and 2                 # a = null
+a = 1 or 2                     # a = 1
+a = null or 2                  # a = 2
+a = code_with_exception tor 3  # a = 3, exception discarded
+</code></pre>
+<p>Ignoring exceptions using "try" without "catch"</p>
+<pre><code>myhash = {"a": 1, "b": 2}
+
+v = try myhash.a
+echo(v)
+# Output: 1
+
+v = try myhash.c
+echo(v)
+# Output: null
+
+v = try { unrelated = 1+2; myhash.c }
+echo(v)
+# Output: null
+</code></pre>
+<p>Exceptions</p>
+<pre><code>{
+    type MyError(Error)
+
+    try {
+        # "e1 throws e2" is same as "if e1 { throw(e2) }"
+        1 == 2 throws Error("This can't be!")
+        throw MyError("As usual, very helpful message")
+    } catch(e:MyError) {
+        echo("[Exceptions] This error was expected: $e")
+    } catch(e:Error) {
+        echo("[Exceptions] Unexpected error: $e")
+        throw e
+    }
+    # Output: [Exceptions] This error was expected: ...
+}
+</code></pre>
+<p>Loops</p>
+<pre><code>for(i=0; i&lt;5; i+=1) {
+    if i == 3 {
+        continue
+    }
+    echo("Regular loop, iteration $i")
+}
+# Output:
+#   Regular loop, iteration 0
+#   Regular loop, iteration 1
+#   Regular loop, iteration 2
+#   Regular loop, iteration 4
+
+for(i;5) {
+    i == 3 continues
+    echo("Shorthand loop, iteration $i")
+}
+# Output:
+#   Shorthand loop, iteration 0
+#   Shorthand loop, iteration 1
+#   Shorthand loop, iteration 2
+#   Shorthand loop, iteration 4
+
+i = 0
+while i&lt;10 {
+    echo("While loop, iteration $i")
+    i += 1
+    # Same as "if i == 2 { break }"
+    i == 2 breaks
+}
+# Output:
+#   While loop, iteration 0
+#   While loop, iteration 1
+</code></pre>
+<p>Switch and switch-like expressions</p>
+<pre><code>a = 10
+result = switch a {
+    10 "ten"
+    20 "twenty"
+    30 { my_complex_code; "thirty" }
+}
+echo("Switch result for $a is $result")
+# Output: Switch result for 10 is ten
+
+a = 12
+result = cond {
+    a &gt; 10
+        "Excellent"
+    a &gt; 5 {
+        my_complex_code; "Good enough"
+    }
+    a &gt; 3
+        "so so"
+}
+echo("Cond result for $a is $result")
+# Output: Cond result for 12 is Excellent
+
+# There are also eswitch and econd which throw an exception
+# when no match is found as opposed to swicth and cond which
+# return null when no match is found.
+
+F will_throw_exception1() {
+    a = "bad value"
+    result = eswitch a {
+        1 "one"
+        2 "two"
+    }
+}
+
+F will_throw_exception2() {
+    a = 10
+    result = econd {
+        a &gt; 15 "one"
+        a &gt; 20 "two"
+    }
+}
+</code></pre>
+<p>Regular expressions</p>
+<pre><code>myregex = /^begin/
+echo(myregex)
+# Output: &lt;RegExp&gt;
+
+mymatch = "beginABC" ~ myregex
+echo(mymatch)
+# Output: &lt;MatchY matches=['begin'] named={} positions=[[0,5]] whole=begin before= after=ABC&gt;
+
+echo(mymatch.matches[0])
+# Output: begin
+
+echo(mymatch.after)
+# Output: ABC
+
+all_matches = "1a2bcd3efg" ~~ /([0-9])(.)/
+each(all_matches, F(match) {
+    echo("The character after the digit ${match.matches[1]} is ${match.matches[2]}")
+})
+# Output:
+#   The character after the digit 1 is a
+#   The character after the digit 2 is b
+#   The character after the digit 3 is e
+</code></pre>
+<p>Collector facility</p>
+<pre><code>mylist = collector {
+    collect("HEADER")
+    [10,20].each(collect)
+    collect("FOOTER")
+}
+echo(mylist)
+# Output: ['HEADER',10,20,'FOOTER']
+
+myhash = collector/{} {
+    collect("first", -1)
+    {"a": 1, "b": 2, "c":100}.each(F(k, v) {
+        if v &lt; 100 {
+            collect("($k)", v*10)
+        }
+    })
+    collect("last", -2)
+}
+echo(myhash)
+# Output: {first=-1, (a)=10, (b)=20, last=-2}
+
+mysumm = collector/0 [1,10,100].each(collect)
+echo(mysumm)
+# Output: 111
+</code></pre>
+<p>Running external programs</p>
+<pre><code>t = `echo -n text1`
+echo("[ $t ]")
+# Output: [ text1 ]
+
+seq = `seq 5`.lines()
+echo(seq)
+# Output: ['1','2','3','4','5']
+
+proc = $(seq 3)
+each(inspect(proc), echo)
+# Output:
+#   Process
+#   command = &lt;Command is_top_level=false redirects=[] argv=['seq','3']&gt;
+#   pid = NNNNN
+#   exit_code = 0
+#   exit_signal = 0
+#   stdout (3 lines):
+#     1
+#     2
+#     3
+#   stderr (0 lines):
+
+data = ``echo '{"a": 1}'``
+echo("Parsed data: $data, a is ${data.a}")
+# Output: Parsed data: {a=1}, a is 1
+</code></pre>
+<p>TODO: <code>@e1 e2</code> wrapper syntax</p>
+<p>TODO: <code>%{k1 v1 k2 v2 ...}</code> hash literal syntax</p>
+<h2>Binary operators and precedence</h2>
+<p>Higher numbers mean higher precedence.</p>
+<pre><code>tor     40  "Try ... or", short-circuit   questionable_code tor default_value
+tand    50  "Try ... and", short-circuit  (not sure when it's needed, don't use it)
+or      60  Logical or, short-circuit
+and     65  Logical and, short-circuit
+in      70  Value-in-container check      1 in [1, 2, 3]
+                                          "a" in {"a": 1}
+not in  70  Value-not-in-container check  10 not in [1, 2, 3]
+                                          "b" not in {"a": 1}
+is      90  Instance-of check             1 is Int
+is not  90  Not-instance-of check         1 is not Str
+
+
+|      120  "Pipe", currenty not used
+===    130  "Same as"                     v = [1, 2]; v === v
+!==    130  "Not same as",                [1, 2] !== [1, 2]
+==     130  "Equals",                     [1, 2] == [1, 2]
+!=     130  "Not equals"                  [1, 3] != [1, 2]
+&lt;=     150  "Less than or equals"
+&lt;      150  "Less than"
+&gt;=     150  "Greater or equals"
+&gt;      150  "Greater"
+~      150  "Match"                       "a1b2c" ~ /[0-9]/
+~~     150  "Match all"                   "a1b2c" ~~ /[0-9]/
+...    160  "Inclusive range"             0...5               # 0,1,2,3,4,5
+..     160  "Exclusive range"             0..5                # 0,1,2,3,4
++      190  "Plus"
+-      190  "Minus"
+*      200  "Multiply" or "repeat"        3 * 5               # 15
+                                          "ab" * 3            # "ababab"
+                                          EmptyBox * 2        # two values of EmptyBox type
+%      200  "Modulus" or "each"           3 % 2               # 1
+                                          ['a', 'b'] % echo   # Outputs a and b on different lines
+/      200  "Divide" or "map"             10 / 5
+                                          [1, 2, 3] / F(x) x * 2
+?      200  "Filter"                      [1, 2, 3] ? F(x) x &gt; 1
+\      200  "Call"                        [1, 2, 3] \ echo
+</code></pre>
+<h2>Assignment shortcuts</h2>
+<p>These are syntactically equivalent expressions:</p>
+<pre><code>a = a + 1      a += 1
+a = a - 1      a -= 1
+a = a * 1      a *= 1
+a = a / 1      a /= 1
+a = a % 1      a %= 1
+a = a.f()      a .= f()    a = f(a)
+a = a.f(b)     a .= f(b)   a = f(a, b)
+</code></pre>
+<h1>LANGUAGE GOTCHAS</h1>
 <p>This section will be expanded as I get feedback :)</p>
-<h2 id="ngs-should-not-be-your-first-language">NGS should not be your first language</h2>
+<h2>NGS should not be your first language</h2>
 <p>I do not recommend NGS as your first language. Python for example would be a much better choice. Programming experience is assumed prior to using NGS.</p>
-<h2 id="keyword-arguments-gotchas">Keyword arguments gotchas</h2>
+<h2>Watch the version</h2>
+<p>NGS is under development. Currently NGS has no version, breaking changes can happen. If you do anything a important with NGS, it's preferable to note the git revision you are using for reproducible installation. The plan is to stop breaking NGS when it reaches version 1.0.0 Since that version, the behaviour will be common - patch level increase for fixes, minor for improvements, major for breaking changes.</p>
+<h2>Keyword arguments gotchas</h2>
 <p>Keyword arguments implementation is preliminary so:</p>
 <pre><code># Keyword arguments are silently ignored if corresponding positional argument is passed.
-kwargs = {&quot;a&quot;: 10}
+kwargs = {"a": 10}
 F f(a, **kw) a; f(1, **kwargs) == 1
 
 # Keyword arguments for existing named attributes cause parameters not to match
-kwargs = {&quot;a&quot;: 10}
+kwargs = {"a": 10}
 F f(a) a; f(1, **kwargs) == 1
 
 # **kwargs silently override (consistent with literal hash) previous named arguments
-kwargs = {&quot;a&quot;: 10}
+kwargs = {"a": 10}
 F f(a=1) a; f(a=10, **kwargs) == 1
 
 # For speed and implementation simplicity reasons, the **kw parameter has all keys,
 # even if some of them matched and used for parameters.
 # This is somewhat likely to change in the future.
-kwargs = {&quot;a&quot;: 10}
-F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {&quot;a&quot;: 10}]</code></pre>
-<h1 id="main-language-concepts">MAIN LANGUAGE CONCEPTS</h1>
-<h2 id="types">Types</h2>
-<p>In NGS, each value is of some type. <code>1</code> for example is an <code>Int</code>, <code>&quot;xyz&quot;</code> is a <code>Str</code> and <code>[1,2,3]</code> is an <code>Arr</code>.</p>
-<p>Define <code>Counter</code> type and a few methods for it (code syntax, must be inside <code>{...}</code>):</p>
-<pre><code>type Counter
+kwargs = {"a": 10}
+F f(a=1, **kw) [a, kw]; f(**kwargs) == [10, {"a": 10}]
+</code></pre>
+<h1>TYPES</h1>
+<p>NGS is dynamically typed language: values (and not variables) have types.</p>
+<pre><code>a = 1
+a = "ok"
+# 'a' had value of one type and then value of another type
+</code></pre>
+<p>NGS is a "strongly typed" language: values are not implicitly converted to unrelated types. This makes the language more verbose but prevents some bugs.</p>
+<pre><code>echo(1+"2")
+# ... Exception of type ImplNotFound occured ...
+# That means that NGS has no method implementation that "knows" how to add an Int and a Str
 
-F init(c:Counter) c.counter = 0
+echo(1+Int("2"))
+# Output: 3
+</code></pre>
+<h1>BUILT-IN TYPES</h1>
+<p>There are several built-in types. Sample types and values:</p>
+<ul>
+<li><code>Bool</code> - true, false</li>
+<li><code>Int</code> - 1,2,3</li>
+<li><code>Str</code> - 'a', "bc"</li>
+<li><code>Arr</code> - <code>[1, true, 'x']</code></li>
+<li><code>Any</code> - any value in NGS is of type <code>Any</code> :)</li>
+</ul>
+<p>Checking types:</p>
+<pre><code>echo(1 is Int)
+# Output: true
 
-F incr(c:Counter) {
-    c.counter = c.counter + 1
-    c
+echo(1 is Str)
+# Output: false
+
+echo(1 is not Str)
+# Output: true
+</code></pre>
+<p>See types reference: <a href="ngstyp.1.html">ngstyp(1)</a>.</p>
+<h1>DEFINE YOUR OWN TYPES</h1>
+<p>You can define your own types. Let's define <code>Counter</code> type and a few methods that can operate on values of the <code>Counter</code> type. Then we'll define <code>MyCounter</code> sub-type and it's <code>incr</code> method:</p>
+<pre><code>{
+    # Declare that we have a new type
+    type Counter
+
+    # * Define constructor which is called when Counter() is invoked.
+    # * First argument of constructor, named "c" is the newly-created value of type Counter
+    # * The value that the constructor returns is discarded,
+    #   Counter() returns the newly-created value of type Counter
+
+    F init(c:Counter) {
+        # Initialize the counter_value attribute
+        c.counter_value = 0
+    }
+
+    # Define increment method implementation
+    F incr(c:Counter) {
+        c.counter_value = c.counter_value + 1
+        # Return the Counter itself, allowing chaining such as c.incr().incr()...
+        c
+    }
+
+    # Define get method implemetation
+    F get(c:Counter) c.counter_value
+
+    c = Counter()
+    # c.incr() and incr(c) are syntactically equivalent
+    c.incr()
+    echo(c.get())
+    # Output: 1
+
+    # Declare MyCounter type, a sub-type of Counter
+    # MyCounter inherits from Counter meaning that any method that works with Counter also works with MyCounter
+    type MyCounter(Counter)
+
+    # Define incr method implementation for MyCounter type
+    F incr(c:MyCounter) {
+        c.counter_value = c.counter_value + 10
+        c
+    }
+    # incr method has now two different implementations: one for Counter type and one for MyCounter type.
+
+    # Instantiate new MyCounter
+    c = MyCounter()
+
+    # * Will run incr(c:MyCounter) method implementation.
+    # * Both incr(c:Counter) and incr(c:MyCounter) implementations match the arguments,
+    #   the second implementation wins because it was declared last and search is perfomed
+    #   from last to first.
+    c.incr()
+
+    # c.get() will run get(c:Counter) because
+    # parameter of type Counter and argument of type MyCounter will match
+    echo(c.get())
+    # Output: 10
+}
+</code></pre>
+<h1>METHODS, METHOD IMPLEMENTATIONS AND CALLING</h1>
+<p>Each value in NGS has a type, similar to many other languages. One of the main features of NGS is choosing the correct <strong>method implementation</strong> based on types of the arguments:
+Let's start with the following snippet:</p>
+<pre><code>F +(a:Int, b:Int) {
+    ...
 }
 
-F get(c:Counter) c.counter</code></pre>
-<p>Use the <code>Counter</code> type:</p>
-<pre><code>c = Counter()
-c.incr()
-echo(c.get())
-# Output: 1</code></pre>
-<p><code>c.incr()</code> and <code>incr(c)</code> are syntactically equivalent.</p>
-<p>Inheritance:</p>
-<pre><code>type MyCounter(Counter)</code></pre>
-<p><code>MyCounter</code> inherits from <code>Counter</code> meaning that any method that works with <code>Counter</code> also works with <code>MyCounter</code>:</p>
-<pre><code>F incr(c:MyCounter) {
-    c.counter = c.counter + 10
-    c
+F +(s1:Str, s2:Str) {
+    ...
 }
 
-c = MyCounter()
-c.incr()
-echo(c.get())
-# Output: 10</code></pre>
-<p><code>incr</code> method now has two <strong>method implementations</strong>: one for <code>Counter</code> and one for <code>MyCounter</code> so <code>incr</code> method behaves differently for these types.</p>
-<p><code>get</code> method still has one <strong>method implementation</strong> which is handling both <code>Counter</code> and <code>MyCounter</code> types.</p>
-<h2 id="methods-method-implementations-and-calling">Methods, method implementations and calling</h2>
-<p>A method in NGS is an <code>Arr</code> (array) of functions. Each function in such array is called <strong>method implementation</strong>.</p>
-<pre><code>F bigger(x:Int) x+1
-F bigger(s:Str) &quot;+${s}+&quot;</code></pre>
-<p><code>bigger</code> is now an <code>Arr</code> with two elements, the functions defined by <code>F</code>. When calling an <code>Arr</code>, NGS scans the array backwards and invokes the <strong>method implementation</strong> that matches the given arguments (this matching process is called multiple dispatch). Example:</p>
-<pre><code>echo(bigger(&quot;x&quot;))
-# Output: +x+
+{
+    1 + 1
+    # -&gt; 2
 
-echo(bigger(1))
-# Output: 2</code></pre>
-<p>No matching <strong>method implementation</strong> causes <code>ImplNotFound</code> exception.</p>
-<pre><code>echo(bigger(true))
-# ImplNotFound exception</code></pre>
-<h2 id="customization-using-methods">Customization using methods</h2>
-<p>Sometimes, like in the <code>Counter</code> and <code>MyCounter</code> example above, it's enough to define a new <strong>method implementation</strong> and let the arguments matching do the work of figuring out which <strong>method implementation</strong> to run.</p>
-<p>In other cases, a finer-grained approach is needed. That's when a <code>guard</code> is needed. If <code>guard</code> condition evaluates to true, it tells NGS that this <strong>method implementation</strong> is the correct one. If <code>guard</code> condition evaluates to false, it tells NGS to keep searching for the correct <strong>method implementation</strong> up the <code>Arr</code> it was looking at. Note that using guards does not cancel argument matching done by NGS. Regarding the <code>guard</code>, a <strong>method implementation</strong> is only invoked when arguments matched the parameters.</p>
-<pre><code>F bigger(x:Int) {
-    guard x &gt;= 100
-    x + 10
+    'a' + 'b'
+    # -&gt; 'ab'
 }
-echo(bigger(1))
-echo(bigger(100))
-
-# Outputs one per line: 2, 110</code></pre>
-<p>The example above added second <strong>method implementation</strong> with the <code>x:Int</code> argument.</p>
-<h1 id="handlers-and-hooks">HANDLERS AND HOOKS</h1>
+</code></pre>
+<p>The <code>+</code> in NGS is a method. It has few <strong>method implementations</strong>. You can see definitions of two of the implementations in the example above. One implementation can add numbers. Another implementation concatenates strings. How NGS knows which one of them to run? The decision is made based on arguments' types. NGS scans the <strong>method imlementations</strong> array backwards and invokes the <strong>method implementation</strong> that matches the given arguments (this matching process is called multiple dispatch).</p>
+<h1>HANDLERS AND HOOKS</h1>
 <p>Handlers and hooks are called by NGS when a certain condition occurs. What exactly happens when they are called differs between handlers and hooks.</p>
-<p><strong>A handler</strong> is a regular method (<code>Arr</code> of <strong>method implementations</strong>). Like with any other method, you can override what it does by defining your own <strong>method implementation</strong> with the same name further down in the code. Since standard handlers are defined in <strong>stdlib.ngs</strong> which is typically loaded first, your own <strong>method implementation</strong> will be &quot;further down&quot;.</p>
+<p><strong>A handler</strong> is a regular method (<code>Arr</code> of <strong>method implementations</strong>). Like with any other method, you can override what it does by defining your own <strong>method implementation</strong> with the same name further down in the code. Since standard handlers are defined in <strong>stdlib.ngs</strong> which is typically loaded first, your own <strong>method implementation</strong> will be "further down".</p>
 <p><strong>A hook</strong> is an instance of the <code>Hook</code> type. Some hooks are called by NGS when a certain condition occurs. You are free to create and use your own hooks. When called, it executes all registered functions. The main difference is that using hook you get accumulative behaviour instead of overriding behaviour.</p>
 <p>User-defined hook example:</p>
 <pre><code>{
     h = Hook()
-    h.push({ echo(&quot;A&quot;) })
-    h.push({ echo(&quot;B&quot;) })
+    h.push({ echo("A") })
+    h.push({ echo("B") })
     h()
 }
-# Outputs one per line: A, B</code></pre>
+# Outputs one per line: A, B
+</code></pre>
 <p>Same example using decorators syntax:</p>
 <pre><code>h = Hook()
 @h {
-    echo(&quot;A&quot;)
+    echo("A")
 }
 @h {
-    echo(&quot;B&quot;)
+    echo("B")
 }
-h()</code></pre>
+h()
+</code></pre>
 <p>And finally practical example:</p>
 <pre><code>@exit_hook {
     # Remove my temp files
-}</code></pre>
-<h2 id="impl_not_found_handler"><code>impl_not_found_handler</code></h2>
+}
+</code></pre>
+<h2><code>impl_not_found_handler</code></h2>
 <p><code>impl_not_found_handler</code> is called when a method was called but no <strong>method implementation</strong> matched the arguments. Use <code>F impl_not_found_handler(callable:Fun, *args) ...</code> to add your behaviours.</p>
-<h2 id="global_not_found_handler"><code>global_not_found_handler</code></h2>
+<h2><code>global_not_found_handler</code></h2>
 <p><code>global_not_found_handler</code> is called on attempt to read from an undefined global variable. Sample usage from <strong>stdlib.ngs</strong></p>
 <pre><code>F global_not_found_handler(name:Str) {
-    require(&quot;${NGS_DIR}/autoload/${name}.ngs&quot;)
-}</code></pre>
-<h2 id="exit_hook"><code>exit_hook</code></h2>
+    require("${NGS_DIR}/autoload/${name}.ngs")
+}
+</code></pre>
+<h2><code>exit_hook</code></h2>
 <p><code>exit_hook</code> is called when NGS is about to exit. Typical cases are:</p>
 <ul>
 <li>All of the given code was executed.</li>
 <li><code>throw</code> was invoked and no matching <code>catch</code> was found.</li>
 </ul>
 <p>Method signature: <code>exit_hook(exit_info:Hash)</code>. <code>exit_info</code> currently has two keys: <code>exit_code</code> and <code>exception</code>. <strong>stdlib.ngs</strong> defines two standard hooks.</p>
-<pre><code># ngs -pi &#39;exit_hook.handlers&#39;
+<pre><code># ngs -pi 'exit_hook.handlers'
 Hash of size 2
 [print_exception] = &lt;Closure &lt;anonymous&gt; at /usr/share/ngs/stdlib.ngs:2110&gt;
-[exception_to_exit_code] = &lt;Closure &lt;anonymous&gt; at /usr/share/ngs/stdlib.ngs:2117&gt;</code></pre>
+[exception_to_exit_code] = &lt;Closure &lt;anonymous&gt; at /usr/share/ngs/stdlib.ngs:2117&gt;
+</code></pre>
 <ul>
-<li><code>print_exception</code> prints exception details if an exception occured.</li>
+<li><code>print_exception</code> prints exception details if an exception occurred.</li>
 <li><code>exception_to_exit_code</code> sets the exit code using <code>to_exit_code</code>. Unless defined for your specific exception, <code>to_exit_code</code> of an <code>Exception</code> returns <strong>200</strong>.</li>
 </ul>
-<h1 id="variables-scoping-rules">VARIABLES SCOPING RULES</h1>
-<h2 id="default-scoping-rules">Default scoping rules</h2>
+<h1>VARIABLES SCOPING RULES</h1>
+<h2>Default scoping rules</h2>
 <p>In a function, any variable that is not assigned to inside the function is looked up as an <strong>upvar</strong> (enclosing functions) and as <strong>global</strong>.</p>
 <pre><code>a = 1
 F f() {
@@ -220,7 +983,8 @@ F f() {
     g()
 }
 f()
-# Output: 2</code></pre>
+# Output: 2
+</code></pre>
 <p>In a function, any identifier that is mentioned in any of the enclosing functions is automatically <code>upvar</code> - references the variable in the outer scope.</p>
 <pre><code>a = 1
 F f() {
@@ -234,7 +998,8 @@ F f() {
 f()
 echo(a)
 # Output: 10
-# Output: 1</code></pre>
+# Output: 1
+</code></pre>
 <p>In a function, any variable that is assigned to (including the <code>i</code> in constuct <code>for(i;10) ...</code>) in the function is automatically <code>local</code> unless it's an <code>upvar</code> as described above.</p>
 <pre><code>a = 1
 F f() {
@@ -244,8 +1009,9 @@ F f() {
 f()
 echo(a)
 # Output: 2
-# Output: 1</code></pre>
-<h2 id="modifying-variables-scoping">Modifying variables' scoping</h2>
+# Output: 1
+</code></pre>
+<h2>Modifying variables' scoping</h2>
 <p>You can modify default scoping using the <code>global</code> and <code>local</code> keywords.</p>
 <pre><code>a = 1
 F f() {
@@ -273,7 +1039,6 @@ F f() {
     echo(a)
 }
 f()
-# Does not work yet due to a bug, &quot;a&quot; stays upvar
-# Output: 3</code></pre>
-</body>
-</html>
+# Does not work yet due to a bug, "a" stays upvar
+# Output: 3
+</code></pre>
