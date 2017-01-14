@@ -18,7 +18,7 @@ q {
     quotes: "\201C" "\201D" "\2018" "\2019";
 }
 
-a.section-link {
+a.section-link, a.type-link {
 	visibility: hidden;
 	font-size: 0.8em;
 	text-decoration: none;
@@ -28,17 +28,23 @@ a.section-link {
 h1:hover > a.section-link,
 h2:hover > a.section-link,
 h3:hover > a.section-link,
-h4:hover > a.section-link
+h4:hover > a.section-link,
+h1:hover > a.type-link,
+h2:hover > a.type-link,
+h3:hover > a.type-link,
+h4:hover > a.type-link
 {
 	visibility: visible;
 }
 
-.method {
+.method, .type, .type-method-impl, .type-method-impl-desc {
 	padding-left: 4em;
+}
+.type-method-impl {
+	padding-bottom: 1em;
 }
 .method-header {
 	color: #888;
-
 }
 .method-source {
 	opacity: 0.5;
@@ -47,7 +53,7 @@ h4:hover > a.section-link
 .method-impl-content {
 	padding-bottom: 1em;
 }
-.method-impl, .method-impl-content, .method-param-content, .method-returns-content, .method-example-content {
+.method-impl, .method-impl-content, .method-param-content, .method-returns-content, .method-example-content, .type-example-content, .type-content {
 	padding-left: 4ex;
 }
 .method-impl-content {
